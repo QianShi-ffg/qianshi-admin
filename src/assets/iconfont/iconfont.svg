@@ -1,0 +1,32 @@
+<?xml version="1.0" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd" >
+<!--
+2013-9-30: Created.
+-->
+<svg>
+<metadata>
+Created by iconfont
+</metadata>
+<defs>
+
+<font id="iconfont" horiz-adv-x="1024" >
+  <font-face
+    font-family="iconfont"
+    font-weight="500"
+    font-stretch="normal"
+    units-per-em="1024"
+    ascent="896"
+    descent="-128"
+  />
+    <missing-glyph />
+    
+    <glyph glyph-name="shouji" unicode="&#58939;" d="M810.3 247.7V680.9c0 83.4-67.8 151.2-151.2 151.2H363.3c-83.4 0-151.2-67.8-151.2-151.2v-433.2h598.2zM212.1 179.4v-91.8c0-83.4 67.8-151.2 151.2-151.2h295.8c83.4 0 151.2 67.8 151.2 151.2v91.8H212.1zM511.2 3c-34.1 0-61.8 27.7-61.8 61.8 0 34.1 27.7 61.8 61.8 61.8s61.8-27.7 61.8-61.8c0-34.1-27.7-61.8-61.8-61.8z"  horiz-adv-x="1024" />
+
+    
+    <glyph glyph-name="mima" unicode="&#58911;" d="M800 512H224c-35.3 0-64-28.6-64-64v-352c0-70.7 57.3-128 128-128h448c70.7 0 128 57.3 128 128V448c0 35.4-28.7 64-64 64zM544 176c0-17.7-14.3-32-32-32s-32 14.3-32 32V304c0 17.7 14.3 32 32 32 8.8 0 16.8-3.6 22.6-9.4 5.8-5.8 9.4-13.8 9.4-22.6v-128zM512 736c42.7 0 82.9-16.6 113.1-46.9C655.4 658.9 672 618.7 672 576v-64H352v64c0 42.7 16.6 82.9 46.9 113.1S469.3 736 512 736m0 64c-123.7 0-224-100.3-224-224v-128h448V576c0 123.7-100.3 224-224 224z"  horiz-adv-x="1024" />
+
+    
+
+
+  </font>
+</defs></svg>

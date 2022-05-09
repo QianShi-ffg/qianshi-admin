@@ -1,0 +1,13 @@
+*{
+    margin: 0;
+    padding: 0;
+}
+html,body{
+    height: 100%;
+}
+body {
+    min-width: 1300px;
+    background:url('../bg1.jpg') no-repeat;
+    background-size: cover;
+    /* background-color: rgb(233, 223, 211); */
+}
