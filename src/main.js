@@ -1,17 +1,8 @@
-import Vue from 'vue'
+import { createApp } from 'vue'
 import App from './App.vue'
-import router from './router'
-import '@/assets/css/base.css'
-import '../src/utils/ax'
-import './utils/element'
-// import ElementUI from 'element-ui'
-
-// 引入axios
-
-import VueParticles from 'vue-particles'
-// Vue.use(ElementUI)
-Vue.use(VueParticles)
-new Vue({
-  router,
-  render: h => h(App)
-}).$mount('#app')
+import ElementPlus from 'element-plus'
+import 'element-plus/dist/index.css'
+import './assets/style/index.css'
+const app = createApp(App)
+app.use(ElementPlus, { size: 'small', zIndex: 3000 })
+app.mount('#app')
