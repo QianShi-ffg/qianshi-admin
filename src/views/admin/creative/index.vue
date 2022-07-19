@@ -1,10 +1,11 @@
 <template>
   <div>
-    5555555
+    <articleListVue></articleListVue>
   </div>
 </template>
 
 <script setup>
+import articleListVue from './modules/articleList.vue';
 
 </script>
 

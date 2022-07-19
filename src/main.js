@@ -11,5 +11,5 @@ import './assets/style/index.css'
 const app = createApp(App)
 app.use(router)
 app.use(createPinia())
-app.use(ElementPlus, { size: 'small', zIndex: 3000 })
+app.use(ElementPlus, { size: 'default', zIndex: 3000 })
 app.mount('#app')

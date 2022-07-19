@@ -7,15 +7,17 @@
             active-text-color="#ffd04b"
             background-color="#545c64"
             class="el-menu-vertical-demo"
-            default-active="2"
+            :default-active="'admin'"
             text-color="#fff"
             :collapse="isCollapse"
             @open="handleOpen"
             @close="handleClose"
+            :collapse-transition="true"
+            :router="true"
           >
-            <el-menu-item index="1-1">
+            <el-menu-item :index="'admin'">
               <el-icon><icon-menu /></el-icon>
-              首页
+              <template #title>首页</template>
             </el-menu-item>
             <!-- <el-sub-menu index="1">
               <template #title>
@@ -30,7 +32,7 @@
                 <el-menu-item index="1-4-1">item one</el-menu-item>
               </el-sub-menu>
             </el-sub-menu> -->
-            <el-menu-item index="2">
+            <el-menu-item :index="'creative'">
               <el-icon><icon-menu /></el-icon>
               <template #title>创作中心</template>
             </el-menu-item>
@@ -38,7 +40,7 @@
               <el-icon><document /></el-icon>
               <template #title>Navigator Three</template>
             </el-menu-item> -->
-            <el-menu-item index="4">
+            <el-menu-item :index="'settings'">
               <el-icon><setting /></el-icon>
               <template #title>设置</template>
             </el-menu-item>
@@ -51,7 +53,8 @@
               @click="putMenu"
               :icon="data.icon"
               link
-            ></el-button>
+            >
+            </el-button>
           </el-header>
           <el-main>
             <el-card class="box-card">
@@ -78,7 +81,7 @@ import {
 
 const isCollapse = ref(false);
 const data = reactive({
-  icon: markRaw(Fold)
+  icon: markRaw(Fold),
 });
 const handleOpen = (key, keyPath) => {
   console.log(key, keyPath);
@@ -89,9 +92,9 @@ const handleClose = (key, keyPath) => {
 const putMenu = () => {
   isCollapse.value = !isCollapse.value;
   if (isCollapse.value) {
-    data.icon = markRaw(Expand)
+    data.icon = markRaw(Expand);
   } else {
-    data.icon = markRaw(Fold)
+    data.icon = markRaw(Fold);
   }
 };
 </script>
@@ -134,6 +137,8 @@ const putMenu = () => {
     background-color: var(--el-main-bgColor);
     .el-card {
       height: calc(100% - 5px);
+      padding: 30px;
+      box-sizing: border-box;
     }
   }
   .el-footer {

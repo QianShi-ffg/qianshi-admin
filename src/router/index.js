@@ -23,6 +23,16 @@ const routes = [
     ]
   },
   {
+    name: 'article',
+    path: '/article',
+    component: () => import('@/views/admin/creative/modules/articleOption.vue')
+  },
+  // {
+  //   name: 'editArticle',
+  //   path: '/editArticle/:id',
+  //   component: () => import('@/views/admin/creative/modules/articleOption.vue')
+  // },
+  {
     name: 'login',
     path: '/login',
     component: () => import('@/views/login/index.vue')
