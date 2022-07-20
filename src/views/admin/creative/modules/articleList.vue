@@ -25,14 +25,20 @@
   <el-pagination background layout="prev, pager, next" :total="1000" />
 </template>
 
-<script setup>
+<script async setup>
 import { ref } from 'vue'
 import { ElTable, ElPagination } from 'element-plus'
 import { useRouter } from 'vue-router'
+import api from '@/api/index.js'
+
 
 const router = useRouter()
 const multipleTableRef = ref()
 const multipleSelection = ref([])
+
+const res = await api.getArticleList()
+console.log(res, 666666666666666666666)
+
 const toggleSelection = (rows) => {
   if (rows) {
     rows.forEach((row) => {

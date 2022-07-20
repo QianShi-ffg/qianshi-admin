@@ -29,10 +29,7 @@ const saveHtml = (e)=> {
 const codeSave = (e)=> {
   console.log(e)
   sessionStorage.setItem('md', e )
-  ElMessage({
-    message: '已保存草稿箱',
-    type: 'success',
-  })
+  ElMessage({ message: '已保存草稿箱',type: 'success' })
 }
 </script>
 
