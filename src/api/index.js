@@ -6,5 +6,8 @@ export default {
   },
   getArticleList:(params = {}) => {
     return axiosGet('/articleList', params)
+  },
+  uploadImg:(params = {}) => {
+    return axiosPost('/uploadImg', params)
   }
 }
