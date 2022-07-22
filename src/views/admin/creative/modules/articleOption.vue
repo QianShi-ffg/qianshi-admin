@@ -1,8 +1,9 @@
 <template>
   <header id="articleHeader">
     <el-button :icon="ArrowLeft" link @click="()=>{router.push({path:'/creative'})}">返回</el-button>
+    <el-input placeholder="请输入文章标题" class="articleTitle" v-model="titleValue"></el-input>
     <div>
-      <el-button @click="save">保存</el-button>
+      <el-button @click="save">保存草稿</el-button>
       <el-button type="success">发布</el-button>
     </div>
   </header>
@@ -21,6 +22,7 @@ import api from '@/api/index.js'
 
 const router = useRouter()
 const text = ref('')
+const titleValue = ref('')
 const theme = ref('light')
 
 let saveIcon = null
@@ -33,10 +35,8 @@ const saveHtml = (e) => {
 }
 
 const save = () => {
-  console.dir(saveIcon)
   saveIcon[0].click()
 }
-
 onMounted(() => {
   const icon = document.getElementsByClassName('md-toolbar-item')
   saveIcon = Array.from(icon).filter(item => {
@@ -47,6 +47,7 @@ onMounted(() => {
 
 const codeSave = (e) => {
   sessionStorage.setItem('md', e )
+  
   ElMessage({ message: '已保存草稿箱',type: 'success' })
 }
 
@@ -54,6 +55,7 @@ const uploadImg = async(files, callback) => {
   const fromData = new FormData();
   for(let i = 0; i < files.length; i++){
     fromData.append('file', files[i]);
+    // fromData.append(files[i].name, files[i]);
   }
   const res = await api.uploadImg(fromData)
   console.log(import.meta.env.VITE_SERVER)
@@ -72,5 +74,8 @@ const uploadImg = async(files, callback) => {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  .articleTitle {
+    width: 60%;
+  }
 }
 </style>

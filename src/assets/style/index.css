@@ -3,8 +3,19 @@
   min-height: 400px;
 }
 
-:root {
-  --el-aside-bgColor: #545c64;
-  --el-main-bgColor: #f5f5f5;
-  --el-footer-bgColor: #2e3338;
+@media (prefers-color-scheme: dark){
+  :root {
+    --el-aside-bgColor: #545c64;
+    --el-main-bgColor: #f5f5f5;
+    --el-footer-bgColor: #2e3338;
+  }
 }
+
+@media (prefers-color-scheme: light){
+  :root {
+    --el-aside-bgColor: #fff;
+    --el-main-bgColor: #f5f5f5;
+    --el-footer-bgColor: #fff;
+  }
+}
+

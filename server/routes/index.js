@@ -2,6 +2,8 @@
 const express = require('express')
 // 创建服务器
 const router = express.Router();
+// const bodyParser = require('body-parser')
+// const formidable = require('express-formidable')
 const upload = require('./modules/uploadImg')
 
 // 获取文章列表
@@ -15,7 +17,7 @@ router.get('/articleList',(req, res) => {
 
 // 图片上传
 router.post('/uploadImg', upload.array('file',10), (req, res) => {
-  console.log(req.file,req.files,55555555555)
+  console.log(req,req.files,55555555555)
   const data = req.files.map(item => {
     console.log('文件类型：%s', item.mimetype);
     console.log('原始文件名：%s', item.originalname);
@@ -31,5 +33,10 @@ router.post('/uploadImg', upload.array('file',10), (req, res) => {
     return obj
   })
   res.json({code: 200, data: data});
+})
+
+// 保存草稿
+router.post('/saveDraft', (req, res) => {
+
 })
 module.exports = router
