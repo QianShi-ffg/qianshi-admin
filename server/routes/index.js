@@ -2,16 +2,25 @@
 const express = require('express')
 // 创建服务器
 const router = express.Router();
-// const bodyParser = require('body-parser')
 // const formidable = require('express-formidable')
 const upload = require('./modules/uploadImg')
-
+// const { mysql, conn } = require('../mysql/index')
+const connection = require('../mysql/index')
+// const connection = conn()
 // 获取文章列表
 router.get('/articleList',(req, res) => {
-  res.send({
-    code:0,
-    data:{aa:66666666666}  
+  let data = {title: '666', articleContent: '999988888888', articleStatus: '0'}
+  connection.query('select * from articleList', function(err,results,fields){
+    console.log(err,'2222',results, '66666', fields)
+    if(!err) {
+      res.send({
+        code: 200,
+        data: results,
+        msg: 'success'
+      })
+    }
   })
+  
 })
 
 
@@ -37,6 +46,17 @@ router.post('/uploadImg', upload.array('file',10), (req, res) => {
 
 // 保存草稿
 router.post('/saveDraft', (req, res) => {
-
+  console.log(req.query, req.params, req.body)
+  const { title, articleContent, articleStatus } = req.body
+  let data = { title, articleContent, articleStatus }
+  connection.query('insert into articleList set ?', data, function(err,results,fields){
+    console.log(err,results,fields)
+    if(!err) {
+      res.send({
+        code: 200,
+        msg: 'success'
+      })
+    }
+  })
 })
 module.exports = router

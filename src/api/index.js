@@ -9,5 +9,8 @@ export default {
   },
   uploadImg:(params = {}) => {
     return axiosPost('/uploadImg', params)
+  },
+  saveDraft:(params = {}) => {
+    return axiosPost('/saveDraft', params)
   }
 }

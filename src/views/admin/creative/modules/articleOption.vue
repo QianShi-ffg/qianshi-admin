@@ -11,7 +11,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted  } from 'vue'
+import { ref, reactive, onMounted  } from 'vue'
 import { useRouter } from 'vue-router'
 import { ElMessage } from 'element-plus'
 import { ArrowLeft } from '@element-plus/icons-vue'
@@ -24,6 +24,11 @@ const router = useRouter()
 const text = ref('')
 const titleValue = ref('')
 const theme = ref('light')
+const articleData = reactive({
+  title: '',
+  articleContent: '',
+  articleStatus: 0
+})
 
 let saveIcon = null
 if(sessionStorage.getItem('md')){
@@ -45,10 +50,18 @@ onMounted(() => {
 })
 
 
-const codeSave = (e) => {
+const codeSave = async(e) => {
   sessionStorage.setItem('md', e )
-  
-  ElMessage({ message: '已保存草稿箱',type: 'success' })
+  const res = await api.saveDraft({
+    title: titleValue.value,
+    articleContent: e,
+    articleStatus: 0
+  })
+  if (res.code === 200) {
+    ElMessage({ message: '已保存草稿箱',type: 'success' })
+  } else {
+    ElMessage({ message: '系统错误请稍后再试',type: 'error' })
+  }
 }
 
 const uploadImg = async(files, callback) => {

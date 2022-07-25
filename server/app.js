@@ -1,11 +1,13 @@
 const express = require('express')
 // 创建服务器
 const app = express();
+const bodyParser = require('body-parser')
 const formidable = require('express-formidable')
 
-const conn = require('./mysql/index')
+app.use(bodyParser.urlencoded({extended:true})) 
+ // 将数据转换为json格式
+app.use(bodyParser.json())
 const router = require('./routes/index')
-conn()
 // app.use('/articleList',formidable());
 app.use('/public', express.static('./public/'))
 app.use((req,res,next)=>{

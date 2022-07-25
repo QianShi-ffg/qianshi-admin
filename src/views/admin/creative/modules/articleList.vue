@@ -7,7 +7,7 @@
   <el-table ref="multipleTableRef" :data="tableData" style="width: 100%" @selection-change="handleSelectionChange">
     <el-table-column type="selection" width="55" />
     <el-table-column property="title" label="标题" />
-    <el-table-column property="status" label="发布状态" show-overflow-tooltip />
+    <el-table-column property="articleStatus" label="发布状态" show-overflow-tooltip />
     <el-table-column label="创建时间">
       <template #default="scope">{{ scope.row.createDate }}</template>
     </el-table-column>
@@ -35,9 +35,20 @@ import api from '@/api/index.js'
 const router = useRouter()
 const multipleTableRef = ref()
 const multipleSelection = ref([])
+const tableData = ref([])
+try {
+  const res = await api.getArticleList()
+  if (res.code === 200) {
+    tableData.value = res.data
+  } else {
+    throw res.msg
+  }
+} catch (error) {
+  console.log(error)
+} finally {
+  // 预留loading处理
+}
 
-const res = await api.getArticleList()
-console.log(res, 666666666666666666666)
 
 const toggleSelection = (rows) => {
   if (rows) {
@@ -52,68 +63,6 @@ const handleSelectionChange = (val) => {
   multipleSelection.value = val
 }
 
-const tableData = [
-  {
-    title: 'aaaaaaaaaaaaa',
-    status: '已发布',
-    createDate: '2016-05-03',
-    upateDate: '2016-05-03',
-  },
-  {
-    title: 'aaaaaaaaaaaaa',
-    status: '已发布',
-    createDate: '2016-05-03',
-    upateDate: '2016-05-03',
-  },
-  {
-    title: 'aaaaaaaaaaaaa',
-    status: '已发布',
-    createDate: '2016-05-03',
-    upateDate: '2016-05-03',
-  },
-  {
-    title: 'aaaaaaaaaaaaa',
-    status: '未发布',
-    createDate: '2016-05-03',
-    upateDate: '2016-05-03',
-  },
-  {
-    title: 'aaaaaaaaaaaaa',
-    status: '未发布',
-    createDate: '2016-05-03',
-    upateDate: '2016-05-03',
-  },
-  {
-    title: 'aaaaaaaaaaaaa',
-    status: '已发布',
-    createDate: '2016-05-03',
-    upateDate: '2016-05-03',
-  },
-  {
-    title: 'aaaaaaaaaaaaa',
-    status: '未发布',
-    createDate: '2016-05-03',
-    upateDate: '2016-05-03',
-  },
-  {
-    title: 'aaaaaaaaaaaaa',
-    status: '已发布',
-    createDate: '2016-05-03',
-    upateDate: '2016-05-03',
-  },
-  {
-    title: 'aaaaaaaaaaaaa',
-    status: '已发布',
-    createDate: '2016-05-03',
-    upateDate: '2016-05-03',
-  },
-  {
-    title: 'aaaaaaaaaaaaa',
-    status: '已发布',
-    createDate: '2016-05-03',
-    upateDate: '2016-05-03',
-  }
-]
 </script>
 
 <style lang='scss' scoped>
