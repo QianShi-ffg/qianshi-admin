@@ -90,3 +90,12 @@ export async function axiosPost(url, params = {}) {
     throw res.statusText
   }
 }
+
+export async function axiosDelete(url, params = {}) {
+  let res = await axios.delete(url, { data: params });
+  if(res.status === 200){
+    return res.data
+  }else {
+    throw res.statusText
+  }
+}

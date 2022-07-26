@@ -37,19 +37,22 @@ const multipleTableRef = ref()
 const multipleSelection = ref([])
 const tableData = ref([])
 
-
-try {
-  const res = await api.getArticleList()
-  if (res.code === 200) {
-    tableData.value = res.data
-  } else {
-    throw res.msg
+init()
+const init = async() => {
+  try {
+    const res = await api.getArticleList()
+    if (res.code === 200) {
+      tableData.value = res.data
+    } else {
+      throw res.msg
+    }
+  } catch (error) {
+    console.log(error)
+  } finally {
+    // 预留loading处理
   }
-} catch (error) {
-  console.log(error)
-} finally {
-  // 预留loading处理
 }
+
 
 
 const toggleSelection = (rows) => {
@@ -65,9 +68,27 @@ const handleSelectionChange = (val) => {
   multipleSelection.value = val
 }
 
+// 编辑
 const handleEdit = (index, row) => {
   console.log(index, row.title)
   router.push({path: '/article', query: {id: row.id} })
+}
+
+// 单条删除
+const handleDelete = async (index, row) => {
+  try {
+    const res = await api.deleteArticle({id: `${row.id}`})
+    if (res.code === 200) {
+      ElMessage({ message: '删除成功',type: 'success' })
+    } else {
+      throw res.msg
+    }
+  } catch (error) {
+    console.log(error)
+    ElMessage({ message: error,type: 'error' })
+  } finally {
+    // 预留loading处理
+  }
 }
 
 </script>
