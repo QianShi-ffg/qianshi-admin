@@ -1,11 +1,11 @@
 const mysql = require('mysql')
 
 let sqlConfig = {
-  host:'188.131.164.41',
+  host:'localhost',
   port: '3306',
-  user:'blogServer',
-  password:'blogServer@123',
-  database:'blogserver', //数据库名称
+  user:'root',
+  password:'root',
+  database:'mysql', //数据库名称
   useConnectionPooling: true
 }
 
