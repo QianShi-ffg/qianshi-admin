@@ -9,10 +9,10 @@
     <el-table-column property="title" label="标题" />
     <el-table-column property="articleStatus" label="发布状态" show-overflow-tooltip />
     <el-table-column label="创建时间">
-      <template #default="scope">{{ scope.row.createDate }}</template>
+      <template #default="scope">{{ scope.row.createTime }}</template>
     </el-table-column>
     <el-table-column label="更新时间">
-      <template #default="scope">{{ scope.row.upateDate }}</template>
+      <template #default="scope">{{ scope.row.updataTime }}</template>
     </el-table-column>
     <el-table-column label="操作">
       <template #default="scope">
@@ -36,6 +36,8 @@ const router = useRouter()
 const multipleTableRef = ref()
 const multipleSelection = ref([])
 const tableData = ref([])
+
+
 try {
   const res = await api.getArticleList()
   if (res.code === 200) {
@@ -61,6 +63,11 @@ const toggleSelection = (rows) => {
 }
 const handleSelectionChange = (val) => {
   multipleSelection.value = val
+}
+
+const handleEdit = (index, row) => {
+  console.log(index, row.title)
+  router.push({path: '/article', query: {id: row.id} })
 }
 
 </script>

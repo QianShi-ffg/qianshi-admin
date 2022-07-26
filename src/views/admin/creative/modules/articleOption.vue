@@ -12,7 +12,7 @@
 
 <script setup>
 import { ref, reactive, onMounted  } from 'vue'
-import { useRouter } from 'vue-router'
+import { useRouter, useRoute } from 'vue-router'
 import { ElMessage } from 'element-plus'
 import { ArrowLeft } from '@element-plus/icons-vue'
 import MdEditor from 'md-editor-v3'
@@ -21,6 +21,7 @@ import api from '@/api/index.js'
 
 
 const router = useRouter()
+const route = useRoute()
 const text = ref('')
 const titleValue = ref('')
 const theme = ref('light')
@@ -31,8 +32,24 @@ const articleData = reactive({
 })
 
 let saveIcon = null
-if(sessionStorage.getItem('md')){
-  text.value = sessionStorage.getItem('md')
+
+// 判断当前是编辑还是新建
+if(route.query.id){
+  try {
+    const res = await api.getArticleList({id: route.query.id})
+    if (res.code === 200) {
+      console.log(res)
+      titleValue.value = res.data[0].title
+      text.value = res.data[0].articleContent
+    } else {
+      throw res.msg
+    }
+  } catch (error) {
+    console.log(error)
+  } finally {
+    // 预留loading处理
+  }
+  // text.value = sessionStorage.getItem('md')
 }
 
 const saveHtml = (e) => {
@@ -51,8 +68,8 @@ onMounted(() => {
 
 
 const codeSave = async(e) => {
-  sessionStorage.setItem('md', e )
   const res = await api.saveDraft({
+    id: route.query.id || null,
     title: titleValue.value,
     articleContent: e,
     articleStatus: 0
@@ -71,6 +88,8 @@ const uploadImg = async(files, callback) => {
     // fromData.append(files[i].name, files[i]);
   }
   const res = await api.uploadImg(fromData)
+
+
   console.log(import.meta.env.VITE_SERVER)
   callback(res.data.map((item) => `${import.meta.env.VITE_SERVER}${item.path}`))
 }

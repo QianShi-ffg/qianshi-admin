@@ -5,10 +5,9 @@
         <el-aside width="auto">
           <el-menu
             active-text-color="#ffd04b"
-            background-color="#545c64"
             class="el-menu-vertical-demo"
             :default-active="'admin'"
-            text-color="#fff"
+            text-color="#000"
             :collapse="isCollapse"
             @open="handleOpen"
             @close="handleClose"
