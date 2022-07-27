@@ -6,7 +6,7 @@
           <el-menu
             active-text-color="#ffd04b"
             class="el-menu-vertical-demo"
-            :default-active="'admin'"
+            :default-active="currentMenu"
             text-color="#000"
             :collapse="isCollapse"
             @open="handleOpen"
@@ -69,6 +69,7 @@
 
 <script setup>
 import { ref, reactive, markRaw } from "vue";
+import { useRoute } from "vue-router";
 import {
   Document,
   Menu as IconMenu,
@@ -79,6 +80,14 @@ import {
 } from "@element-plus/icons-vue";
 
 const isCollapse = ref(false);
+const route = useRoute()
+console.log(route.name)
+const currentMenu = ref()
+if(route.name) {
+  currentMenu.value = route.name
+} else {
+  currentMenu.value = 'admin'
+}
 const data = reactive({
   icon: markRaw(Fold),
 });
@@ -88,6 +97,7 @@ const handleOpen = (key, keyPath) => {
 const handleClose = (key, keyPath) => {
   console.log(key, keyPath);
 };
+
 const putMenu = () => {
   isCollapse.value = !isCollapse.value;
   if (isCollapse.value) {

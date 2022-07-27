@@ -37,7 +37,7 @@ const multipleTableRef = ref()
 const multipleSelection = ref([])
 const tableData = ref([])
 
-init()
+
 const init = async() => {
   try {
     const res = await api.getArticleList()
@@ -52,6 +52,7 @@ const init = async() => {
     // 预留loading处理
   }
 }
+init()
 
 
 
