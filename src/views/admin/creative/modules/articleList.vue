@@ -1,24 +1,30 @@
 <template>
   <div id="articleBtn">
     <el-button type="primary" @click="()=>{router.push({path:'/article'})}">新建</el-button>
-    <el-button type="success">批量发布</el-button>
-    <el-button type="danger">批量删除</el-button>
+    <el-button type="success" @click="batchPublish" v-if="multipleSelectionId.length > 0">批量发布</el-button>
+    <el-button type="danger" @click="batchDelete" v-if="multipleSelectionId.length > 0">批量删除</el-button>
   </div>
   <el-table ref="multipleTableRef" :data="tableData" style="width: 100%" @selection-change="handleSelectionChange">
     <el-table-column type="selection" width="55" />
     <el-table-column property="title" label="标题" />
-    <el-table-column property="articleStatus" label="发布状态" show-overflow-tooltip />
+    <el-table-column label="发布状态">
+      <template #default="scope">
+        <span :style="{background: scope.row.articleStatus === 0 ? '#ed3b29' : '#67c23a', color: '#fff', padding: '2px 10px', borderRadius: '10px'}">
+          {{ scope.row.articleStatus === 0 ? '未发布' : '已发布' }}
+        </span>
+      </template>
+    </el-table-column>
     <el-table-column label="创建时间">
-      <template #default="scope">{{ scope.row.createTime }}</template>
+      <template #default="scope">{{ date(scope.row.createTime) }}</template>
     </el-table-column>
     <el-table-column label="更新时间">
-      <template #default="scope">{{ scope.row.updataTime }}</template>
+      <template #default="scope">{{ date(scope.row.updataTime) }}</template>
     </el-table-column>
     <el-table-column label="操作">
       <template #default="scope">
         <el-button size="small" @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
-        <el-button size="small" type="success">发布</el-button>
-        <el-button size="small" type="danger" @click="handleDelete(scope.$index, scope.row)">删除</el-button>
+        <el-button size="small" type="danger" @click="handleDelete([scope.row.id])">删除</el-button>
+        <el-button size="small" type="success" @click="publish([scope.row.id])" v-if="scope.row.articleStatus === 0">发布</el-button>
       </template>
     </el-table-column>
   </el-table>
@@ -27,14 +33,16 @@
 
 <script async setup>
 import { ref } from 'vue'
-import { ElTable, ElPagination } from 'element-plus'
+import { ElTable, ElPagination, ElMessage } from 'element-plus'
 import { useRouter } from 'vue-router'
+import date from '@/utils/date'
 import api from '@/api/index.js'
 
 
 const router = useRouter()
 const multipleTableRef = ref()
 const multipleSelection = ref([])
+const multipleSelectionId = ref([])
 const tableData = ref([])
 
 
@@ -66,7 +74,11 @@ const toggleSelection = (rows) => {
   }
 }
 const handleSelectionChange = (val) => {
+  console.log(val)
   multipleSelection.value = val
+  multipleSelectionId.value = val.map(item => {
+    return item.id
+  })
 }
 
 // 编辑
@@ -75,11 +87,18 @@ const handleEdit = (index, row) => {
   router.push({path: '/article', query: {id: row.id} })
 }
 
+
+// 批量删除
+const batchDelete = () => {
+  handleDelete(multipleSelectionId.value)
+}
 // 单条删除
-const handleDelete = async (index, row) => {
+const handleDelete = async (ids) => {
   try {
-    const res = await api.deleteArticle({id: `${row.id}`})
+    const res = await api.deleteArticle({id: ids.join(',')})
+    console.log(res, 'resresres')
     if (res.code === 200) {
+      init()
       ElMessage({ message: '删除成功',type: 'success' })
     } else {
       throw res.msg
@@ -89,6 +108,23 @@ const handleDelete = async (index, row) => {
     ElMessage({ message: error,type: 'error' })
   } finally {
     // 预留loading处理
+  }
+}
+
+
+// 批量发布
+const batchPublish = () => {
+  publish(multipleSelectionId.value)
+}
+// 发布 
+const publish = async(ids) => {
+  console.log(666)
+  const res = await api.publish({id: ids.join(',')})
+  if (res.code === 200) {
+    init()
+    ElMessage({ message: '发布成功',type: 'success' })
+  } else {
+    ElMessage({ message: '发布失败,请稍后再试',type: 'error' })
   }
 }
 
