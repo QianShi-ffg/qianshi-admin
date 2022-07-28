@@ -99,3 +99,12 @@ export async function axiosDelete(url, params = {}) {
     throw res.statusText
   }
 }
+
+export async function axiosPut(url, params = {}) {
+  let res = await axios.put(url, params);
+  if(res.status === 200){
+    return res.data
+  }else {
+    throw res.statusText
+  }
+}

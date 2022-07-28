@@ -9,10 +9,7 @@ let sqlConfig = {
   useConnectionPooling: true
 }
 
-const pool = mysql.createPool(sqlConfig)
-
-
-
+// 不使用连接池方案
 // const conn = function(){
 //   let connection = mysql.createConnection(sqlConfig)
   
@@ -29,4 +26,40 @@ const pool = mysql.createPool(sqlConfig)
 // const connection = conn()
 
 // module.exports = connection()
-module.exports = pool
+
+
+const pool = mysql.createPool(sqlConfig)
+
+const conn = (sql, data) => {
+  return new Promise((resolve, reject) => {
+    // const fn =
+    // if (data) {
+      pool.getConnection((err, connection) => {
+        if (err) return reject(err)
+        connection.query(sql, data, (err, results, fields) => {
+          connection.release();
+          if (err) {
+            return resolve({
+              code: 500,
+              msg: err
+            });
+          } else {
+            return resolve({
+              code: 200,
+              data: Object.prototype.toString.call(results) === '[object Array]' ? results : '',
+              msg: 'success'
+            })
+          }
+        })
+      })
+    // } else {
+    //   pool.getConnection((err, connection) => {
+    //     connection.query(sql, fn)
+    //     connection.release();
+    //   })
+    // }
+  })
+}
+exports.conn = conn
+exports.pool = pool
+// module.exports = pool.getConnection((err, connection) => {

@@ -5,150 +5,88 @@ const router = express.Router();
 // 文件处理
 const upload = require('./modules/uploadImg')
 // 引入连接池
-const pool = require('../mysql/index')
+const { conn, pool } = require('../mysql/index')
 // 获取文章列表
 router.get('/articleList', async(req, res) => {
   let sql = ''
   if (req.query.id) {
     sql = `select * from articleList where id=${req.query.id}`
   } else {
-    sql = 'select * from articleList'
+    sql = 'select * from articleList order by updataTime DESC'
   }
-  await conn(pool, sql, null, res)
-  // pool.getConnection((err, connection) => {
-  //   connection.query(sql, function (err, results) {
-  //     if (!err) {
-  //       res.json({
-  //         code: 200,
-  //         data: results,
-  //         msg: 'success'
-  //       })
-  //     }
-  //     // connection.release()
-  //   })
-  // })
+  const results = await conn(sql, null)
+  res.json(results)
 })
 
 
-// pool.getConnection((err, connection) => {
-//   if (err) throw err
-//   router.get('/articleList', (req, res) => {
-//     let sql = ''
-//     if (req.query.id) {
-//       sql = `select * from articleList where id=${req.query.id}`
-//     } else {
-//       sql = 'select * from articleList'
-//     }
-//     connection.query(sql, function (err, results, fields) {
-//       if (!err) {
-//         res.json({
-//           code: 200,
-//           data: results,
-//           msg: 'success'
-//         })
-//       }
-//     })
-//   })
-
-//   // 保存草稿
-//   router.post('/saveDraft', async(req, res) => {
-//     console.log(req.query, req.params, req.body)
-//     const { id, title, articleContent, articleStatus } = req.body
-//     let sql = ''
-//     let saveSql = ''
-//     let data = null
-//     if (id) {
-//       sql = `select * from articleList where id=${id}`
-//       connection.query(sql, (err, results, fields) => {
-//         console.log(err, results, fields)
-//         if (!err) {
-//           saveSql = 'update articleList set ?  where id=?'
-//           data = [{ id, title, articleContent, articleStatus }, id]
-//           conn(connection, saveSql, data, res)
-//         } else {
-//           res.send({ code: 500,msg: err })
-//         }
-//       })
-//     } else {
-//       saveSql = 'insert into articleList set ?'
-//       data = { title, articleContent, articleStatus }
-//       conn(connection, saveSql, data, res)
-//     }
-//   })
-
-//   // 删除文章
-//   router.delete('/deleteArticle', (req, res) => {
-//     const { id } = req.body
-//     console.log(id.split(','))
-//     let sql = 'delete from articleList where id=?'
-//     connection.query(sql, id.split(','), function (err, results, fields) {
-//       if (!err) {
-//         res.json({
-//           code: 200,
-//           data: results,
-//           msg: 'success'
-//         })
-//       }
-//     })
-//     // res.json({
-//     //         code: 200,
-//     //         msg: 'success'
-//     //       })
-//     // if (req.query.id) {
-//     //   sql = `select * from articleList where id=${req.query.id}`
-//     // } else {
-//     //   // sql = 'delete from articleList where id in (640,634,633);'
-//     //   sql = 'delete from articleList where id=?;'
-//     // }
-    
-//   })
-//   // 释放
-//   // connection.release();
-// })
-
-
-// // 图片上传
-// router.post('/uploadImg', upload.array('file', 10), (req, res) => {
-//   const data = req.files.map(item => {
-//     console.log('文件类型：%s', item.mimetype);
-//     console.log('原始文件名：%s', item.originalname);
-//     console.log('文件大小：%s', item.size);
-//     console.log('文件保存路径：%s', item.path);
-//     console.log('文件新名称：%s', item.filename);
-//     const obj = {
-//       mimetype: item.mimetype,
-//       originalname: item.originalname,
-//       size: item.size,
-//       path: `/public/uploads/${item.filename}`
-//     }
-//     return obj
-//   })
-//   res.json({ code: 200, data: data });
-// })
-
-
-const conn = (pool, sql, data, res) => {
-  const callback = (err, results, fields) => {
-    if (!err) {
-      res.send({
-        code: 200,
-        data: Object.prototype.toString.call(results) === '[object Array]' ? results : '',
-        msg: 'success'
-      })
+// 保存草稿
+router.post('/saveDraft', async(req, res) => {
+  console.log(req.query, req.params, req.body)
+  const { id, title, articleContent, articleStatus } = req.body
+  let sql = ''
+  let saveSql = ''
+  let data = null
+  if (id) {
+    sql = `select * from articleList where id=${id}`
+    const results = await conn(sql, null)
+    if (results.code === 200) {
+        saveSql = 'update articleList set ?  where id=?'
+        data = [{ id, title, articleContent, articleStatus }, id]
+        res.json(await conn(saveSql, data))
     } else {
-      res.send({ code: 500,msg: err })
+      res.json(results)
+    }
+  } else {
+    saveSql = 'insert into articleList set ?;'
+    // const returnSql = 'select max(id) from articleList;'
+    const returnSql = 'SELECT LAST_INSERT_ID();'
+    data = { title, articleContent, articleStatus }
+    const results = await conn(saveSql, data)
+    if (results.code === 200) {
+      const res1 = await conn(returnSql, data)
+      res1.data = { id: res1.data[0]['LAST_INSERT_ID()'] }
+      res.json(res1)
+    } else {
+      res.json(results)
     }
   }
-  if (data) {
-    pool.getConnection((err, connection) => {
-      connection.query(sql, data, callback)
-      // connection.release();
-    })
-  } else {
-    pool.getConnection((err, connection) => {
-      connection.query(sql, callback)
-      // connection.release();
-    })
-  }
-}
+})
+
+//发布
+router.put('/publish', async (req, res) => {
+  const { id } = req.body
+  const sql = 'update articleList set articleStatus = 1  where id=?'
+  const results = await conn(sql, id.split(','))
+  res.json(results)
+})
+
+// 删除文章
+router.delete('/deleteArticle', async (req, res) => {
+  const { id } = req.body
+  const sql = 'delete from articleList where id=?'
+  const results = await conn(sql, id.split(','))
+  res.json(results)
+})
+
+
+// 图片上传
+router.post('/uploadImg', upload.array('file', 10), (req, res) => {
+  const data = req.files.map(item => {
+    console.log('文件类型：%s', item.mimetype);
+    console.log('原始文件名：%s', item.originalname);
+    console.log('文件大小：%s', item.size);
+    console.log('文件保存路径：%s', item.path);
+    console.log('文件新名称：%s', item.filename);
+    const obj = {
+      mimetype: item.mimetype,
+      originalname: item.originalname,
+      size: item.size,
+      path: `/public/uploads/${item.filename}`
+    }
+    return obj
+  })
+  res.json({ code: 200, data: data });
+})
+
+
 module.exports = router

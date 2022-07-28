@@ -1,4 +1,4 @@
-import { axiosGet, axiosPost, axiosDelete } from './axios'
+import { axiosGet, axiosPost, axiosDelete, axiosPut } from './axios'
 
 export default {
   getLogin:(params = {}) => {
@@ -15,5 +15,8 @@ export default {
   },
   deleteArticle:(params = {}) => {
     return axiosDelete('/deleteArticle/', params)
+  },
+  publish:(params = {}) => {
+    return axiosPut('/publish', params)
   }
 }

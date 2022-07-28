@@ -7,18 +7,20 @@
   <el-table ref="multipleTableRef" :data="tableData" style="width: 100%" @selection-change="handleSelectionChange">
     <el-table-column type="selection" width="55" />
     <el-table-column property="title" label="标题" />
-    <el-table-column property="articleStatus" label="发布状态" show-overflow-tooltip />
+    <el-table-column label="发布状态">
+      <template #default="scope">{{ scope.row.articleStatus === 0 ? '未发布' : '已发布' }}</template>
+    </el-table-column>
     <el-table-column label="创建时间">
-      <template #default="scope">{{ scope.row.createTime }}</template>
+      <template #default="scope">{{ date(scope.row.createTime) }}</template>
     </el-table-column>
     <el-table-column label="更新时间">
-      <template #default="scope">{{ scope.row.updataTime }}</template>
+      <template #default="scope">{{ date(scope.row.updataTime) }}</template>
     </el-table-column>
     <el-table-column label="操作">
       <template #default="scope">
         <el-button size="small" @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
-        <el-button size="small" type="success">发布</el-button>
         <el-button size="small" type="danger" @click="handleDelete(scope.$index, scope.row)">删除</el-button>
+        <el-button size="small" type="success" @click="publish([scope.row.id])" v-if="scope.row.articleStatus === 0">发布</el-button>
       </template>
     </el-table-column>
   </el-table>
@@ -27,8 +29,9 @@
 
 <script async setup>
 import { ref } from 'vue'
-import { ElTable, ElPagination } from 'element-plus'
+import { ElTable, ElPagination, ElMessage } from 'element-plus'
 import { useRouter } from 'vue-router'
+import date from '@/utils/date'
 import api from '@/api/index.js'
 
 
@@ -79,7 +82,9 @@ const handleEdit = (index, row) => {
 const handleDelete = async (index, row) => {
   try {
     const res = await api.deleteArticle({id: `${row.id}`})
+    console.log(res, 'resresres')
     if (res.code === 200) {
+      init()
       ElMessage({ message: '删除成功',type: 'success' })
     } else {
       throw res.msg
@@ -89,6 +94,18 @@ const handleDelete = async (index, row) => {
     ElMessage({ message: error,type: 'error' })
   } finally {
     // 预留loading处理
+  }
+}
+
+// 发布 
+const publish = async(ids) => {
+  console.log(666)
+  const res = await api.publish({id: ids.join(',')})
+  if (res.code === 200) {
+    init()
+    ElMessage({ message: '发布成功',type: 'success' })
+  } else {
+    ElMessage({ message: '发布失败,请稍后再试',type: 'error' })
   }
 }
 
