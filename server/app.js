@@ -11,9 +11,11 @@ const router = require('./routes/index')
 // app.use('/articleList',formidable());
 app.use('/public', express.static('./public/'))
 app.use((req,res,next)=>{
+  // 如果是编辑器上传图片就绕过formdata解析
   if(req.originalUrl === '/uploadImg'){
     next()
   } else {
+    // formdata全局解析
     app.use(formidable());
     next()
   }

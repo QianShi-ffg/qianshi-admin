@@ -105,12 +105,12 @@ const publish = async() => {
 
 // 上传图片
 const uploadImg = async(files, callback) => {
-  const fromData = new FormData();
+  const formData = new FormData();
   for(let i = 0; i < files.length; i++){
-    fromData.append('file', files[i]);
+    formData.append('file', files[i]);
     // fromData.append(files[i].name, files[i]);
   }
-  const res = await api.uploadImg(fromData)
+  const res = await api.uploadImg(formData)
   console.log(import.meta.env.VITE_SERVER)
   callback(res.data.map((item) => `${import.meta.env.VITE_SERVER}${item.path}`))
 }

@@ -9,13 +9,13 @@
     <el-table-column property="title" label="标题" />
     <el-table-column label="发布状态">
       <template #default="scope">
-        <span :style="{background: scope.row.articleStatus === 0 ? '#ed3b29' : '#67c23a', color: '#fff', padding: '2px 10px', borderRadius: '10px'}">
+        <span :style="{background: scope.row.articleStatus === 0 ? '#f37227' : '#67c23a', color: '#fff', padding: '2px 10px', borderRadius: '10px'}">
           {{ scope.row.articleStatus === 0 ? '未发布' : '已发布' }}
         </span>
       </template>
     </el-table-column>
     <el-table-column label="创建时间">
-      <template #default="scope">{{ date(scope.row.createTime) }}</template>
+      <template #default="scope">{{ date(scope.row.createTime) }}</template>  
     </el-table-column>
     <el-table-column label="更新时间">
       <template #default="scope">{{ date(scope.row.updataTime) }}</template>
