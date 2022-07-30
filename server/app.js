@@ -1,6 +1,10 @@
 const express = require('express')
 // 创建服务器
 const app = express();
+// 处理跨域
+const cors = require('cors')
+app.use(cors())
+
 const bodyParser = require('body-parser')
 const formidable = require('express-formidable')
 

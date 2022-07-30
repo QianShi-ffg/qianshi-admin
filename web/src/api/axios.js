@@ -4,7 +4,8 @@ import { ElMessage, ElMessageBox } from 'element-plus'
 import { useRouter } from 'vue-router'
 const router = useRouter()
 
-axios.defaults.baseURL = 'api';
+axios.defaults.baseURL = import.meta.env.VITE_BASEURL;
+// console.log(import.meta.env.VITE_BASEURL, import.meta.env.development, 66666666666666666)
 // if (process.env.NODE_ENV === 'development') {
 //   axios.defaults.baseURL = 'api';
 // } else if (process.env.NODE_ENV === 'production') {
