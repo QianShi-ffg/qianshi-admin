@@ -23,6 +23,11 @@ const routes = [
     ]
   },
   {
+    name: 'login',
+    path: '/login',
+    component: () => import('@/views/login/index.vue')
+  },
+  {
     name: 'article',
     path: '/article',
     component: () => import('@/views/admin/creative/modules/articleOption.vue')
@@ -40,8 +45,24 @@ const routes = [
 ]
 
 
-// const router = 
-export default createRouter({
+
+const router = createRouter({
   history: createWebHashHistory(),
   routes
 })
+
+router.beforeEach((to, from, next) => {
+  if(to.name === 'login') {
+    sessionStorage.clear()
+    next()
+  } else {
+    if(!sessionStorage.getItem('user') && to.name !== 'login') {
+      next({ name: 'login' })
+    } else {
+      next()
+    }
+  }
+})
+
+export default router
+
