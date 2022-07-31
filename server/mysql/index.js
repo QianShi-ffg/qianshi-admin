@@ -5,7 +5,7 @@ let sqlConfig = {
   port: '3306',
   user:'root',
   password:'root',
-  database:'mysql', //数据库名称
+  database:'root', //数据库名称
   useConnectionPooling: true
 }
 
