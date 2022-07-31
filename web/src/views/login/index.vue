@@ -47,6 +47,7 @@
 import { ref } from "vue";
 import { useRouter } from 'vue-router'
 import { ElMessage } from 'element-plus'
+import api from '@/api/index.js'
 
 const name = ref('');
 const password = ref('');
@@ -65,31 +66,36 @@ const switchType = (value) => {
   }
 }
 
-const signUp = () => {
-  type.value = 'signIn'
-  containerClass.value = ''
+const signUp = async() => {
+  const res = await api.signUp({name: name.value, password: password.value})
+  if (res.code === 200) {
+    if (res.data) {
+      type.value = 'signIn'
+      containerClass.value = ''
+    } else {
+      ElMessage({ message: res.msg, type: 'error'})
+    }
+  } else {
+    ElMessage({ message: res.msg, type: 'error'})
+  }
 }
-const signIn = () => {
+const signIn = async() => {
   if (name.value !== '' && password.value !== '') {
-    sessionStorage.setItem('user', JSON.stringify({name: name.value, password: password.value}))
-    router.push('/')
+    const res = await api.login({name: name.value, password: password.value})
+    if (res.code === 200) {
+      if (res.data) {
+        sessionStorage.setItem('user', JSON.stringify({name: name.value, password: password.value}))
+        router.push('/')
+      } else {
+        ElMessage({ message: res.msg, type: 'error'})
+      }
+    } else {
+      ElMessage({ message: res.msg, type: 'error'})
+    }
   } else {
     ElMessage({ message: '账号与密码不可为空', type: 'error'})
   }
 }
-// onMounted(() => {
-//   const signUpBtn = document.getElementById("signUp");
-//   const signInBtn = document.getElementById("signIn");
-//   const container = document.getElementById("container");
-
-//   signUpBtn.addEventListener("click", () => {
-//     container.classList.add("right-panel-active");
-//   });
-
-//   signInBtn.addEventListener("click", () => {
-//     container.classList.remove("right-panel-active");
-//   });
-// });
 </script>
 
 <style lang="scss" scoped>
@@ -168,7 +174,7 @@ form {
   user-select: none;
 }
 
-:deep.el-input {
+:deep(.el-input) {
   .el-input__wrapper {
     position: relative;
     border: none;

@@ -3,8 +3,8 @@
     <el-button :icon="ArrowLeft" link @click="()=>{router.push({path:'/creative'})}">返回</el-button>
     <el-input placeholder="请输入文章标题" class="articleTitle" v-model="titleValue"></el-input>
     <div>
-      <el-button @click="save">保存草稿</el-button>
-      <el-button type="success" @click="publish">发布</el-button>
+      <el-button @click="save" round>保存草稿</el-button>
+      <el-button type="success" @click="publish" round>发布</el-button>
     </div>
   </header>
   <md-editor v-model="text" @onHtmlChanged="saveHtml"  @onSave="codeSave" :onUploadImg="uploadImg" :theme="theme"/>

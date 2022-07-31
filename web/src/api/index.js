@@ -18,5 +18,11 @@ export default {
   },
   publish:(params = {}) => {
     return axiosPut('/publish', params)
+  },
+  signUp:(params = {}) => {
+    return axiosPost('/signUp', params)
+  },
+  login:(params = {}) => {
+    return axiosPost('/login', params)
   }
 }

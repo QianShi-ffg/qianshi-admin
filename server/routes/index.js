@@ -6,6 +6,43 @@ const router = express.Router();
 const upload = require('./modules/uploadImg')
 // 引入连接池
 const { conn, pool } = require('../mysql/index')
+
+// 注册
+router.post('/signUp', async(req, res) => {
+  console.log(req.body)
+  const { name, password } = req.body
+  const sql1 = `select count(name) from user where name='${name}';`
+  const sql2 = 'insert into user set ?;'
+  const  data = { name, password }
+  const results = await conn(sql1)
+  if (results.code === 200) {
+    if (results.data[0]['count(name)'] === 0) {
+      const results = await conn(sql2, data)
+      res.json(results)
+    } else {
+      res.json({code: 200, msg: '该名称已被注册'})
+    }
+  } else {
+    res.json(results)
+  }
+})
+
+// 登录
+router.post('/login', async(req, res) => {
+  const { name, password } = req.body
+  const sql = `select * from user where name='${name}' and password='${password}';`
+  const results = await conn(sql)
+  if (results.code === 200) {
+    if (results.data.length !== 0) {
+      res.json(results)
+    } else {
+      res.json({code: 200, msg: '该账号不存在，请先注册后再次尝试'})
+    }
+  } else {
+    res.json(results)
+  }
+})
+
 // 获取文章列表
 router.get('/articleList', async(req, res) => {
   let sql = ''
