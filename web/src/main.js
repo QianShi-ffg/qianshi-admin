@@ -7,6 +7,9 @@ import ElementPlus from 'element-plus'
 import 'element-plus/dist/index.css'
 import './assets/style/index.scss'
 import '@/utils/theme'
+
+// 请求列表
+window._axiosPromiseArr = []
 // 声明vue实例
 const app = createApp(App)
 app.use(router)

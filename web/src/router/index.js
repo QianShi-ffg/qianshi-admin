@@ -51,7 +51,14 @@ const router = createRouter({
   routes
 })
 
+
 router.beforeEach((to, from, next) => {
+  // 跳转路由中断请求
+  window._axiosPromiseArr.forEach((el, index) => {
+    el.cancel() // 路由跳转之前，中止请求
+    //  重置 window._axiosPromiseArr
+    delete window._axiosPromiseArr[index]
+  })
   if(to.name === 'login') {
     sessionStorage.clear()
     next()

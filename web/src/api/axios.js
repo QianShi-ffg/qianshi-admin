@@ -3,6 +3,7 @@ import { ElMessage, ElMessageBox } from 'element-plus'
 // import 'element-ui/lib/theme-chalk/index.css';
 import { useRouter } from 'vue-router'
 const router = useRouter()
+// 当前请求列表
 
 axios.defaults.baseURL = import.meta.env.VITE_BASEURL;
 // console.log(import.meta.env.VITE_BASEURL, import.meta.env.development, 66666666666666666)
@@ -16,17 +17,22 @@ axios.defaults.baseURL = import.meta.env.VITE_BASEURL;
 //请求拦截器 区分了一下正常请求时与发送formdata时的请求头
 axios.interceptors.request.use((config) => {
   config.headers['Content-Type'] = 'application/json';
-  if (config.method === 'post') {
-    //FormData时的请求头
-    if (Object.prototype.toString.call(config.data) === '[object FormData]') {
-      // 请求拦截器处理
-      config.headers['Content-Type'] = 'multipart/form-data';
-    } else if (Object.prototype.toString.call(config.data) === '[object String]') {
-      config.headers['Content-Type'] = 'application/x-www-form-urlencoded';
-    }
-  } else {
-    config.headers['Content-Type'] = 'application/json';
-  }
+  config.headers['token'] = 'token66666666666666'
+  // 每个请求都会 加入 
+  config.cancelToken = new axios.CancelToken(cancel => {
+    window._axiosPromiseArr.push({ cancel })
+  })
+  // if (config.method === 'post') {
+  //   //FormData时的请求头
+  //   if (Object.prototype.toString.call(config.data) === '[object FormData]') {
+  //     // 请求拦截器处理
+  //     config.headers['Content-Type'] = 'multipart/form-data';
+  //   } else if (Object.prototype.toString.call(config.data) === '[object String]') {
+  //     config.headers['Content-Type'] = 'application/x-www-form-urlencoded';
+  //   }
+  // } else {
+  //   config.headers['Content-Type'] = 'application/json';
+  // }
   return config;
 });
 

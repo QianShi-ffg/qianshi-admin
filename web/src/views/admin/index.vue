@@ -48,11 +48,8 @@
           </el-aside>
           <el-container>
             <el-header>
-              <el-breadcrumb :separator-icon="ArrowRight">
-                <el-breadcrumb-item :to="{ path: '/' }">homepage</el-breadcrumb-item>
-                <el-breadcrumb-item>promotion management</el-breadcrumb-item>
-                <el-breadcrumb-item>promotion list</el-breadcrumb-item>
-                <el-breadcrumb-item>promotion detail</el-breadcrumb-item>
+              <el-breadcrumb separator="/">
+                <el-breadcrumb-item v-for="item in breadcrumbList" :key="item.name" :to="{ path: item.path }">{{ item.name }}</el-breadcrumb-item>
               </el-breadcrumb>
               <el-button class="expandIcon" @click="putMenu" :icon="data.icon" link>
               </el-button>
@@ -69,7 +66,7 @@
 </template>
 
 <script setup>
-import { ref, reactive, markRaw } from "vue";
+import { ref, reactive, markRaw, watch } from "vue";
 import { useRoute } from "vue-router";
 import {
   Document,
@@ -82,16 +79,27 @@ import {
 
 const isCollapse = ref(false);
 const route = useRoute()
-console.log(route.name)
 const currentMenu = ref()
+let breadcrumbList = ref([])
+const data = reactive({
+  icon: markRaw(Fold),
+});
+
+console.log(route.name)
+console.log(route.matched, '998888888888866')
+
+watch(route, (value, oldVal) => {
+  console.log(45269333)
+  breadcrumb()
+})
+
+
+
 if (route.name) {
   currentMenu.value = route.name
 } else {
   currentMenu.value = 'admin'
 }
-const data = reactive({
-  icon: markRaw(Fold),
-});
 const handleOpen = (key, keyPath) => {
   console.log(key, keyPath);
 };
@@ -106,7 +114,17 @@ const putMenu = () => {
   } else {
     data.icon = markRaw(Fold);
   }
-};
+}
+
+const breadcrumb = () => {
+  const routeList = route.matched.map(item => {
+    item.name = item.path === '/' ? 'home' : item.name
+    return item
+  })
+  routeList[0].name === 'home'
+  breadcrumbList.value = routeList
+}
+breadcrumb()
 </script>
 
 <style lang="scss" scoped>

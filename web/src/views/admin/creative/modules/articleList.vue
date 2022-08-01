@@ -52,18 +52,22 @@
 </template>
 
 <script async setup>
-import { ref } from "vue";
+import { ref, reactive } from "vue";
 import { ElTable, ElPagination, ElMessage } from "element-plus";
 import { Delete, Edit, Promotion } from "@element-plus/icons-vue";
-import { useRouter } from "vue-router";
+import { useRouter, useRoute } from "vue-router";
 import date from "@/utils/date";
 import api from "@/api/index.js";
 
 const router = useRouter();
+const route = useRoute();
 const multipleTableRef = ref();
 const multipleSelection = ref([]);
 const multipleSelectionId = ref([]);
 const tableData = ref([]);
+const paginationObj = reactive({
+  page: 1
+})
 
 const init = async () => {
   try {
@@ -142,6 +146,7 @@ const publish = async (ids) => {
     ElMessage({ message: "发布失败,请稍后再试", type: "error" });
   }
 };
+
 </script>
 
 <style lang="scss" scoped>
