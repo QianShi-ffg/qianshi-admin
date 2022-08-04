@@ -55,7 +55,9 @@
               </el-button>
             </el-header>
             <el-main>
-              <router-view></router-view>
+              <el-card id="box-card">
+                <router-view/>
+              </el-card>
             </el-main>
           </el-container>
         </el-container>
@@ -182,6 +184,12 @@ breadcrumb()
 
   .el-main {
     overflow: hidden;
+    .el-card {
+      position: relative;
+      height: 100%;
+      padding: 30px;
+      box-sizing: border-box;
+    }
   }
 
   .el-footer {

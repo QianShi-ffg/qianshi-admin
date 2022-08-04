@@ -1,53 +1,50 @@
 <template>
-  <el-card class="box-card">
-    <div id="articleBtn">
-      <el-button type="primary" @click="
-        () => {
-          router.push({ path: '/article' });
-        }
-      " round>新 建</el-button>
-      <el-button type="success" @click="batchPublish" v-if="multipleSelectionId.length > 0" round>批量发布</el-button>
-      <el-button type="danger" @click="batchDelete" v-if="multipleSelectionId.length > 0" round>批量删除</el-button>
-    </div>
-    <el-table ref="multipleTableRef" :data="tableData" style="width: 100%" @selection-change="handleSelectionChange"
-      size="default" height="calc(100% - 125px)">
-      <el-table-column type="selection" width="55" />
-      <el-table-column property="title" label="标题" />
-      <el-table-column label="发布状态">
-        <template #default="scope">
-          <span :style="{
-            background: scope.row.articleStatus === 0 ? '#f37227' : '#67c23a',
-            color: '#fff',
-            padding: '2px 10px',
-            borderRadius: '10px',
-          }">
-            {{ scope.row.articleStatus === 0 ? "未发布" : "已发布" }}
-          </span>
-        </template>
-      </el-table-column>
-      <el-table-column label="创建时间">
-        <template #default="scope">{{ date(scope.row.createTime) }}</template>
-      </el-table-column>
-      <el-table-column label="更新时间">
-        <template #default="scope">{{ date(scope.row.updataTime) }}</template>
-      </el-table-column>
-      <el-table-column label="操作">
-        <template #default="scope">
-          <el-tooltip class="box-item" effect="dark" content="编辑" placement="top">
-            <el-button @click="handleEdit(scope.$index, scope.row)" :icon="Edit" link></el-button>
-          </el-tooltip>
-          <el-tooltip class="box-item" effect="dark" content="删除" placement="top">
-            <el-button type="danger" @click="handleDelete([scope.row.id])" :icon="Delete" link></el-button>
-          </el-tooltip>
-          <el-tooltip class="box-item" effect="dark" content="发布" placement="top" v-if="scope.row.articleStatus === 0">
-            <el-button type="success" @click="publish([scope.row.id])" 
-              :icon="Promotion" link></el-button>
-          </el-tooltip>
-        </template>
-      </el-table-column>
-    </el-table>
-    <el-pagination background layout="prev, pager, next" :total="1000" />
-  </el-card>
+  <div id="articleBtn">
+    <el-button type="primary" @click="
+      () => {
+        router.push({ path: '/article' });
+      }
+    " round>新 建</el-button>
+    <el-button type="success" @click="batchPublish" v-if="multipleSelectionId.length > 0" round>批量发布</el-button>
+    <el-button type="danger" @click="batchDelete" v-if="multipleSelectionId.length > 0" round>批量删除</el-button>
+  </div>
+  <el-table ref="multipleTableRef" :data="tableData" style="width: 100%" @selection-change="handleSelectionChange"
+    size="default" height="calc(100% - 125px)">
+    <el-table-column type="selection" width="55" />
+    <el-table-column property="title" label="标题" />
+    <el-table-column label="发布状态">
+      <template #default="scope">
+        <span :style="{
+          background: scope.row.articleStatus === 0 ? '#f37227' : '#67c23a',
+          color: '#fff',
+          padding: '2px 10px',
+          borderRadius: '10px',
+        }">
+          {{ scope.row.articleStatus === 0 ? "未发布" : "已发布" }}
+        </span>
+      </template>
+    </el-table-column>
+    <el-table-column label="创建时间">
+      <template #default="scope">{{ date(scope.row.createTime) }}</template>
+    </el-table-column>
+    <el-table-column label="更新时间">
+      <template #default="scope">{{ date(scope.row.updataTime) }}</template>
+    </el-table-column>
+    <el-table-column label="操作">
+      <template #default="scope">
+        <el-tooltip class="box-item" effect="dark" content="编辑" placement="top">
+          <el-button @click="handleEdit(scope.$index, scope.row)" :icon="Edit" link></el-button>
+        </el-tooltip>
+        <el-tooltip class="box-item" effect="dark" content="删除" placement="top">
+          <el-button type="danger" @click="handleDelete([scope.row.id])" :icon="Delete" link></el-button>
+        </el-tooltip>
+        <el-tooltip class="box-item" effect="dark" content="发布" placement="top" v-if="scope.row.articleStatus === 0">
+          <el-button type="success" @click="publish([scope.row.id])" :icon="Promotion" link></el-button>
+        </el-tooltip>
+      </template>
+    </el-table-column>
+  </el-table>
+  <el-pagination background layout="prev, pager, next" :total="1000" />
 
 </template>
 
@@ -152,13 +149,6 @@ const publish = async (ids) => {
 <style lang="scss" scoped>
 #articleBtn {
   margin-bottom: 20px;
-}
-
-.el-card {
-  position: relative;
-  height: calc(100vh - 140px);
-  padding: 30px;
-  box-sizing: border-box;
 }
 
 .el-pagination {
