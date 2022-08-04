@@ -4,8 +4,10 @@
       <el-container>
         <el-container>
           <el-aside width="auto">
-            <el-card class="menu">
-              <el-menu active-text-color="#4968db" class="el-menu-vertical-demo" :default-active="currentMenu"
+            <el-card class="aside">
+              <img :src="userIcon" alt="" :class="isCollapse ? 'collapseImg' : ''">
+              <div class="menu">
+                <el-menu active-text-color="#4968db" class="el-menu-vertical-demo" :default-active="currentMenu"
                 text-color="#000" :collapse="isCollapse" @open="handleOpen" @close="handleClose"
                 :collapse-transition="true" :router="true">
                 <el-menu-item :index="'admin'">
@@ -14,7 +16,7 @@
                   </el-icon>
                   <template #title>首页</template>
                 </el-menu-item>
-                <!-- <el-sub-menu index="1">
+                <el-sub-menu index="1">
               <template #title>
                 <el-icon><location /></el-icon>
                 <span>Navigator One</span>
@@ -26,7 +28,7 @@
                 <template #title><span>item four</span></template>
                 <el-menu-item index="1-4-1">item one</el-menu-item>
               </el-sub-menu>
-            </el-sub-menu> -->
+            </el-sub-menu>
                 <el-menu-item :index="'creative'">
                   <el-icon>
                     <icon-menu />
@@ -44,6 +46,7 @@
                   <template #title>设置</template>
                 </el-menu-item>
               </el-menu>
+              </div>
             </el-card>
           </el-aside>
           <el-container>
@@ -70,6 +73,7 @@
 <script setup>
 import { ref, reactive, markRaw, watch } from "vue";
 import { useRoute } from "vue-router";
+import userIcon from '@/assets/userIcon.jpg'
 import {
   Document,
   Menu as IconMenu,
@@ -143,10 +147,28 @@ breadcrumb()
   .el-aside {
     background-color: var(--el-aside-bgColor);
     padding: 20px 0 20px 20px;
-
-    .menu {
+    :deep(.el-card__body) {
+      padding: 20px 12px;
+    }
+    .aside {
       height: 100%;
       background-color: var(--el-card-bgColor);
+      text-align: center;
+      img {
+        width: 110px;
+        border-radius: 55px;
+        margin-bottom: 10px;
+        transition: all 0.5s;
+      }
+      .collapseImg {
+        width: 50px;
+        border-radius: 25px;
+      }
+      .menu {
+        padding: 0 8px;
+        height: calc(100% - 110px - 10px - 10px);
+        overflow-y: overlay;
+      }
     }
 
     .el-menu {

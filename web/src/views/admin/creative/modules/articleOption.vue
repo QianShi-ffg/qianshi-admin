@@ -127,8 +127,15 @@ const uploadImg = async(files, callback) => {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  .articleTitle {
-    width: 60%;
+  .el-button.is-link {
+    font-size: 18px;
+    color: rgba(255, 255, 255, 0.849);
+    &:hover {
+      color: rgb(255, 255, 255);
+    }
+  }
+  .el-input {
+    width: 40%;
   }
 }
 </style>
