@@ -2,23 +2,24 @@ import { createRouter, createWebHashHistory } from 'vue-router'
 
 const routes = [
   {
-    path: '/',
-    component: () => import('@/views/admin/index.vue'),
+    path: '/admin',
+    component: () => import('@/views/index.vue'),
+    redirect: '/',
     children: [
       {
-        name: 'admin',
-        path: '/admin',
-        redirect: '/'
+        name: '/',
+        path: '/',
+        component: () => import('@/views/overview/index.vue')
       },
       {
         name: 'creative',
         path: '/creative',
-        component: () => import('@/views/admin/creative/index.vue')
+        component: () => import('@/views/creative/index.vue')
       },
       {
         name: 'settings',
         path: '/settings',
-        component: () => import('@/views/admin/settings/index.vue')
+        component: () => import('@/views/settings/index.vue')
       }
     ]
   },
@@ -30,7 +31,7 @@ const routes = [
   {
     name: 'article',
     path: '/article',
-    component: () => import('@/views/admin/creative/modules/articleOption.vue')
+    component: () => import('@/views/creative/modules/articleOption.vue')
   },
   // {
   //   name: 'editArticle',

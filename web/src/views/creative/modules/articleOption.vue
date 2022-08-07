@@ -7,7 +7,9 @@
       <el-button type="success" @click="publish" round>发布</el-button>
     </div>
   </header>
-  <md-editor v-model="text" @onHtmlChanged="saveHtml"  @onSave="codeSave" :onUploadImg="uploadImg" :theme="theme"/>
+  <div class="editor">
+    <md-editor v-model="text" @onHtmlChanged="saveHtml"  @onSave="codeSave" :onUploadImg="uploadImg" :theme="theme"/>
+  </div>
 </template>
 
 <script setup>
@@ -117,8 +119,9 @@ const uploadImg = async(files, callback) => {
 </script>
 
 <style lang='scss' scoped>
-#md-editor-v3 {
+.editor {
   height: calc(100vh - 60px);
+  padding: 10px 20px;
 }
 #articleHeader {
   position: relative;
@@ -136,6 +139,19 @@ const uploadImg = async(files, callback) => {
   }
   .el-input {
     width: 40%;
+  .el-input__wrapper {
+    border: 3px solid transparent;
+    border-radius: 18px;
+    background-image: linear-gradient(to right, var(--el-card-bgColor), var(--el-card-bgColor)),
+    linear-gradient(to right, var(--theme-right-color) 0%,var(--theme-left-color) 100%);
+    background-clip: padding-box, border-box;
+    background-origin: padding-box, border-box;
+    box-shadow: none;
+    &.is-focus {
+      border: 3px solid var(--theme-left-color);
+      box-shadow: 0 0 13px 3px var(--theme-left-color);
+    }
+  }
   }
 }
 </style>

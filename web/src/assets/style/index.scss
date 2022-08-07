@@ -3,16 +3,53 @@
   height: 100%;
 }
 
+.el-header[data-v-b301384e] .expandIcon .el-icon svg {
+  color: var(--header-icon-color);
+}
+
 .el-menu-vertical-demo:not(.el-menu--collapse) {
   width: 194px;
 }
 
 .el-menu-item {
   border-radius: 32px;
+  margin-bottom: 5px;
+}
+
+.el-sub-menu {
+  border-radius: 32px;
+  margin-bottom: 5px;
+  .el-sub-menu__title {
+    border-radius: 32px;
+  }
+}
+
+.menubar > li {
+  margin-bottom: 5px;
 }
 
 .el-menu-item.is-active {
   background: var(--div-bgColor);
+}
+
+.el-popper {
+  border-radius: 25px;
+}
+.el-popper.is-light {
+  background: transparent;
+  border-radius: 30px;
+  border: none;
+  box-shadow: 0 0 5px 3px var(--el-popper-light);
+}
+.el-menu--vertical.el-menu--popup-container {
+  background: transparent;
+  border-radius: 30px;
+  .el-menu.el-menu--popup.el-menu--popup-right-start {
+    background: var(--el-popper-light);
+    backdrop-filter: saturate(180%) blur(5px);
+    border-radius: 30px;
+    padding: 10px;
+  }
 }
 
 
@@ -105,6 +142,17 @@
 }
 
 
+#md-editor-v3 {
+  width: 100%;
+  height: 100%;
+  border-radius: 30px;
+  padding: 10px 20px;
+  background-color: var(--el-card-bgColor);
+  .md-content {
+    background-color: var(--div-bgColor);
+    border-radius: 30px;
+  }
+}
 // 滚动条美化
 * {
 
@@ -165,6 +213,8 @@
     --el-breadcrumb-color: #fff;
     --div-bgColor: hsla(0, 0%, 100%, 0.5);
     --el-table_column_1-padding: 0 0 0 15px;
+    --header-icon-color: #fff;
+    --el-popper-light: rgba(183, 194, 231, 0.8);
   }
 
   a:hover {
