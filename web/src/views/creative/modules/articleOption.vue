@@ -114,7 +114,7 @@ const uploadImg = async(files, callback) => {
   }
   const res = await api.uploadImg(formData)
   console.log(import.meta.env.VITE_SERVER)
-  callback(res.data.map((item) => `${import.meta.env.VITE_SERVER}${item.path}`))
+  callback(res.data.map((item) => `${import.meta.env.VITE_BASEURL}${item.path}`))
 }
 </script>
 
