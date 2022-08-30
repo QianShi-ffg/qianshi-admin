@@ -136,7 +136,6 @@ const batchPublish = () => {
 };
 // 发布
 const publish = async (ids) => {
-  console.log(666);
   const res = await api.publish({ id: ids.join(",") });
   if (res.code === 200) {
     init();

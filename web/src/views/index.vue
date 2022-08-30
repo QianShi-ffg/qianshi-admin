@@ -8,9 +8,9 @@
               <img :src="userIcon" alt="" :class="isCollapse ? 'collapseImg' : ''">
               <div class="menu">
                 <el-menu active-text-color="#4968db" class="el-menu-vertical-demo" :default-active="currentMenu"
-                  text-color="#000" :collapse="isCollapse" @open="handleOpen" @close="handleClose"
+                  text-color="#000" :collapse="isCollapse"
                   :collapse-transition="true" :router="true">
-                  <el-menu-item :index="'/'">
+                  <el-menu-item index="/">
                     <el-icon>
                       <icon-menu />
                     </el-icon>
@@ -26,22 +26,14 @@
                     <el-menu-item index="1-1">流量分析</el-menu-item>
                     <el-menu-item index="1-2">来源分析</el-menu-item>
                     <el-menu-item index="1-3">访问分析</el-menu-item>
-                    <!-- <el-sub-menu index="1-4">
-                <template #title><span>item four</span></template>
-                <el-menu-item index="1-4-1">item one</el-menu-item>
-              </el-sub-menu> -->
                   </el-sub-menu>
-                  <el-menu-item :index="'creative'">
+                  <el-menu-item index="creative">
                     <el-icon>
                       <EditPen />
                     </el-icon>
                     <template #title>创作中心</template>
                   </el-menu-item>
-                  <!-- <el-menu-item index="3" disabled>
-              <el-icon><document /></el-icon>
-              <template #title>Navigator Three</template>
-            </el-menu-item> -->
-                  <el-menu-item :index="'settings'">
+                  <el-menu-item index="settings">
                     <el-icon>
                       <setting />
                     </el-icon>
@@ -81,7 +73,6 @@ import { ref, reactive, markRaw, watch } from "vue";
 import { useRoute } from "vue-router";
 import userIcon from '@/assets/userIcon.jpg'
 import {
-  Document,
   DataLine as IconMenu,
   EditPen,
   Expand,
@@ -98,11 +89,7 @@ const data = reactive({
   icon: markRaw(Fold),
 });
 
-console.log(route.name)
-console.log(route.matched, '998888888888866')
-
 watch(route, (value, oldVal) => {
-  console.log(45269333)
   breadcrumb()
 })
 
@@ -113,12 +100,7 @@ if (route.name) {
 } else {
   currentMenu.value = '/'
 }
-const handleOpen = (key, keyPath) => {
-  console.log(key, keyPath);
-};
-const handleClose = (key, keyPath) => {
-  console.log(key, keyPath);
-};
+
 
 const putMenu = () => {
   isCollapse.value = !isCollapse.value;
@@ -180,7 +162,7 @@ breadcrumb()
       .menu {
         padding: 0 8px;
         height: calc(100% - 110px - 10px - 10px);
-        overflow-y: overlay;
+        // overflow-y: overlay;
       }
     }
 

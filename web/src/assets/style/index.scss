@@ -9,6 +9,7 @@
 
 .el-menu-vertical-demo:not(.el-menu--collapse) {
   width: 194px;
+  height: 100%;
 }
 
 .el-menu-item {
@@ -98,9 +99,10 @@
   border-radius: 25px;
 }
 
-// .el-table .el-table__inner-wrapper {
-//   // height: 100% !important;
-// }
+
+.el-table .el-table__inner-wrapper {
+  height: 100% !important;
+}
 
 .el-table tr {
   background: var(--div-bgColor);
