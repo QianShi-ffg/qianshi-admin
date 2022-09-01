@@ -24,5 +24,11 @@ export default {
   },
   login:(params = {}) => {
     return axiosPost('/login', params)
+  },
+  getClassifyList:(params = {}) => {
+    return axiosGet('/classifyList', params)
+  },
+  saveClassify:(params = {}) => {
+    return axiosPost('/saveClassify', params)
   }
 }

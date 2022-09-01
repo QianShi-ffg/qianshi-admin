@@ -55,6 +55,18 @@ router.get('/articleList', async(req, res) => {
   res.json(results)
 })
 
+// 获取文章列表(博客端)
+router.get('/publishArticleList', async(req, res) => {
+  let sql = ''
+  if (req.query.id) {
+    sql = `select * from articleList where id=${req.query.id} and articleStatus=1`
+  } else {
+    sql = 'select * from articleList where articleStatus=1 order by id DESC'
+  }
+  const results = await conn(sql, null)
+  res.json(results)
+})
+
 
 // 保存草稿
 router.post('/saveDraft', async(req, res) => {
@@ -136,5 +148,21 @@ router.post('/uploadImg', upload.array('file', 10), (req, res) => {
   res.json({ code: 200, data: data });
 })
 
+
+// 获取分类列表
+router.get('/classifyList', async(req, res) => {
+  const sql = 'select * from classifyList order by id DESC'
+  const results = await conn(sql, null)
+  res.json(results)
+})
+
+// 添加分类
+router.post('/saveClassify', async(req, res) => {
+  const { name, describe } = req.body
+  const sql = 'insert into classifyList set ?;'
+  const data = { name, describe }
+  const results = await conn(sql, data)
+  res.json(results)
+})
 
 module.exports = router

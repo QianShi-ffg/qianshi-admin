@@ -73,6 +73,10 @@ onMounted(() => {
 
 // 点击编辑器内部保存 保存草稿
 const codeSave = async(e) => {
+  if (!titleValue.value) {
+    ElMessage({ message: '请添加文章标题',type: 'waring' })
+    return
+  }
   const res = await api.saveDraft({
     id: route.query.id || null,
     title: titleValue.value,
