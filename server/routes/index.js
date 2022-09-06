@@ -40,11 +40,6 @@ router.post('/login', async(req, res) => {
   const results = await conn(sql)
   if (results.code === 200) {
     if (results.data.length !== 0) {
-      // console.log(122222)
-      // axios.get(`http://openapi.baidu.com/oauth/2.0/token?grant_type=refresh_token&refresh_token=${refresh_token}&client_id=${'PLFuZ5UHascuRd9cANO6SrMdP8GhX6lF'}&client_secret=${'rYhbIuz4YWqK3PTNqzpK5xRzGGpNjbp1'}`).then(res=> {
-      // }).catch(err =>{
-      //   console.log(err, 877777)
-      // })
       res.json(results)
     } else {
       res.json({code: 200, msg: '该账号不存在，请先注册后再次尝试'})
@@ -63,8 +58,8 @@ router.get('/overview',(req, res) => {
         access_token: access_token,
         site_id: '18341059',
         method: 'overview/getTimeTrendRpt',
-        start_date: '20190101',
-        end_date: '20190105',
+        start_date: '20220701',
+        end_date: '20220905',
         metrics: 'pv_count,visitor_count,ip_count'
       }
     }).then(result => {
