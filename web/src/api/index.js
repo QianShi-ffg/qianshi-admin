@@ -30,5 +30,11 @@ export default {
   },
   saveClassify:(params = {}) => {
     return axiosPost('/saveClassify', params)
+  },
+  overview:(params = {}) => {
+    return axiosGet('/overview', params)
+  },
+  refreshToken:(params = {}) => {
+    return axiosGet('/refreshToken', params)
   }
 }

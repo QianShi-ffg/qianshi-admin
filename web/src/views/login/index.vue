@@ -81,7 +81,7 @@ const signUp = async() => {
 }
 const signIn = async() => {
   if (name.value !== '' && password.value !== '') {
-    const res = await api.login({name: name.value, password: password.value})
+    const res = await api.login({name: name.value, password: password.value, apiKey: 'PLFuZ5UHascuRd9cANO6SrMdP8GhX6lF', scretKey: 'rYhbIuz4YWqK3PTNqzpK5xRzGGpNjbp1'})
     if (res.code === 200) {
       if (res.data) {
         sessionStorage.setItem('user', JSON.stringify({name: name.value, password: password.value}))

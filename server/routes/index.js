@@ -6,7 +6,13 @@ const router = express.Router();
 const upload = require('./modules/uploadImg')
 // 引入连接池
 const { conn, pool } = require('../mysql/index')
+const axios = require("axios")
 
+let refresh_token = '122.3d94748d6fc63e9366ad0634d061313c.YliRhfr5Xyc8yUHxptVOu3aOTOs9Q6v3n4kptl-.jAPGew'
+let access_token = '121.39d0b9c5d88acc152ec57d0ca317163f.YCy7fJAT4xW05TeHQeywF-g0s62H_K6H16Qn-sn._sZ8lA'
+let expires_in = ''
+const apiKey = 'PLFuZ5UHascuRd9cANO6SrMdP8GhX6lF'
+const secretKey = 'rYhbIuz4YWqK3PTNqzpK5xRzGGpNjbp1'
 // 注册
 router.post('/signUp', async(req, res) => {
   console.log(req.body)
@@ -29,11 +35,16 @@ router.post('/signUp', async(req, res) => {
 
 // 登录
 router.post('/login', async(req, res) => {
-  const { name, password } = req.body
+  const { name, password} = req.body
   const sql = `select * from user where name='${name}' and password='${password}';`
   const results = await conn(sql)
   if (results.code === 200) {
     if (results.data.length !== 0) {
+      // console.log(122222)
+      // axios.get(`http://openapi.baidu.com/oauth/2.0/token?grant_type=refresh_token&refresh_token=${refresh_token}&client_id=${'PLFuZ5UHascuRd9cANO6SrMdP8GhX6lF'}&client_secret=${'rYhbIuz4YWqK3PTNqzpK5xRzGGpNjbp1'}`).then(res=> {
+      // }).catch(err =>{
+      //   console.log(err, 877777)
+      // })
       res.json(results)
     } else {
       res.json({code: 200, msg: '该账号不存在，请先注册后再次尝试'})
@@ -41,6 +52,52 @@ router.post('/login', async(req, res) => {
   } else {
     res.json(results)
   }
+})
+
+router.get('/overview',(req, res) => {
+  axios(
+    {
+      url: 'https://openapi.baidu.com/rest/2.0/tongji/report/getData',
+      method: 'get',
+      params: {
+        access_token: access_token,
+        site_id: '18341059',
+        method: 'overview/getTimeTrendRpt',
+        start_date: '20190101',
+        end_date: '20190105',
+        metrics: 'pv_count,visitor_count,ip_count'
+      }
+    }).then(result => {
+      console.log(result.data.result)
+      res.json({code: 200, data: result.data.result, message: '获取数据成功'})
+    }).catch(err => {
+      console.log(err)
+      if (err.data.error_code === 110) {
+        res.json({code: 110, data: [], message: 'token过期,正在重新刷新token'})
+      }
+    })
+})
+
+router.get('/refreshToken',(req, res) => {
+  axios(
+    {
+      url: 'http://openapi.baidu.com/oauth/2.0/token',
+      method: 'get',
+      params: {
+        grant_type: 'refresh_token',
+        refresh_token: refresh_token,
+        client_id: apiKey,
+        client_secret: secretKey
+      }
+    }).then(result => {
+      refresh_token = result.data.refresh_token
+      access_token = result.data.access_token
+      expires_in = result.data.expires_in
+      res.json({code: 200, data: result.data, message: '获取数据成功'})
+    }).catch(err => {
+      console.log(err)
+      res.json({code: 2001, message: err.data })
+    })
 })
 
 // 获取文章列表

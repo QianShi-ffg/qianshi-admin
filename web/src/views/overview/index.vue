@@ -18,6 +18,28 @@
 <script setup>
 import todaysFlow from '@/assets/admin/jrll.png'
 import chartVue from '@/components/chart.vue';
+import api from '@/api/index.js'
+import { ref } from 'vue'
+
+const data = ref({})
+// 获取数据
+const getOverview = async() => {
+  const res = await api.overview()
+  if (res.code === 200) {
+    console.log(res, 966)
+    data.value = res.data
+  } else {
+    refreshToken()
+  }
+}
+getOverview()
+// 刷新token
+const refreshToken = async() => {
+  const res = await api.refreshToken()
+  if (res.code === 200) {
+    getOverview()
+  }
+}
 </script>
 
 <style lang="scss" scoped>
