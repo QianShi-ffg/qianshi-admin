@@ -36,5 +36,8 @@ export default {
   },
   refreshToken:(params = {}) => {
     return axiosGet('/refreshToken', params)
+  },
+  getClassifyList:(params = {}) => {
+    return axiosGet('/classifyList', params)
   }
 }

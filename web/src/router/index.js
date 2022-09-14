@@ -31,7 +31,7 @@ const routes = [
   {
     name: 'article',
     path: '/article',
-    component: () => import('@/views/creative/modules/articleOption.vue')
+    component: () => import('@/views/creative/components/articleOption.vue')
   },
   // {
   //   name: 'editArticle',

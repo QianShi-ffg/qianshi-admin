@@ -10,9 +10,11 @@
   <div class="editor">
     <md-editor v-model="text" @onHtmlChanged="saveHtml"  @onSave="codeSave" :onUploadImg="uploadImg" :theme="theme"/>
   </div>
+  <saveDialogVue ref="saveDialog" @success="success"/>
 </template>
 
 <script setup>
+import saveDialogVue from './saveDialog.vue'
 import { ref, reactive, onMounted  } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import { ElMessage } from 'element-plus'
@@ -26,6 +28,8 @@ const router = useRouter()
 const route = useRoute()
 const text = ref('')
 const titleValue = ref('')
+const articleInfo = ref({})
+const saveDialog = ref(null)
 // 编辑器主题
 const theme = ref('light')
 const articleData = reactive({
@@ -57,11 +61,32 @@ if(route.query.id){
 }
 
 const saveHtml = (e) => {
-  console.log(e)
+  console.log(e, 86666)
+  // if (e.includes('<!---->')) {
+  //   // console.log(e.split('!----')[0], 89999)
+  //   articleHtmlContent.value = e.split('<!---->')[0]
+  // } else {
+  //   // console.log(e, 86666)
+  //   articleHtmlContent.value = e
+  // }
 }
 
 // 点击保存草稿
 const save = () => {
+  if (saveType.value === 'save') {
+    if (!titleValue.value) {
+      ElMessage({ message: '请添加文章标题',type: 'waring' })
+      return
+    }
+    saveDialog.value.show()
+  } else {
+    saveIcon[0].click()
+  }
+}
+
+const success = (value) => {
+  console.log(value, 223333)
+  articleInfo.value = value
   saveIcon[0].click()
 }
 onMounted(() => {
@@ -77,12 +102,14 @@ const codeSave = async(e) => {
     ElMessage({ message: '请添加文章标题',type: 'waring' })
     return
   }
-  const res = await api.saveDraft({
+  let params = {
     id: route.query.id || null,
     title: titleValue.value,
     articleContent: e,
-    articleStatus: 0
-  })
+    articleStatus: 0,
+  }
+  params = Object.assign(params, articleInfo.value)
+  const res = await api.saveDraft(params)
   if (res.code === 200) {
     if (saveType.value === 'save') {
       router.replace({path: route.path, query: {id: res.data.id}})
@@ -141,21 +168,21 @@ const uploadImg = async(files, callback) => {
       color: rgb(255, 255, 255);
     }
   }
-  .el-input {
+  :deep(.el-input) {
     width: 40%;
-  .el-input__wrapper {
-    border: 3px solid transparent;
-    border-radius: 18px;
-    background-image: linear-gradient(to right, var(--el-card-bgColor), var(--el-card-bgColor)),
-    linear-gradient(to right, var(--theme-right-color) 0%,var(--theme-left-color) 100%);
-    background-clip: padding-box, border-box;
-    background-origin: padding-box, border-box;
-    box-shadow: none;
-    &.is-focus {
-      border: 3px solid var(--theme-left-color);
-      box-shadow: 0 0 13px 3px var(--theme-left-color);
+    .el-input__wrapper {
+      border: 3px solid transparent;
+      border-radius: 18px;
+      background-image: linear-gradient(to right, var(--el-card-bgColor), var(--el-card-bgColor)),
+      linear-gradient(to right, var(--theme-right-color) 0%,var(--theme-left-color) 100%);
+      background-clip: padding-box, border-box;
+      background-origin: padding-box, border-box;
+      box-shadow: none;
+      &.is-focus {
+        border: 3px solid var(--theme-left-color);
+        box-shadow: 0 0 13px 3px var(--theme-left-color);
+      }
     }
-  }
   }
 }
 </style>
