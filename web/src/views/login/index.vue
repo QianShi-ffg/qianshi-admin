@@ -179,7 +179,7 @@ form {
     position: relative;
     border: none;
     border-radius: unset;
-    box-shadow: none;
+    box-shadow: none !important;
     padding: 0 20px;
 
     .el-input__inner {

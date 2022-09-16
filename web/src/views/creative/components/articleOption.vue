@@ -109,6 +109,7 @@ const codeSave = async(e) => {
     articleStatus: 0,
   }
   params = Object.assign(params, articleInfo.value)
+  console.log(params, articleInfo.value)
   const res = await api.saveDraft(params)
   if (res.code === 200) {
     if (saveType.value === 'save') {

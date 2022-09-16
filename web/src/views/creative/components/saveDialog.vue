@@ -7,6 +7,9 @@
             <el-option v-for="item in classifyList" :label="item.name" :value="item.id" :key="item.id"/>
           </el-select>
         </el-form-item>
+        <el-form-item label="文章封面">
+          <el-input v-model="form.coverUrl" placeholder="请输入文章封面链接"/>
+        </el-form-item>
         <el-form-item label="文章详情" prop="describe">
           <el-input v-model="form.describe" type="textarea" :rows="5"/>
         </el-form-item>
@@ -33,7 +36,8 @@ const formRef = ref()
 // const form = ref({})
 const form = reactive({
   classifyId: '',
-  describe: ''
+  describe: '',
+  coverUrl: ''
 })
 const rules = reactive({
   classifyId: [
@@ -62,7 +66,8 @@ const dialogSave = async(formEl) => {
   if (!formEl) return
   await formEl.validate((valid, fields) => {
     if (valid) {
-      emits('success', form.value)
+      console.log(form, 12222)
+      emits('success', form)
       dialogVisible.value = false
     }
   })

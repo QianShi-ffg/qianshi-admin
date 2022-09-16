@@ -123,7 +123,7 @@ router.get('/publishArticleList', async(req, res) => {
 // 保存草稿
 router.post('/saveDraft', async(req, res) => {
   console.log(req.query, req.params, req.body)
-  const { id, title, articleContent, articleStatus, classifyId, describe } = req.body
+  const { id, title, articleContent, articleStatus, classifyId, describe, coverUrl } = req.body
   let sql = ''
   let saveSql = ''
   let data = null
@@ -132,7 +132,7 @@ router.post('/saveDraft', async(req, res) => {
     const results = await conn(sql, null)
     if (results.code === 200) {
         saveSql = 'update articleList set ?  where id=?'
-        data = [{ id, title, articleContent, articleStatus, classifyId, describe }, id]
+        data = [{ id, title, articleContent, articleStatus, classifyId, describe, coverUrl }, id]
         res.json(await conn(saveSql, data))
     } else {
       res.json(results)
@@ -141,7 +141,7 @@ router.post('/saveDraft', async(req, res) => {
     saveSql = 'insert into articleList set ?;'
     // const returnSql = 'select max(id) from articleList;'
     const returnSql = 'SELECT LAST_INSERT_ID();'
-    data = { title, articleContent, articleStatus, classifyId, describe }
+    data = { title, articleContent, articleStatus, classifyId, describe, coverUrl }
     const results = await conn(saveSql, data)
     if (results.code === 200) {
       const res1 = await conn(returnSql, data)
