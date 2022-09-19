@@ -25,10 +25,16 @@
 </template>
 
 <script setup>
-import { ref, reactive  } from 'vue'
+import { ref, reactive, onMounted  } from 'vue'
 import { ElMessage } from 'element-plus'
 import api from '@/api/index.js'
 
+const props = defineProps({
+  artDesc: {
+    type: Object,
+    default: {}
+  }
+})
 const emits = defineEmits(['success'])
 const dialogVisible = ref(false)
 const classifyList = ref([])
@@ -46,6 +52,13 @@ const rules = reactive({
   describe: [
     { required: false, message: '请选择文章分类', trigger: 'change' }
   ]
+})
+
+onMounted(() => {
+  console.log(props.artDesc)
+  form.classifyId = props.artDesc.classifyId
+  form.describe = props.artDesc.describe
+  form.coverUrl = props.artDesc.coverUrl
 })
 
 const show = () => {

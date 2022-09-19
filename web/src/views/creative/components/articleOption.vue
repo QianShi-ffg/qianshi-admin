@@ -10,7 +10,7 @@
   <div class="editor">
     <md-editor v-model="text" @onHtmlChanged="saveHtml"  @onSave="codeSave" :onUploadImg="uploadImg" :theme="theme"/>
   </div>
-  <saveDialogVue ref="saveDialog" @success="success"/>
+  <saveDialogVue ref="saveDialog" @success="success" :artDesc="artDesc"/>
 </template>
 
 <script setup>
@@ -29,6 +29,7 @@ const route = useRoute()
 const text = ref('')
 const titleValue = ref('')
 const articleInfo = ref({})
+const artDesc = ref({})
 const saveDialog = ref(null)
 // 编辑器主题
 const theme = ref('light')
@@ -49,6 +50,11 @@ if(route.query.id){
       console.log(res)
       titleValue.value = res.data[0].title
       text.value = res.data[0].articleContent
+      artDesc.value = {
+        classifyId: res.data[0].classifyId,
+        coverUrl: res.data[0].coverUrl,
+        describe: res.data[0].describe
+      }
     } else {
       throw res.msg
     }
@@ -73,15 +79,11 @@ const saveHtml = (e) => {
 
 // 点击保存草稿
 const save = () => {
-  if (saveType.value === 'save') {
-    if (!titleValue.value) {
-      ElMessage({ message: '请添加文章标题',type: 'waring' })
-      return
-    }
-    saveDialog.value.show()
-  } else {
-    saveIcon[0].click()
+  if (!titleValue.value) {
+    ElMessage({ message: '请添加文章标题',type: 'waring' })
+    return
   }
+  saveDialog.value.show()
 }
 
 const success = (value) => {
@@ -89,19 +91,17 @@ const success = (value) => {
   articleInfo.value = value
   saveIcon[0].click()
 }
+
 onMounted(() => {
   const icon = document.getElementsByClassName('md-toolbar-item')
   saveIcon = Array.from(icon).filter(item => {
     return item.title === '保存'
   })
+  saveIcon[0].style.display = 'none'
 })
 
 // 点击编辑器内部保存 保存草稿
 const codeSave = async(e) => {
-  if (!titleValue.value) {
-    ElMessage({ message: '请添加文章标题',type: 'waring' })
-    return
-  }
   let params = {
     id: route.query.id || null,
     title: titleValue.value,
@@ -132,6 +132,7 @@ const publish = async() => {
   const res = await api.publish({id: route.query.id})
   if (res.code === 200) {
     ElMessage({ message: '发布成功',type: 'success' })
+    router.push({path:'/creative'})
   } else {
     ElMessage({ message: '发布失败,请稍后再试',type: 'error' })
   }
