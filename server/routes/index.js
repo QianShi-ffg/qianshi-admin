@@ -59,8 +59,8 @@ router.get('/overview',(req, res) => {
         site_id: '18341059',
         method: 'overview/getTimeTrendRpt',
         start_date: '20220701',
-        end_date: '20220905',
-        metrics: 'pv_count,visitor_count,ip_count'
+        end_date: `${new Date().getFullYear()}${new Date().getMonth() + 1}${new Date().getDate()}`,
+        metrics: 'pv_count,visitor_count'
       }
     }).then(result => {
       console.log(result.data.result)
