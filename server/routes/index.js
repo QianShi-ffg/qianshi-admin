@@ -1,5 +1,6 @@
 
 const express = require('express')
+const dayjs = require('dayjs')
 // 创建服务器router
 const router = express.Router();
 // 文件处理
@@ -50,20 +51,26 @@ router.post('/login', async(req, res) => {
 })
 
 router.get('/overview',(req, res) => {
-  axios(
+  console.log(dayjs().subtract(90, 'day').format('YYYYMMDD'))
+  const params = {
+    access_token: access_token,
+    site_id: '18341059',
+    method: 'overview/getTimeTrendRpt',
+    start_date: '20220701',
+    end_date: dayjs().format('YYYYMMDD'),
+    metrics: 'pv_count,visitor_count'
+  }
+  axios.get('https://openapi.baidu.com/rest/2.0/tongji/report/getData',
     {
-      url: 'https://openapi.baidu.com/rest/2.0/tongji/report/getData',
-      method: 'get',
       params: {
         access_token: access_token,
         site_id: '18341059',
         method: 'overview/getTimeTrendRpt',
-        start_date: '20220701',
-        end_date: `${new Date().getFullYear()}${new Date().getMonth() + 1}${new Date().getDate()}`,
+        start_date: dayjs().subtract(90, 'day').format('YYYYMMDD'),
+        end_date: dayjs().format('YYYYMMDD'),
         metrics: 'pv_count,visitor_count'
       }
     }).then(result => {
-      console.log(result.data.result)
       res.json({code: 200, data: result.data.result, message: '获取数据成功'})
     }).catch(err => {
       console.log(err)
