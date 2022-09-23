@@ -114,16 +114,26 @@ router.get('/articleList', async(req, res) => {
   res.json(results)
 })
 
+
 // 获取文章列表(博客端)
 router.get('/publishArticleList', async(req, res) => {
   let sql = ''
-  if (req.query.id) {
-    sql = `select * from articleList where id=${req.query.id} and articleStatus=1`
+  // 条件查询
+  if (req.query.type) {
+    if (req.query.type === 'category') {
+      sql = `select * from articleList where classifyId=${req.query.id} and articleStatus=1`
+    }
+    const results = await conn(sql, null)
+    res.json(results)
   } else {
-    sql = 'select * from articleList where articleStatus=1 order by id DESC'
+    if (req.query.id) {
+      sql = `select * from articleList where id=${req.query.id} and articleStatus=1`
+    } else {
+      sql = 'select * from articleList where articleStatus=1 order by id DESC'
+    }
+    const results = await conn(sql, null)
+    res.json(results)
   }
-  const results = await conn(sql, null)
-  res.json(results)
 })
 
 
@@ -210,7 +220,12 @@ router.post('/uploadImg', upload.array('file', 10), (req, res) => {
 
 // 获取分类列表
 router.get('/classifyList', async(req, res) => {
-  const sql = 'select * from classifyList order by id DESC'
+  const sql = `select a.*, count(*) as 'artNum' from classifylist as a 
+  INNER JOIN articlelist as b 
+  WHERE a.id = b.classifyId
+  GROUP BY a.id
+  order by id asc
+  `
   const results = await conn(sql, null)
   res.json(results)
 })
@@ -223,5 +238,6 @@ router.post('/saveClassify', async(req, res) => {
   const results = await conn(sql, data)
   res.json(results)
 })
+
 
 module.exports = router
