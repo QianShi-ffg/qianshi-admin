@@ -104,36 +104,45 @@ router.get('/refreshToken',(req, res) => {
 
 // 获取文章列表
 router.get('/articleList', async(req, res) => {
+  const { page, pageSize } = req.query
   let sql = ''
   if (req.query.id) {
     sql = `select * from articleList where id=${req.query.id}`
   } else {
-    sql = 'select * from articleList order by id DESC'
+    sql = `select * from articleList order by id DESC limit ${(page - 1)*pageSize},${pageSize}`
   }
-  const results = await conn(sql, null)
-  res.json(results)
+  const results1 = await conn(sql, null)
+  const sqlS = 'select count(*) from articleList'
+  const results2 = await conn(sqlS, null)
+  res.json({code: 200, data:results1.data, total: results2.data[0]['count(*)'], msg: results1.msg})
 })
 
 
 // 获取文章列表(博客端)
 router.get('/publishArticleList', async(req, res) => {
+  const { page, pageSize } = req.query
   let sql = ''
+  let sqlS = ''
   // 条件查询
   if (req.query.type) {
     if (req.query.type === 'category') {
-      sql = `select * from articleList where classifyId=${req.query.id} and articleStatus=1`
+      sql = `select * from articleList where classifyId=${req.query.id} and articleStatus=1 limit ${(page - 1)*pageSize},${pageSize}`
+      sqlS = `select count(*) from articleList where classifyId=${req.query.id} and articleStatus=1`
     }
-    const results = await conn(sql, null)
-    res.json(results)
   } else {
     if (req.query.id) {
       sql = `select * from articleList where id=${req.query.id} and articleStatus=1`
+      const results = await conn(sql, null)
+      res.json(results)
+      return 
     } else {
-      sql = 'select * from articleList where articleStatus=1 order by id DESC'
+      sql = `select * from articleList where articleStatus=1 order by id DESC limit ${(page - 1)*pageSize},${pageSize}`
+      sqlS = 'select count(*) from articleList where articleStatus=1'
     }
-    const results = await conn(sql, null)
-    res.json(results)
   }
+  const results1 = await conn(sql, null)
+  const results2 = await conn(sqlS, null)
+  res.json({code: 200, data: { rows: results1.data, total: results2.data[0]['count(*)'] }, msg: results1.msg})
 })
 
 

@@ -45,7 +45,8 @@
         </template>
       </el-table-column>
     </el-table>
-    <el-pagination background layout="prev, pager, next" :total="1000" />
+    <el-pagination background layout="prev, pager, next" :total="total" :page-size="10"
+      @current-change="currentChange" :current-page="paginationObj.page"/>
   </div>
 
 </template>
@@ -65,14 +66,17 @@ const multipleSelection = ref([]);
 const multipleSelectionId = ref([]);
 const tableData = ref([]);
 const paginationObj = reactive({
-  page: 1
+  page: 1,
+  pageSize: 10
 })
+const total = ref(0)
 
 const init = async () => {
   try {
-    const res = await api.getArticleList();
+    const res = await api.getArticleList(paginationObj);
     if (res.code === 200) {
       tableData.value = res.data;
+      total.value = res.total
     } else {
       throw res.msg;
     }
@@ -143,7 +147,13 @@ const publish = async (ids) => {
   } else {
     ElMessage({ message: "发布失败,请稍后再试", type: "error" });
   }
-};
+}
+
+const currentChange = (value) => {
+  console.log(value)
+  paginationObj.page = value
+  init()
+}
 
 </script>
 
