@@ -220,6 +220,13 @@ router.post('/uploadImg', upload.array('file', 10), (req, res) => {
 
 // 获取分类列表
 router.get('/classifyList', async(req, res) => {
+  const sql = `select * from classifylist order by id asc`
+  const results = await conn(sql, null)
+  res.json(results)
+})
+
+// 获取文章分类列表
+router.get('/artClassifyList', async(req, res) => {
   const sql = `select a.*, count(*) as 'artNum' from classifylist as a 
   INNER JOIN articlelist as b 
   WHERE a.id = b.classifyId
