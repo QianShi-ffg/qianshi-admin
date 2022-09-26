@@ -1,18 +1,13 @@
 <template>
   <div id="classifySetting">
     <div>
-      <el-button type="primary" @click="
-        () => {
-          router.push({ path: '/article' });
-        }
-      " round>新 建</el-button>
-      <el-button type="success" @click="batchPublish" v-if="multipleSelectionId.length > 0" round>批量发布</el-button>
+      <el-button type="primary" @click="addClass" round>新 建</el-button>
       <el-button type="danger" @click="batchDelete" v-if="multipleSelectionId.length > 0" round>批量删除</el-button>
     </div>
     <el-table ref="multipleTableRef" :data="tableData" style="width: 100%" @selection-change="handleSelectionChange"
       size="default" height="calc(100% - 135px)">
       <el-table-column type="selection" width="55" />
-      <el-table-column property="id" label="ID" />
+      <!-- <el-table-column property="id" label="ID" /> -->
       <el-table-column property="name" label="分类名称"/>
       <el-table-column property="describe" label="描述"/>
       <el-table-column label="创建时间">
@@ -30,8 +25,8 @@
       </el-table-column>
     </el-table>
     <el-pagination background layout="prev, pager, next" :total="1000" />
+    <classifyDialogVue :classDesc="classDesc" ref="classDialog" @success="success"/>
   </div>
-
 </template>
 
 <script setup>
@@ -41,6 +36,7 @@ import { Delete, Edit, Promotion } from "@element-plus/icons-vue";
 import { useRouter, useRoute } from "vue-router";
 import date from "@/utils/date";
 import api from "@/api/index.js";
+import classifyDialogVue from "./classifyDialog.vue";
 
 const router = useRouter();
 const route = useRoute();
@@ -48,86 +44,79 @@ const multipleTableRef = ref();
 const multipleSelection = ref([]);
 const multipleSelectionId = ref([]);
 const tableData = ref([]);
+const classDesc = ref({})
+const classDialog = ref()
 const paginationObj = reactive({
   page: 1
 })
 
 const init = async () => {
   try {
-    const res = await api.getClassifyList();
+    const res = await api.getClassifyList()
     if (res.code === 200) {
-      tableData.value = res.data;
+      tableData.value = res.data
     } else {
-      throw res.msg;
+      throw res.msg
     }
   } catch (error) {
-    console.log(error);
+    console.log(error)
   } finally {
     // 预留loading处理
   }
-};
-init();
+}
+init()
 
 const toggleSelection = (rows) => {
   if (rows) {
     rows.forEach((row) => {
-      multipleTableRef.value.toggleRowSelection(row, undefined);
-    });
+      multipleTableRef.value.toggleRowSelection(row, undefined)
+    })
   } else {
-    multipleTableRef.value.clearSelection();
+    multipleTableRef.value.clearSelection()
   }
 };
 const handleSelectionChange = (val) => {
-  console.log(val);
-  multipleSelection.value = val;
+  multipleSelection.value = val
   multipleSelectionId.value = val.map((item) => {
-    return item.id;
-  });
-};
+    return item.id
+  })
+}
 
 // 编辑
 const handleEdit = (index, row) => {
-  console.log(index, row.title);
-  router.push({ path: "/article", query: { id: row.id } });
+  console.log(index, row.title)
 };
 
 // 批量删除
 const batchDelete = () => {
-  handleDelete(multipleSelectionId.value);
-};
+  // handleDelete(multipleSelectionId.value)
+}
 // 单条删除
 const handleDelete = async (ids) => {
-  try {
-    const res = await api.deleteArticle({ id: ids.join(",") });
-    console.log(res, "resresres");
-    if (res.code === 200) {
-      init();
-      ElMessage({ message: "删除成功", type: "success" });
-    } else {
-      throw res.msg;
-    }
-  } catch (error) {
-    console.log(error);
-    ElMessage({ message: error, type: "error" });
-  } finally {
-    // 预留loading处理
-  }
-};
+  // try {
+  //   const res = await api.deleteArticle({ id: ids.join(",") })
+  //   console.log(res, "resresres") 
+  //   if (res.code === 200) {
+  //     init();
+  //     ElMessage({ message: "删除成功", type: "success" })
+  //   } else {
+  //     throw res.msg
+  //   }
+  // } catch (error) {
+  //   console.log(error)
+  //   ElMessage({ message: error, type: "error" })
+  // } finally {
+  //   // 预留loading处理
+  // }
+}
 
-// 批量发布
-const batchPublish = () => {
-  publish(multipleSelectionId.value);
-};
-// 发布
-const publish = async (ids) => {
-  const res = await api.publish({ id: ids.join(",") });
-  if (res.code === 200) {
-    init();
-    ElMessage({ message: "发布成功", type: "success" });
-  } else {
-    ElMessage({ message: "发布失败,请稍后再试", type: "error" });
-  }
-};
+const addClass = () => {
+  classDialog.value.show()
+}
+
+const success = () => {
+  init()
+}
 
 </script>
 

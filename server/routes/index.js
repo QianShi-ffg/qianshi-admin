@@ -122,14 +122,18 @@ router.get('/articleList', async(req, res) => {
 router.get('/publishArticleList', async(req, res) => {
   const { page, pageSize } = req.query
   let sql = ''
+  let countSql = ''
+  // 所有文章总数
   const sqlS = 'select count(*) from articleList where articleStatus=1'
   // 条件查询
   if (req.query.type) {
+    // 点击分类后的查询
     if (req.query.type === 'category') {
       sql = `select * from articleList where classifyId=${req.query.id} and articleStatus=1 limit ${(page - 1)*pageSize},${pageSize}`
-      // sqlS = `select count(*) from articleList where classifyId=${req.query.id} and articleStatus=1`
+      countSql = `select count(*) from articleList where classifyId=${req.query.id} and articleStatus=1`
     }
   } else {
+    // 查询某一文章具体信息
     if (req.query.id) {
       sql = `select * from articleList where id=${req.query.id} and articleStatus=1`
       const results = await conn(sql, null)
@@ -137,12 +141,18 @@ router.get('/publishArticleList', async(req, res) => {
       return 
     } else {
       sql = `select * from articleList where articleStatus=1 order by id DESC limit ${(page - 1)*pageSize},${pageSize}`
-      // sqlS = 'select count(*) from articleList where articleStatus=1'
+      countSql = 'select count(*) from articleList where articleStatus=1'
     }
   }
   const results1 = await conn(sql, null)
-  const results2 = await conn(sqlS, null)
-  res.json({code: 200, data: { rows: results1.data, total: results2.data[0]['count(*)'] }, msg: results1.msg})
+  const results2 = await conn(countSql, null)
+  const results3 = await conn(sqlS, null)
+  res.json({code: 200, data: {
+    rows: results1.data, 
+    conditionTotal: results2.data[0]['count(*)'], // 条件查询后的总数
+    total: results3.data[0]['count(*)'] }, // 所有文章总数
+    msg: results1.msg
+  })
 })
 
 
@@ -229,7 +239,7 @@ router.post('/uploadImg', upload.array('file', 10), (req, res) => {
 
 // 获取分类列表
 router.get('/classifyList', async(req, res) => {
-  const sql = `select * from classifylist order by id asc`
+  const sql = `select * from classifylist order by id desc`
   const results = await conn(sql, null)
   res.json(results)
 })
