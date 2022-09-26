@@ -122,12 +122,12 @@ router.get('/articleList', async(req, res) => {
 router.get('/publishArticleList', async(req, res) => {
   const { page, pageSize } = req.query
   let sql = ''
-  let sqlS = ''
+  const sqlS = 'select count(*) from articleList where articleStatus=1'
   // 条件查询
   if (req.query.type) {
     if (req.query.type === 'category') {
       sql = `select * from articleList where classifyId=${req.query.id} and articleStatus=1 limit ${(page - 1)*pageSize},${pageSize}`
-      sqlS = `select count(*) from articleList where classifyId=${req.query.id} and articleStatus=1`
+      // sqlS = `select count(*) from articleList where classifyId=${req.query.id} and articleStatus=1`
     }
   } else {
     if (req.query.id) {
@@ -137,7 +137,7 @@ router.get('/publishArticleList', async(req, res) => {
       return 
     } else {
       sql = `select * from articleList where articleStatus=1 order by id DESC limit ${(page - 1)*pageSize},${pageSize}`
-      sqlS = 'select count(*) from articleList where articleStatus=1'
+      // sqlS = 'select count(*) from articleList where articleStatus=1'
     }
   }
   const results1 = await conn(sql, null)
