@@ -9,8 +9,8 @@ const upload = require('./modules/uploadImg')
 const { conn, pool } = require('../mysql/index')
 const axios = require("axios")
 
-let refresh_token = '122.3d94748d6fc63e9366ad0634d061313c.YliRhfr5Xyc8yUHxptVOu3aOTOs9Q6v3n4kptl-.jAPGew'
-let access_token = '121.39d0b9c5d88acc152ec57d0ca317163f.YCy7fJAT4xW05TeHQeywF-g0s62H_K6H16Qn-sn._sZ8lA'
+let refresh_token = '122.3c6c1b35141ce423a52faa540654abf3.YnLXYMxlTALa6H-WBLDwxaoVt7G98bNGQ8ea1i8.6oa3ug'
+let access_token = '121.4c902ca467c6a88f5f16e19f07c38270.YgfKog-oMaQhvrzCHKegCzlUyFUsSwdXsxdQ4Tw.5WAKUw'
 let expires_in = ''
 const apiKey = 'PLFuZ5UHascuRd9cANO6SrMdP8GhX6lF'
 const secretKey = 'rYhbIuz4YWqK3PTNqzpK5xRzGGpNjbp1'
@@ -71,10 +71,13 @@ router.get('/overview',(req, res) => {
         metrics: 'pv_count,visitor_count'
       }
     }).then(result => {
+      if (result.data && result.data.error_code === 111) {
+        res.json({code: 111, data: result.data.result, message: 'token过期,正在重新刷新token'})
+      }
       res.json({code: 200, data: result.data.result, message: '获取数据成功'})
     }).catch(err => {
-      console.log(err)
-      if (err.data.error_code === 110) {
+      console.log(err, 666)
+      if (err.data && err.data.error_code === 110) {
         res.json({code: 110, data: [], message: 'token过期,正在重新刷新token'})
       }
     })
