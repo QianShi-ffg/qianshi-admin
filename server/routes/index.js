@@ -180,8 +180,11 @@ router.post('/saveDraft', async(req, res) => {
     data = { title, articleContent, articleStatus, classifyId, describe, coverUrl }
     const results = await conn(saveSql, data)
     if (results.code === 200) {
+      console.log(results.code)
       const res1 = await conn(returnSql, data)
+      console.log(res1)
       res1.data = { id: res1.data[0]['LAST_INSERT_ID()'] }
+      console.log(res1.data, 9999)
       res.json(res1)
     } else {
       res.json(results)
