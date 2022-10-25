@@ -3,12 +3,22 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { ArticleModule } from './modules/article/article.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { ArticleList as articleListEntity } from './modules/article/article.entity';
+import { UserModule } from './modules/user/user.module';
 @Module({
   imports: [
-    TypeOrmModule.forRoot(),
-    TypeOrmModule.forFeature([articleListEntity]),
+    TypeOrmModule.forRoot({
+      type: 'mysql',
+      host: 'localhost',
+      port: 3306,
+      username: 'root',
+      password: 'root',
+      database: 'root',
+      entities: ['dist/**/*.entity{.ts,.js}'],
+      autoLoadEntities: true, // 自动链接被 forFeature 注册的实体
+      synchronize: true,
+    }),
     ArticleModule,
+    UserModule,
   ],
   controllers: [AppController],
   providers: [AppService],

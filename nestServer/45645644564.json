@@ -1,10 +1,10 @@
 { 
     "type": "mysql",
-    "host": "localhost", 
+    "host": "188.131.164.41", 
     "port": 3306, 
-    "username": "root", 
-    "password": "root", 
-    "database": "root", 
+    "username": "2", 
+    "password": "nestBlog", 
+    "database": "2", 
     "entities": ["dist/**/*.entity{.ts,.js}"], 
     "synchronize": true
-} 
+}   

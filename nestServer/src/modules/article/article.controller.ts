@@ -1,28 +1,36 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Query,
+  Body,
+  Patch,
+  Param,
+  Delete,
+} from '@nestjs/common';
 import { ArticleService } from './article.service';
-import { CreateUserDto } from './dto/create-user.dto';
-import { UpdateUserDto } from './dto/update-user.dto';
 @Controller('article')
 export class ArticleController {
   constructor(private readonly articleService: ArticleService) {}
-  @Post()
-  create(@Body() createUserDto: CreateUserDto) {
-    return this.articleService.create(createUserDto);
+  @Post('saveDraft')
+  create() {
+    return this.articleService.create();
   }
 
-  @Get()
-  findAll() {
-    return this.articleService.findAll();
+  @Get('articleList')
+  findAll(@Query() query: any) {
+    console.log(66666677);
+    return this.articleService.findAll(query);
   }
 
-  @Get(':id')
+  @Get('articleList/:id')
   findOne(@Param('id') id: string) {
     return this.articleService.findOne(+id);
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
-    return this.articleService.update(+id, updateUserDto);
+  update(@Param('id') id: string) {
+    return this.articleService.update(+id);
   }
 
   @Delete(':id')
