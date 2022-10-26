@@ -72,20 +72,23 @@ const signUp = async() => {
     if (res.data) {
       type.value = 'signIn'
       containerClass.value = ''
+      ElMessage({ message: res.msg, type: 'success'})
     } else {
       ElMessage({ message: res.msg, type: 'error'})
     }
   } else {
-    ElMessage({ message: res.msg, type: 'error'})
+    ElMessage({ message: res.msg, type: 'error'}) 
   }
 }
 const signIn = async() => {
   if (name.value !== '' && password.value !== '') {
-    const res = await api.login({name: name.value, password: password.value, apiKey: 'PLFuZ5UHascuRd9cANO6SrMdP8GhX6lF', scretKey: 'rYhbIuz4YWqK3PTNqzpK5xRzGGpNjbp1'})
+    const res = await api.login({name: name.value, password: password.value})
+    console.log(res)
     if (res.code === 200) {
       if (res.data) {
         sessionStorage.setItem('user', JSON.stringify({name: name.value, password: password.value}))
         router.push('/')
+        ElMessage({ message: res.msg, type: 'success'})
       } else {
         ElMessage({ message: res.msg, type: 'error'})
       }

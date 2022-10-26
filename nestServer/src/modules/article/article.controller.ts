@@ -19,8 +19,8 @@ export class ArticleController {
 
   @Get('articleList')
   findAll(@Query() query: any) {
-    console.log(66666677);
-    return this.articleService.findAll(query);
+    const { page, pageSize } = query;
+    return this.articleService.findAllArticle(page, pageSize);
   }
 
   @Get('articleList/:id')

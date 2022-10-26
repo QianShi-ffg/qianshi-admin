@@ -45,7 +45,7 @@
         </template>
       </el-table-column>
     </el-table>
-    <el-pagination background layout="prev, pager, next" :total="total" :page-size="10"
+    <el-pagination background layout="prev, pager, next" :total="total" :page-size="20"
       @current-change="currentChange" :current-page="paginationObj.page"/>
   </div>
 
@@ -67,13 +67,14 @@ const multipleSelectionId = ref([]);
 const tableData = ref([]);
 const paginationObj = reactive({
   page: 1,
-  pageSize: 10
+  pageSize: 20
 })
 const total = ref(0)
 
 const init = async () => {
   try {
     const res = await api.getArticleList(paginationObj);
+    console.log('8955555')
     if (res.code === 200) {
       tableData.value = res.data;
       total.value = res.total

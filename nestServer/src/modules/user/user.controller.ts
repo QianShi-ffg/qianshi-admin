@@ -1,4 +1,12 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+} from '@nestjs/common';
 import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
@@ -7,12 +15,19 @@ import { UpdateUserDto } from './dto/update-user.dto';
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
-  @Post()
-  create(@Body() createUserDto: CreateUserDto) {
-    return this.userService.create(createUserDto);
+  @Post('signUp')
+  signUp(@Body() body: any) {
+    const { name, password } = body;
+    return this.userService.signUp(name, password);
   }
 
-  @Get()
+  @Post('login')
+  login(@Body() body: any) {
+    const { name, password } = body;
+    return this.userService.login(name, password);
+  }
+
+  @Get('all')
   findAll() {
     return this.userService.findAll();
   }

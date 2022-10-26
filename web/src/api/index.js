@@ -2,10 +2,10 @@ import { axiosGet, axiosPost, axiosDelete, axiosPut } from './axios'
 
 export default {
   getLogin:(params = {}) => {
-    return axiosPost('/login', params)
+    return axiosPost('/user/login', params)
   },
   getArticleList:(params = {}) => {
-    return axiosGet('/articleList', params)
+    return axiosGet('/article/articleList', params)
   },
   uploadImg:(params = {}) => {
     return axiosPost('/uploadImg', params)
@@ -20,10 +20,10 @@ export default {
     return axiosPut('/publish', params)
   },
   signUp:(params = {}) => {
-    return axiosPost('/signUp', params)
+    return axiosPost('/user/signUp', params)
   },
   login:(params = {}) => {
-    return axiosPost('/login', params)
+    return axiosPost('/user/login', params)
   },
   getClassifyList:(params = {}) => {
     return axiosGet('/classifyList', params)

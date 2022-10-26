@@ -91,7 +91,7 @@ export async function axiosGet(url, params = {}) {
 
 export async function axiosPost(url, params = {}) {
   let res = await axios.post(url, params);
-  if(res.status === 200){
+  if(res.status === 200 || res.status === 201){
     return res.data
   }else {
     throw res.statusText
