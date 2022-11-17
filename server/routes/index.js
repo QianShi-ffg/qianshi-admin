@@ -329,33 +329,51 @@ router.get("/friendShipList", async (req, res) => {
   const sql = "select * from friendShip";
   const results = await conn(sql, null);
   // results.data.map(async(item) => {
-  //   return await init(item)
+  //   return await setScreenShot(item)
   // })
   res.json(results);
 });
 
 const setScreenShot = async (item) => {
-  const browser = await puppeteer.launch();
+  const browser = await puppeteer.launch({
+    headless: true,
+    slowMo: 0,
+    args: [
+      "--no-zygote",
+      "--no-sandbox",
+      "--disable-gpu",
+      "--no-first-run",
+      "--single-process",
+      "--disable-extensions",
+      "--disable-xss-auditor",
+      "--disable-dev-shm-usage",
+      "--disable-popup-blocking",
+      "--disable-setuid-sandbox",
+      "--disable-accelerated-2d-canvas",
+      "--enable-features=NetworkService",
+    ],
+  });
   const page = await browser.newPage();
   await page.setViewport({
     width: 1920,
     height: 1080,
   });
-  if (item.blogUrl !== "https://www.candy.icu/") {
-    const rres = await page.goto(item.blogUrl); //对整个页面截图
+  // if (item.blogUrl !== "https://www.candy.icu/") {
+    const rres = await page.goto(item.blogUrl ,{timeout: 0})
     console.log(rres, 8555);
-    await page.waitForTimeout(5000);
+    await page.waitForTimeout(4000);
     await page.screenshot({
-      path: `./public/screenshot/${item.id}.png`, //图片保存路径
-      type: "png",
+      quality: 10,
+      path: `./public/screenshot/${item.id}.jpeg`, //图片保存路径
+      type: "jpeg",
       fullPage: false, //边滚动边截图
     });
+    await browser.close();
     const sql = "update friendShip set ?  where id=?";
-    const data = [{ screenshot: `/public/screenshot/${item.id}.png` }, item.id];
+    const data = [{ screenshot: `/public/screenshot/${item.id}.jpeg` }, item.id];
     const results = await conn(sql, data);
     console.log(results);
     console.log("OK");
-  }
-  return `/public/screenshot/${item.id}.png`;
+  // }
 };
 module.exports = router;
