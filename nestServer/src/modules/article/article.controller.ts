@@ -12,6 +12,7 @@ import { ArticleService } from './article.service';
 @Controller('article')
 export class ArticleController {
   constructor(private readonly articleService: ArticleService) {}
+
   @Post('saveDraft')
   create() {
     return this.articleService.create();
@@ -24,8 +25,9 @@ export class ArticleController {
   }
 
   @Get('articleList/:id')
-  findOne(@Param('id') id: string) {
-    return this.articleService.findOne(+id);
+  findArticleDetail(@Param('id') id: string) {
+    console.log(id, 5555);
+    return this.articleService.findArticleDetail(+id);
   }
 
   @Patch(':id')

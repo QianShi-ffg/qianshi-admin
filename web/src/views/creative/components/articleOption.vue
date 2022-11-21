@@ -45,7 +45,8 @@ let saveIcon = null
 if(route.query.id){
   saveType.value = 'edit'
   try {
-    const res = await api.getArticleList({id: route.query.id})
+    const res = await api.getArticleDetail({id: route.query.id})
+    console.log(res, 96666)
     if (res.code === 200) {
       console.log(res)
       titleValue.value = res.data[0].title

@@ -7,6 +7,9 @@ export default {
   getArticleList:(params = {}) => {
     return axiosGet('/article/articleList', params)
   },
+  getArticleDetail:(params = {}) => {
+    return axiosGet(`/article/articleList/${params.id}`)
+  },
   uploadImg:(params = {}) => {
     return axiosPost('/uploadImg', params)
   },
@@ -38,6 +41,6 @@ export default {
     return axiosGet('/refreshToken', params)
   },
   getClassifyList:(params = {}) => {
-    return axiosGet('/classifyList', params)
+    return axiosGet('/classify/classifyList', params)
   }
 }

@@ -4,6 +4,7 @@ import { AppService } from './app.service';
 import { ArticleModule } from './modules/article/article.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { UserModule } from './modules/user/user.module';
+import { ClassifyModule } from './modules/classify/classify.module';
 @Module({
   imports: [
     TypeOrmModule.forRoot({
@@ -19,6 +20,7 @@ import { UserModule } from './modules/user/user.module';
     }),
     ArticleModule,
     UserModule,
+    ClassifyModule,
   ],
   controllers: [AppController],
   providers: [AppService],

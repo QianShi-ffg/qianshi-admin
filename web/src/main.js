@@ -7,12 +7,17 @@ import 'element-plus/dist/index.css'
 import './style.css'
 import './assets/style/index.scss'
 import '@/utils/theme'
+import * as ElementPlusIconsVue from '@element-plus/icons-vue'
 
 // 请求列表
 window._axiosPromiseArr = []
 // 声明vue实例
 const app = createApp(App)
+
 app.use(router)
 app.use(createPinia())
 app.use(ElementPlus, { size: 'default', zIndex: 3000 })
+for (const [key, component] of Object.entries(ElementPlusIconsVue)) {
+  app.component(key, component)
+}
 app.mount('#app')

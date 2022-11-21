@@ -73,12 +73,8 @@ import { ref, reactive, markRaw, watch } from "vue";
 import { useRoute } from "vue-router";
 import userIcon from '@/assets/userIcon.jpg'
 import {
-  DataLine as IconMenu,
-  EditPen,
-  Expand,
   Fold,
-  DataAnalysis,
-  Setting,
+  Expand
 } from "@element-plus/icons-vue";
 
 const isCollapse = ref(false);

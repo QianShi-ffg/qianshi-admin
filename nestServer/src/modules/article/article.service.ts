@@ -8,6 +8,11 @@ export class ArticleService {
     @InjectRepository(ArticleList)
     private ArticleListRepository: Repository<ArticleList>,
   ) {}
+
+  /**
+   * @description: 创建一条草稿
+   * @returns {*}
+   */
   create() {
     return 'This action adds a new user';
   }
@@ -39,8 +44,21 @@ export class ArticleService {
     };
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} user`;
+  /**
+   * @description: 查询选中文章详情
+   * @param id 文章id
+   * @returns {*}
+   */
+  async findArticleDetail(id: number) {
+    const res: any = await this.ArticleListRepository.findOne({
+      where: { id: id },
+    });
+    console.log(res, 3333);
+    return {
+      code: 200,
+      msg: 'success',
+      data: res,
+    };
   }
 
   update(id: number) {
