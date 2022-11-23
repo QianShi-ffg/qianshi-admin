@@ -72,12 +72,12 @@ const signUp = async() => {
     if (res.data) {
       type.value = 'signIn'
       containerClass.value = ''
-      ElMessage({ message: res.msg, type: 'success'})
+      ElMessage({ message: res.message, type: 'success'})
     } else {
-      ElMessage({ message: res.msg, type: 'error'})
+      ElMessage({ message: res.message, type: 'error'})
     }
   } else {
-    ElMessage({ message: res.msg, type: 'error'}) 
+    ElMessage({ message: res.message, type: 'error'}) 
   }
 }
 const signIn = async() => {
@@ -88,12 +88,12 @@ const signIn = async() => {
       if (res.data) {
         sessionStorage.setItem('user', JSON.stringify({name: name.value, password: password.value}))
         router.push('/')
-        ElMessage({ message: res.msg, type: 'success'})
+        ElMessage({ message: res.message, type: 'success'})
       } else {
-        ElMessage({ message: res.msg, type: 'error'})
+        ElMessage({ message: res.message, type: 'error'})
       }
     } else {
-      ElMessage({ message: res.msg, type: 'error'})
+      ElMessage({ message: res.message, type: 'error'})
     }
   } else {
     ElMessage({ message: '账号与密码不可为空', type: 'error'})

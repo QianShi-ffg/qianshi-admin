@@ -31,9 +31,9 @@ export class UserService {
       //   .into('user')
       //   .values([{ name: name, password: password }])
       //   .execute()
-      return { code: 200, data: res1, msg: '注册成功' };
+      return { code: 200, data: res1, message: '注册成功' };
     } else {
-      return { code: 500, msg: '该名称已被注册' };
+      return { code: 500, message: '该名称已被注册' };
     }
   }
 
@@ -55,7 +55,7 @@ export class UserService {
     } else {
       msg = '登录成功';
     }
-    return { code: code, msg: msg, data: res };
+    return { code: code, message: msg, data: res };
   }
 
   findAll() {

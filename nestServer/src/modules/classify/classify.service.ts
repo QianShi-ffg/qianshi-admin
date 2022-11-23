@@ -20,7 +20,7 @@ export class ClassifyService {
     console.log(res);
     return {
       code: 200,
-      msg: 'success',
+      message: 'success',
       data: res,
     };
   }

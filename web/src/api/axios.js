@@ -61,6 +61,7 @@ axios.interceptors.response.use(
     return config;
   },
   (err) => {
+    console.log(err, 855555)
     let value = err.response.statusText;
     switch (err.response.status) {
       case 400:
@@ -109,6 +110,15 @@ export async function axiosDelete(url, params = {}) {
 
 export async function axiosPut(url, params = {}) {
   let res = await axios.put(url, params);
+  if(res.status === 200){
+    return res.data
+  }else {
+    throw res.statusText
+  }
+}
+
+export async function axiosPatch(url, params = {}) {
+  let res = await axios.patch(url, params);
   if(res.status === 200){
     return res.data
   }else {

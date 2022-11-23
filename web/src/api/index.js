@@ -1,26 +1,37 @@
-import { axiosGet, axiosPost, axiosDelete, axiosPut } from './axios'
+import { axiosGet, axiosPost, axiosDelete, axiosPut, axiosPatch } from './axios'
 
 export default {
+  // 登录
   getLogin:(params = {}) => {
     return axiosPost('/user/login', params)
   },
+  // 获取文章列表
   getArticleList:(params = {}) => {
-    return axiosGet('/article/articleList', params)
+    return axiosGet('/article', params)
   },
+  // 获取文章详情
   getArticleDetail:(params = {}) => {
-    return axiosGet(`/article/articleList/${params.id}`)
+    return axiosGet(`/article/${params.id}`)
   },
+  // 文章保存
+  saveDraft:(params = {}) => {
+    return axiosPost('/article/saveDraft', params)
+  },
+  // 文章更新
+  articleUpdate:(params = {}) => {
+    return axiosPatch('/article/update', params)
+  },
+  // 文章删除
+  deleteArticle:(params = {}) => {
+    return axiosDelete('/article/delete', params)
+  },
+  // 文章状态更新
+  publish:(params = {}) => {
+    return axiosPatch('/article/publish', params)
+  },
+  // 编辑器上传图片
   uploadImg:(params = {}) => {
     return axiosPost('/uploadImg', params)
-  },
-  saveDraft:(params = {}) => {
-    return axiosPost('/saveDraft', params)
-  },
-  deleteArticle:(params = {}) => {
-    return axiosDelete('/deleteArticle/', params)
-  },
-  publish:(params = {}) => {
-    return axiosPut('/publish', params)
   },
   signUp:(params = {}) => {
     return axiosPost('/user/signUp', params)

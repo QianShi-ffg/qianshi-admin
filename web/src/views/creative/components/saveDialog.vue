@@ -70,7 +70,7 @@ const init = async() => {
   if (res.code === 200) {
     classifyList.value = res.data
   } else {
-    ElMessage({ message: res.msg,type: 'error' })
+    ElMessage({ message: res.message,type: 'error' })
   }
 }
 init()

@@ -1,7 +1,16 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { ArticleList } from './entities/article.entity';
+
+export interface ArticleSave {
+  id: null;
+  title: 'sdsa';
+  articleContent: '';
+  articleStatus: 0;
+  classifyId: 3;
+}
+
 @Injectable()
 export class ArticleService {
   constructor(
@@ -10,11 +19,16 @@ export class ArticleService {
   ) {}
 
   /**
-   * @description: 创建一条草稿
+   * @description: 创建草稿
    * @returns {*}
    */
-  create() {
-    return 'This action adds a new user';
+  create(data: ArticleSave) {
+    const { title } = data;
+    const doc = this.ArticleListRepository.findOne({ where: { title } });
+    if (doc) {
+      throw new HttpException('文章已存在', 401);
+    }
+    return this.ArticleListRepository.save(data);
   }
 
   /**
@@ -23,25 +37,18 @@ export class ArticleService {
    * @param {*} pageSize 每页行数
    * @return {*}
    */
-  async findAllArticle(page, pageSize) {
-    const res = await this.ArticleListRepository.createQueryBuilder(
-      'article_list',
-    )
+  findAllArticle(page, pageSize) {
+    return this.ArticleListRepository.createQueryBuilder('article_list')
       .orderBy('id', 'DESC')
       .skip((page - 1) * pageSize)
       .take(pageSize)
       .getMany();
-    const res1 = await this.ArticleListRepository.createQueryBuilder(
-      'article_list',
-    )
+  }
+
+  countArticle() {
+    return this.ArticleListRepository.createQueryBuilder('article_list')
       .select('COUNT(*) count')
       .getRawOne();
-    return {
-      code: 200,
-      msg: 'success',
-      data: res,
-      total: Number(res1.count),
-    };
   }
 
   /**
@@ -49,23 +56,38 @@ export class ArticleService {
    * @param id 文章id
    * @returns {*}
    */
-  async findArticleDetail(id: number) {
-    const res: any = await this.ArticleListRepository.findOne({
+  findArticleDetail(id: number) {
+    const res: any = this.ArticleListRepository.findOne({
       where: { id: id },
     });
-    console.log(res, 3333);
     return {
       code: 200,
-      msg: 'success',
+      message: 'success',
       data: res,
     };
   }
 
-  update(id: number) {
-    return `This action updates a #${id} user`;
+  /**
+   * 文章内容更新
+   * @param data 文章详情
+   * @returns
+   */
+  update(data) {
+    return this.ArticleListRepository.update(data.id, data);
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} user`;
+  /**
+   * 文章状态更新
+   * @param data 文章id
+   * @returns
+   */
+  publish(data) {
+    const { ids } = data;
+    return this.ArticleListRepository.update(ids, { articleStatus: 1 });
+  }
+
+  remove(data) {
+    const { ids } = data;
+    return this.ArticleListRepository.delete(ids);
   }
 }

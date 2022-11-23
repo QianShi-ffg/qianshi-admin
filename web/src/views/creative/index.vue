@@ -79,7 +79,7 @@ const init = async () => {
       tableData.value = res.data;
       total.value = res.total
     } else {
-      throw res.msg;
+      throw res.message;
     }
   } catch (error) {
     console.log(error);
@@ -119,13 +119,13 @@ const batchDelete = () => {
 // 单条删除
 const handleDelete = async (ids) => {
   try {
-    const res = await api.deleteArticle({ id: ids.join(",") });
+    const res = await api.deleteArticle({ ids: ids });
     console.log(res, "resresres");
     if (res.code === 200) {
       init();
       ElMessage({ message: "删除成功", type: "success" });
     } else {
-      throw res.msg;
+      throw res.message;
     }
   } catch (error) {
     console.log(error);
@@ -141,7 +141,7 @@ const batchPublish = () => {
 };
 // 发布
 const publish = async (ids) => {
-  const res = await api.publish({ id: ids.join(",") });
+  const res = await api.publish({ ids: ids });
   if (res.code === 200) {
     init();
     ElMessage({ message: "发布成功", type: "success" });

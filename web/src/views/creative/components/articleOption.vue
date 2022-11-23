@@ -1,6 +1,6 @@
 <template>
   <header id="articleHeader">
-    <el-button :icon="ArrowLeft" link @click="()=>{router.push({path:'/creative'})}">返回</el-button>
+    <el-button :icon="ArrowLeft" link @click="() => { router.push({ path: '/creative' }) }">返回</el-button>
     <el-input placeholder="请输入文章标题" class="articleTitle" v-model="titleValue"></el-input>
     <div>
       <el-button @click="save" round>保存草稿</el-button>
@@ -8,14 +8,14 @@
     </div>
   </header>
   <div class="editor">
-    <md-editor v-model="text" @onHtmlChanged="saveHtml"  @onSave="codeSave" :onUploadImg="uploadImg" :theme="theme"/>
+    <md-editor v-model="text" @onHtmlChanged="saveHtml" @onSave="codeSave" :onUploadImg="uploadImg" :theme="theme" />
   </div>
-  <saveDialogVue ref="saveDialog" @success="success" :artDesc="artDesc"/>
+  <saveDialogVue ref="saveDialog" @success="success" :artDesc="artDesc" />
 </template>
 
 <script setup>
 import saveDialogVue from './saveDialog.vue'
-import { ref, reactive, onMounted  } from 'vue'
+import { ref, reactive, onMounted } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import { ElMessage } from 'element-plus'
 import { ArrowLeft } from '@element-plus/icons-vue'
@@ -42,22 +42,22 @@ const saveType = ref('save')
 let saveIcon = null
 
 // 判断当前是编辑还是新建
-if(route.query.id){
+if (route.query.id) {
   saveType.value = 'edit'
   try {
-    const res = await api.getArticleDetail({id: route.query.id})
+    const res = await api.getArticleDetail({ id: route.query.id })
     console.log(res, 96666)
     if (res.code === 200) {
       console.log(res)
-      titleValue.value = res.data[0].title
-      text.value = res.data[0].articleContent
+      titleValue.value = res.data.title
+      text.value = res.data.articleContent
       artDesc.value = {
-        classifyId: res.data[0].classifyId,
-        coverUrl: res.data[0].coverUrl,
-        describe: res.data[0].describe
+        classifyId: res.data.classifyId,
+        coverUrl: res.data.coverUrl,
+        describe: res.data.describe
       }
     } else {
-      throw res.msg
+      throw res.message
     }
   } catch (error) {
     console.log(error)
@@ -81,7 +81,7 @@ const saveHtml = (e) => {
 // 点击保存草稿
 const save = () => {
   if (!titleValue.value) {
-    ElMessage({ message: '请添加文章标题',type: 'waring' })
+    ElMessage({ message: '请添加文章标题', type: 'waring' })
     return
   }
   saveDialog.value.show()
@@ -102,7 +102,7 @@ onMounted(() => {
 })
 
 // 点击编辑器内部保存 保存草稿
-const codeSave = async(e) => {
+const codeSave = async (e) => {
   let params = {
     id: route.query.id || null,
     title: titleValue.value,
@@ -110,39 +110,38 @@ const codeSave = async(e) => {
     articleStatus: 0,
   }
   params = Object.assign(params, articleInfo.value)
-  console.log(params, articleInfo.value)
-  const res = await api.saveDraft(params)
+  const res = route.query.id ? await api.articleUpdate(params) : await api.saveDraft(params)
   if (res.code === 200) {
     if (saveType.value === 'save') {
-      router.replace({path: route.path, query: {id: res.data.id}})
+      router.replace({ path: route.path, query: { id: res.data.id } })
       saveType.value = 'edit'
     }
-    ElMessage({ message: '已保存草稿箱',type: 'success' })
+    ElMessage({ message: '已保存草稿箱', type: 'success' })
   } else {
-    ElMessage({ message: '系统错误请稍后再试',type: 'error' })
+    ElMessage({ message: '系统错误请稍后再试', type: 'error' })
   }
 }
 
 // 发布
-const publish = async() => {
+const publish = async () => {
   if (saveType.value === 'save') {
-    ElMessage({ message: '当前文章未保存,请保存后再发布',type: 'error' })
+    ElMessage({ message: '当前文章未保存,请保存后再发布', type: 'error' })
     return
   }
   console.log(666)
-  const res = await api.publish({id: route.query.id})
+  const res = await api.publish({ ids: [route.query.id] })
   if (res.code === 200) {
-    ElMessage({ message: '发布成功',type: 'success' })
-    router.push({path:'/creative'})
+    ElMessage({ message: '发布成功', type: 'success' })
+    router.push({ path: '/creative' })
   } else {
-    ElMessage({ message: '发布失败,请稍后再试',type: 'error' })
+    ElMessage({ message: '发布失败,请稍后再试', type: 'error' })
   }
 }
 
 // 上传图片
-const uploadImg = async(files, callback) => {
+const uploadImg = async (files, callback) => {
   const formData = new FormData();
-  for(let i = 0; i < files.length; i++){
+  for (let i = 0; i < files.length; i++) {
     formData.append('file', files[i]);
     // fromData.append(files[i].name, files[i]);
   }
@@ -157,6 +156,7 @@ const uploadImg = async(files, callback) => {
   height: calc(100vh - 60px);
   padding: 10px 20px;
 }
+
 #articleHeader {
   position: relative;
   padding: 0 20px;
@@ -164,23 +164,28 @@ const uploadImg = async(files, callback) => {
   display: flex;
   justify-content: space-between;
   align-items: center;
+
   .el-button.is-link {
     font-size: 18px;
     color: rgba(255, 255, 255, 0.849);
+
     &:hover {
       color: rgb(255, 255, 255);
     }
   }
+
   :deep(.el-input) {
     width: 40%;
+
     .el-input__wrapper {
       border: 3px solid transparent;
       border-radius: 18px;
       background-image: linear-gradient(to right, var(--el-card-bgColor), var(--el-card-bgColor)),
-      linear-gradient(to right, var(--theme-right-color) 0%,var(--theme-left-color) 100%);
+        linear-gradient(to right, var(--theme-right-color) 0%, var(--theme-left-color) 100%);
       background-clip: padding-box, border-box;
       background-origin: padding-box, border-box;
       box-shadow: none;
+
       &.is-focus {
         border: 3px solid var(--theme-left-color);
         box-shadow: 0 0 13px 3px var(--theme-left-color);

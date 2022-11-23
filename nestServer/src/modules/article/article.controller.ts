@@ -14,29 +14,66 @@ export class ArticleController {
   constructor(private readonly articleService: ArticleService) {}
 
   @Post('saveDraft')
-  create() {
-    return this.articleService.create();
+  async create(@Body() data) {
+    const res = await this.articleService.create(data);
+    return {
+      code: 200,
+      message: 'success',
+      data: res,
+    };
   }
 
-  @Get('articleList')
-  findAll(@Query() query: any) {
+  @Get()
+  async findAll(@Query() query: any) {
     const { page, pageSize } = query;
-    return this.articleService.findAllArticle(page, pageSize);
+    const res: any = await this.articleService.findAllArticle(page, pageSize);
+    const res1: any = await this.articleService.countArticle();
+    return {
+      code: 200,
+      message: 'success',
+      data: res,
+      total: Number(res1.count),
+    };
   }
 
-  @Get('articleList/:id')
-  findArticleDetail(@Param('id') id: string) {
+  @Get(':id')
+  async findArticleDetail(@Param('id') id: string) {
     console.log(id, 5555);
-    return this.articleService.findArticleDetail(+id);
+    const res = await this.articleService.findArticleDetail(+id);
+    return {
+      code: 200,
+      message: 'success',
+      data: res,
+    };
   }
 
-  @Patch(':id')
-  update(@Param('id') id: string) {
-    return this.articleService.update(+id);
+  @Patch('update')
+  async update(@Body() data) {
+    const res = await this.articleService.update(data);
+    return {
+      code: 200,
+      message: 'success',
+      data: res,
+    };
   }
 
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.articleService.remove(+id);
+  @Patch('publish')
+  async publish(@Body() data) {
+    const res = await this.articleService.update(data);
+    return {
+      code: 200,
+      message: 'success',
+      data: res,
+    };
+  }
+
+  @Delete('delete')
+  async remove(@Body() data) {
+    const res = await this.articleService.remove(data);
+    return {
+      code: 200,
+      message: 'success',
+      data: res,
+    };
   }
 }
