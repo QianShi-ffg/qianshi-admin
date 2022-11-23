@@ -94,7 +94,7 @@ const success = (value) => {
 }
 
 onMounted(() => {
-  const icon = document.getElementsByClassName('md-toolbar-item')
+  const icon = document.getElementsByClassName('md-editor-toolbar-item')
   saveIcon = Array.from(icon).filter(item => {
     return item.title === '保存'
   })

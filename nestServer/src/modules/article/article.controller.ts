@@ -59,7 +59,8 @@ export class ArticleController {
 
   @Patch('publish')
   async publish(@Body() data) {
-    const res = await this.articleService.update(data);
+    console.log(data)
+    const res = await this.articleService.publish(data);
     return {
       code: 200,
       message: 'success',

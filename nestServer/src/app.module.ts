@@ -5,6 +5,7 @@ import { ArticleModule } from './modules/article/article.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { UserModule } from './modules/user/user.module';
 import { ClassifyModule } from './modules/classify/classify.module';
+import { HttpModule } from '@nestjs/axios';
 @Module({
   imports: [
     TypeOrmModule.forRoot({
@@ -17,10 +18,18 @@ import { ClassifyModule } from './modules/classify/classify.module';
       entities: ['dist/**/*.entity{.ts,.js}'],
       autoLoadEntities: true, // 自动链接被 forFeature 注册的实体
       synchronize: true,
+      timezone: '+08:00', // 东八区
+      cache: {
+        duration: 60000, // 1分钟的缓存
+      },
+      retryAttempts: 10,
+      retryDelay: 60000,
+      keepConnectionAlive: true
     }),
     ArticleModule,
     UserModule,
     ClassifyModule,
+    HttpModule
   ],
   controllers: [AppController],
   providers: [AppService],

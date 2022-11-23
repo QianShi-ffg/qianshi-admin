@@ -45,6 +45,10 @@ export class ArticleService {
       .getMany();
   }
 
+  /**
+   * @description: 统计文章总数
+   * @returns 
+   */
   countArticle() {
     return this.ArticleListRepository.createQueryBuilder('article_list')
       .select('COUNT(*) count')
@@ -57,14 +61,9 @@ export class ArticleService {
    * @returns {*}
    */
   findArticleDetail(id: number) {
-    const res: any = this.ArticleListRepository.findOne({
+    return this.ArticleListRepository.findOne({
       where: { id: id },
     });
-    return {
-      code: 200,
-      message: 'success',
-      data: res,
-    };
   }
 
   /**
@@ -83,6 +82,7 @@ export class ArticleService {
    */
   publish(data) {
     const { ids } = data;
+    console.log(data)
     return this.ArticleListRepository.update(ids, { articleStatus: 1 });
   }
 

@@ -1,10 +1,6 @@
 import { axiosGet, axiosPost, axiosDelete, axiosPut, axiosPatch } from './axios'
 
 export default {
-  // 登录
-  getLogin:(params = {}) => {
-    return axiosPost('/user/login', params)
-  },
   // 获取文章列表
   getArticleList:(params = {}) => {
     return axiosGet('/article', params)
@@ -29,18 +25,17 @@ export default {
   publish:(params = {}) => {
     return axiosPatch('/article/publish', params)
   },
-  // 编辑器上传图片
+  // 编辑器上传图片------------------
   uploadImg:(params = {}) => {
     return axiosPost('/uploadImg', params)
   },
+  // 注册
   signUp:(params = {}) => {
     return axiosPost('/user/signUp', params)
   },
+  // 登录
   login:(params = {}) => {
     return axiosPost('/user/login', params)
-  },
-  getClassifyList:(params = {}) => {
-    return axiosGet('/classifyList', params)
   },
   saveClassify:(params = {}) => {
     return axiosPost('/saveClassify', params)
