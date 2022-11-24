@@ -37,16 +37,22 @@ export default {
   login:(params = {}) => {
     return axiosPost('/user/login', params)
   },
+  getClassifyList:(params = {}) => {
+    return axiosGet('/classify/classifyList', params)
+  },
   saveClassify:(params = {}) => {
     return axiosPost('/saveClassify', params)
   },
+  // 百度统计
   overview:(params = {}) => {
     return axiosGet('/overview', params)
   },
+  // 刷新token
   refreshToken:(params = {}) => {
     return axiosGet('/refreshToken', params)
   },
-  getClassifyList:(params = {}) => {
-    return axiosGet('/classify/classifyList', params)
-  }
+  // 饼图数据
+  articleClassifyCount:(params = {}) => {
+    return axiosGet('/article/articleClassifyCount', params)
+  },
 }

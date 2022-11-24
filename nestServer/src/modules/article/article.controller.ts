@@ -28,6 +28,19 @@ export class ArticleController {
     const { page, pageSize } = query;
     const res: any = await this.articleService.findAllArticle(page, pageSize);
     const res1: any = await this.articleService.countArticle();
+    console.log(await this.articleService.countClassify(), 666666666);
+    return {
+      code: 200,
+      message: 'success',
+      data: res,
+      total: Number(res1.count),
+    };
+  }
+
+  @Get('articleClassifyCount')
+  async findArticleCount() {
+    const res = await this.articleService.countClassify();
+    const res1: any = await this.articleService.countArticle();
     return {
       code: 200,
       message: 'success',
@@ -59,7 +72,6 @@ export class ArticleController {
 
   @Patch('publish')
   async publish(@Body() data) {
-    console.log(data)
     const res = await this.articleService.publish(data);
     return {
       code: 200,

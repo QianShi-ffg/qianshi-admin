@@ -4,7 +4,9 @@ import {
   Column,
   CreateDateColumn,
   UpdateDateColumn,
+  ManyToOne,
 } from 'typeorm';
+import { ClassifyList } from '../../classify/entities/classify.entity';
 @Entity()
 export class ArticleList {
   @PrimaryGeneratedColumn({ type: 'int' })
@@ -36,4 +38,7 @@ export class ArticleList {
 
   @Column({ type: 'longtext', nullable: true })
   coverUrl: string;
+
+  @ManyToOne((type) => ClassifyList, (classify_list) => classify_list.id)
+  classify: ClassifyList;
 }

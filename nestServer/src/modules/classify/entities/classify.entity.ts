@@ -3,7 +3,9 @@ import {
   PrimaryGeneratedColumn,
   Column,
   CreateDateColumn,
+  OneToMany,
 } from 'typeorm';
+import { ArticleList } from '../../article/entities/article.entity';
 
 @Entity()
 export class ClassifyList {
@@ -18,4 +20,7 @@ export class ClassifyList {
 
   @CreateDateColumn({ type: 'timestamp' })
   createTime: Date;
+
+  @OneToMany((type) => ArticleList, (article_list) => article_list.classifyId)
+  article: ArticleList[];
 }

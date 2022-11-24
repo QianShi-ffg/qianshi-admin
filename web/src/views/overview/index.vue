@@ -37,40 +37,68 @@
     </div>
     <div class="statistics">
       <div class="item">
-        <div class="selectList"></div>
         <div class="chart">
-          <chartVue />
+          <chartLine :chartLineData="chartLineData" ref="chart1"/>
         </div>
       </div>
-      <div class="item"></div>
+      <div class="item">
+        <div class="chart">
+          <chartPie :chartPieData="chartPieData" ref="chart2"/>
+        </div>
+      </div>
     </div>
   </div>
 </template>
 
 <script setup>
 import todaysFlow from '@/assets/admin/jrll.png'
-import chartVue from '@/components/chart.vue';
+import chartLine from '@/components/chartLine.vue';
+import chartPie from '@/components/chartPie.vue'
 import api from '@/api/index.js'
-import { ref } from 'vue'
+import { onMounted, ref } from 'vue'
 
 const data = ref({})
+const chartLineData = ref({})
+const chartPieData = ref({})
+const chart1 = ref(null)
+const chart2 = ref(null)
+
+onMounted(()=> {
+  getOverview()
+  articleClassifyCount()
+  window.onresize = () => {
+    chart1.value.refresh()
+    chart2.value.refresh()
+  }
+})
 // 获取数据
 const getOverview = async() => {
   const res = await api.overview()
   if (res.code === 200) {
     console.log(res, 966)
     data.value = res.data
+    chartDataInit(res.data.items)
     dataInit(res.data.items)
   } else {
     refreshToken()
   }
 }
-getOverview()
 // 刷新token
 const refreshToken = async() => {
   const res = await api.refreshToken()
   if (res.code === 200) {
     getOverview()
+  }
+}
+
+const articleClassifyCount = async() => {
+  const res = await api.articleClassifyCount()
+  if (res.code === 200) {
+    console.log(res)
+    chartPieData.value = {
+      data: res.data,
+      total: res.total
+    }
   }
 }
 
@@ -98,6 +126,21 @@ const dataInit = (value) => {
     todayData: value[1][value[1].length - 1][0],
     yesterdayData: value[1][value[1].length - 2][0],
     sum: sum
+  }
+}
+
+const chartDataInit = (value) => {
+  const arr = value[0].slice(value[0].length -7, value[0].length).flat(Infinity)
+  let arr1 = []
+  let arr2 = []
+  value[1].slice(-7).map(item => {
+    arr1.push(item[0])
+    arr2.push(item[1])
+  })
+  chartLineData.value = {
+    x: arr,
+    y1: arr1,
+    y2: arr2
   }
 }
 </script>

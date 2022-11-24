@@ -2,7 +2,7 @@ import { HttpException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { ArticleList } from './entities/article.entity';
-
+import { ClassifyList } from '../classify/entities/classify.entity';
 export interface ArticleSave {
   id: null;
   title: 'sdsa';
@@ -47,12 +47,20 @@ export class ArticleService {
 
   /**
    * @description: 统计文章总数
-   * @returns 
+   * @returns
    */
   countArticle() {
     return this.ArticleListRepository.createQueryBuilder('article_list')
       .select('COUNT(*) count')
       .getRawOne();
+  }
+
+  async countClassify() {
+    return await this.ArticleListRepository.createQueryBuilder('article_list')
+      .select(['b.name as name', 'COUNT(b.name) as value'])
+      .innerJoin('article_list.classify', 'b')
+      .groupBy('b.id')
+      .getRawMany();
   }
 
   /**
@@ -82,7 +90,7 @@ export class ArticleService {
    */
   publish(data) {
     const { ids } = data;
-    console.log(data)
+    console.log(data);
     return this.ArticleListRepository.update(ids, { articleStatus: 1 });
   }
 
