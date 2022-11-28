@@ -32,13 +32,7 @@ const init = () => {
   let option;
   let index = 0;
   const colorList = [
-    "#73DDFF",
-    "#73ACFF",
-    "#FDD56A",
-    "#FDB36A",
-    "#FD866A",
-    "#9E87FF",
-    "#58D5FF",
+    '#37a2da', '#32c5e9', '#9fe6b8', '#ffdb5c', '#ff9f7f', '#fb7293', '#e7bcf3', '#8378ea', '#bf41ff'
   ];
   option = {
     title: {
@@ -53,16 +47,16 @@ const init = () => {
       trigger: "item",
     },
     legend: {
-        orient: 'vertical',
-        icon: 'circle',
-        x: '80%',
-        y: 'center',
-        align: 'left',
-        formatter: function(name) {
-            let res = props.chartPieData.data.filter(v => v.name === name);
-            res = res[0] || {};
-            return name + ' ' + res.value
-        }
+      orient: 'vertical',
+      icon: 'circle',
+      x: '80%',
+      y: 'center',
+      align: 'left',
+      formatter: function (name) {
+        let res = props.chartPieData.data.filter(v => v.name === name);
+        res = res[0] || {};
+        return name + ' ' + res.value
+      }
     },
     series: [
       {

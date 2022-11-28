@@ -66,7 +66,7 @@ const show = () => {
 }
 
 const init = async() => {
-  const res = await api.getClassifyList()
+  const res = await api.getClassifyList({})
   if (res.code === 200) {
     classifyList.value = res.data
   } else {

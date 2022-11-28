@@ -22,9 +22,9 @@ export class ArticleService {
    * @description: 创建草稿
    * @returns {*}
    */
-  create(data: ArticleSave) {
+  async create(data: ArticleSave) {
     const { title } = data;
-    const doc = this.ArticleListRepository.findOne({ where: { title } });
+    const doc = await this.ArticleListRepository.findOne({ where: { title } });
     if (doc) {
       throw new HttpException('文章已存在', 401);
     }
@@ -55,6 +55,10 @@ export class ArticleService {
       .getRawOne();
   }
 
+  /**
+   * @description: 联查当前文章分类的统计数
+   * @returns
+   */
   async countClassify() {
     return await this.ArticleListRepository.createQueryBuilder('article_list')
       .select(['b.name as name', 'COUNT(b.name) as value'])

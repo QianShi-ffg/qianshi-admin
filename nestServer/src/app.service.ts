@@ -1,6 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { HttpService } from '@nestjs/axios';
 import * as dayjs from 'dayjs';
+import { createWriteStream, mkdirSync, existsSync } from 'fs';
+import { join, extname } from 'path';
 
 let refresh_token =
   '122.a9f21f37883c5c3e38e278b854c7f73e.Y3sFDZZzsfTGU78eGOzZ78Qlssx9_4LJLUkteD5.MiUUrw';
@@ -82,5 +84,35 @@ export class AppService {
         console.log(err);
         return { code: 2001, message: err.data };
       });
+  }
+
+  async uploadFile(file) {
+    // 获取文件的后缀
+    const ext = extname(file.originalname);
+    const filename = `${file.fieldname}-${Date.now()}${ext}`;
+    await this.createMkdir();
+    const writeStream = createWriteStream(
+      join(__dirname, '../public/uploads', filename),
+    );
+    writeStream.write(file.buffer);
+    return {
+      mimetype: file.mimetype,
+      originalname: file.originalname,
+      size: file.size,
+      path: `/uploads/${filename}`,
+    };
+  }
+
+  createMkdir() {
+    if (!existsSync(join(__dirname, '../public'))) {
+      mkdirSync(join(__dirname, '../public'));
+      if (!existsSync(join(__dirname, '../public/uploads'))) {
+        mkdirSync(join(__dirname, '../public/uploads'));
+      }
+    } else {
+      if (!existsSync(join(__dirname, '../public/uploads'))) {
+        mkdirSync(join(__dirname, '../public/uploads'));
+      }
+    }
   }
 }

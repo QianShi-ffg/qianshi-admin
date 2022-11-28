@@ -1,1 +1,4 @@
-export class CreateClassifyDto {}
+export class CreateClassifyDto {
+  name: string;
+  describe: string;
+}

@@ -24,7 +24,8 @@
         </template>
       </el-table-column>
     </el-table>
-    <el-pagination background layout="prev, pager, next" :total="1000" />
+    <el-pagination background layout="prev, pager, next" :total="total" :page-size="20"
+      @current-change="currentChange" :current-page="paginationObj.page"/>
     <classifyDialogVue :classDesc="classDesc" ref="classDialog" @success="success"/>
   </div>
 </template>
@@ -47,14 +48,17 @@ const tableData = ref([]);
 const classDesc = ref({})
 const classDialog = ref()
 const paginationObj = reactive({
-  page: 1
+  page: 1,
+  pageSize: 20
 })
+const total = ref(0)
 
 const init = async () => {
   try {
-    const res = await api.getClassifyList()
+    const res = await api.getClassifyList(paginationObj)
     if (res.code === 200) {
       tableData.value = res.data
+      total.value = res.total
     } else {
       throw res.msg
     }
@@ -115,6 +119,12 @@ const addClass = () => {
 }
 
 const success = () => {
+  init()
+}
+
+const currentChange = (value) => {
+  console.log(value)
+  paginationObj.page = value
   init()
 }
 

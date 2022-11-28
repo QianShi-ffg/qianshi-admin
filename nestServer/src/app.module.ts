@@ -6,6 +6,8 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { UserModule } from './modules/user/user.module';
 import { ClassifyModule } from './modules/classify/classify.module';
 import { HttpModule } from '@nestjs/axios';
+import { ServeStaticModule } from '@nestjs/serve-static';
+import { join } from 'path';
 @Module({
   imports: [
     TypeOrmModule.forRoot({
@@ -24,12 +26,15 @@ import { HttpModule } from '@nestjs/axios';
       },
       retryAttempts: 10,
       retryDelay: 60000,
-      keepConnectionAlive: true
+      keepConnectionAlive: true,
     }),
     ArticleModule,
     UserModule,
     ClassifyModule,
-    HttpModule
+    HttpModule,
+    ServeStaticModule.forRoot({
+      rootPath: join(__dirname, '..', 'public'),
+    }),
   ],
   controllers: [AppController],
   providers: [AppService],

@@ -27,7 +27,7 @@ export default {
   },
   // 编辑器上传图片------------------
   uploadImg:(params = {}) => {
-    return axiosPost('/uploadImg', params)
+    return axiosPost('/upload', params)
   },
   // 注册
   signUp:(params = {}) => {
@@ -37,11 +37,13 @@ export default {
   login:(params = {}) => {
     return axiosPost('/user/login', params)
   },
+  // 获取分类
   getClassifyList:(params = {}) => {
-    return axiosGet('/classify/classifyList', params)
+    return axiosGet('/classify', params)
   },
+  // 添加分类
   saveClassify:(params = {}) => {
-    return axiosPost('/saveClassify', params)
+    return axiosPost('/classify/saveClassify', params)
   },
   // 百度统计
   overview:(params = {}) => {

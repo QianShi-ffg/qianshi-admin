@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, HttpException } from '@nestjs/common';
 import { CreateClassifyDto } from './dto/create-classify.dto';
 import { UpdateClassifyDto } from './dto/update-classify.dto';
 import { Repository } from 'typeorm';
@@ -8,21 +8,42 @@ import { ClassifyList } from './entities/classify.entity';
 export class ClassifyService {
   constructor(
     @InjectRepository(ClassifyList)
-    private ArticleListRepository: Repository<ClassifyList>,
+    private ClassifyRepository: Repository<ClassifyList>,
   ) {}
 
-  create(createClassifyDto: CreateClassifyDto) {
-    return 'This action adds a new classify';
+  async create(createClassifyDto: CreateClassifyDto) {
+    const { name } = createClassifyDto;
+    const doc = await this.ClassifyRepository.findOne({ where: { name } });
+    console.log(doc);
+    if (doc) {
+      throw new HttpException('分类已存在', 401);
+    }
+    return this.ClassifyRepository.save(createClassifyDto);
   }
 
-  async findAllClassify() {
-    const res: any = await this.ArticleListRepository.find({});
-    console.log(res);
-    return {
-      code: 200,
-      message: 'success',
-      data: res,
-    };
+  async findAllClassify(query) {
+    const { page, pageSize } = query;
+    if (!page || !pageSize) {
+      return this.ClassifyRepository.createQueryBuilder('classify_list')
+        .orderBy('id', 'DESC')
+        .getMany();
+    } else {
+      return this.ClassifyRepository.createQueryBuilder('classify_list')
+        .orderBy('id', 'DESC')
+        .skip((page - 1) * pageSize)
+        .take(pageSize)
+        .getMany();
+    }
+  }
+
+  /**
+   * @description: 统计文章总数
+   * @returns
+   */
+  countArticle() {
+    return this.ClassifyRepository.createQueryBuilder('classify_list')
+      .select('COUNT(*) count')
+      .getRawOne();
   }
 
   findOne(id: number) {
