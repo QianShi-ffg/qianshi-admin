@@ -25,10 +25,8 @@ export class ArticleController {
 
   @Get()
   async findAll(@Query() query: any) {
-    const { page, pageSize } = query;
-    const res: any = await this.articleService.findAllArticle(page, pageSize);
-    const res1: any = await this.articleService.countArticle();
-    console.log(await this.articleService.countClassify(), 666666666);
+    const res: any = await this.articleService.findAllArticle(query);
+    const res1: any = await this.articleService.countArticle('0');
     return {
       code: 200,
       message: 'success',
@@ -37,15 +35,27 @@ export class ArticleController {
     };
   }
 
-  @Get('articleClassifyCount')
-  async findArticleCount() {
-    const res = await this.articleService.countClassify();
-    const res1: any = await this.articleService.countArticle();
+  @Get('publishArticle')
+  async findPublishArticle(@Query() query: any) {
+    const res: any = await this.articleService.findPublishArticle(query);
     return {
       code: 200,
       message: 'success',
       data: res,
-      total: Number(res1.count),
+    };
+  }
+
+  @Get('articleClassifyCount')
+  async findArticleCount() {
+    const res = await this.articleService.countClassify('1');
+    const res1: any = await this.articleService.countArticle('1');
+    return {
+      code: 200,
+      message: 'success',
+      data: {
+        rows: res,
+        total: Number(res1.count),
+      },
     };
   }
 

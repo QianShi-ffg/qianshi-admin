@@ -37,7 +37,8 @@ export class ArticleService {
    * @param {*} pageSize 每页行数
    * @return {*}
    */
-  findAllArticle(page, pageSize) {
+  findAllArticle(query) {
+    const { page, pageSize } = query
     return this.ArticleListRepository.createQueryBuilder('article_list')
       .orderBy('id', 'DESC')
       .skip((page - 1) * pageSize)
@@ -46,25 +47,66 @@ export class ArticleService {
   }
 
   /**
+   * @description: 获取当前页的所有发布的文章
+   * @param {*} page 当前页
+   * @param {*} pageSize 每页行数
+   * @return {*}
+   */
+  findPublishArticle(query) {
+    const { page, pageSize, id } = query
+    console.log(id)
+    const sql = this.ArticleListRepository.createQueryBuilder('article_list')
+    .where('article_list.articleStatus = :articleStatus', { articleStatus: '1' })
+    if (id) {
+      return sql
+      .andWhere('article_list.classifyId = :classifyId', { classifyId: id })
+      .orderBy('id', 'DESC')
+      .skip((page - 1) * pageSize)
+      .take(pageSize)
+      .getMany();
+    } else {
+      return sql
+      .orderBy('id', 'DESC')
+      .skip((page - 1) * pageSize)
+      .take(pageSize)
+      .getMany();
+    }
+  }
+
+  /**
    * @description: 统计文章总数
    * @returns
    */
-  countArticle() {
-    return this.ArticleListRepository.createQueryBuilder('article_list')
-      .select('COUNT(*) count')
-      .getRawOne();
+  countArticle(articleStatus) {
+    const sql =  this.ArticleListRepository.createQueryBuilder('article_list')
+    .select('COUNT(*) count')
+    if (articleStatus === '1') {
+      return sql
+        .where('article_list.articleStatus = :articleStatus', { articleStatus: articleStatus })
+        .getRawOne();
+    } else {
+      return sql.getRawOne();
+    }
   }
 
   /**
    * @description: 联查当前文章分类的统计数
    * @returns
    */
-  async countClassify() {
-    return await this.ArticleListRepository.createQueryBuilder('article_list')
-      .select(['b.name as name', 'COUNT(b.name) as value'])
-      .innerJoin('article_list.classify', 'b')
-      .groupBy('b.id')
-      .getRawMany();
+  async countClassify(articleStatus) {
+    const sql = await this.ArticleListRepository.createQueryBuilder('article_list')
+    .select(['b.id as id','b.name as name', 'COUNT(b.name) as value'])
+    .innerJoin('article_list.classify', 'b')
+    if (articleStatus === '1') {
+      return sql
+        .where('article_list.articleStatus = :articleStatus', { articleStatus: articleStatus })
+        .groupBy('b.id')
+        .getRawMany();
+    } else {
+      return sql
+        .groupBy('b.id')
+        .getRawMany();
+    }
   }
 
   /**

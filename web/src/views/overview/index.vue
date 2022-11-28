@@ -96,8 +96,8 @@ const articleClassifyCount = async() => {
   if (res.code === 200) {
     console.log(res)
     chartPieData.value = {
-      data: res.data,
-      total: res.total
+      data: res.data.rows,
+      total: res.data.total
     }
   }
 }
