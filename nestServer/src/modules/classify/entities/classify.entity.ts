@@ -12,10 +12,10 @@ export class ClassifyList {
   @PrimaryGeneratedColumn({ type: 'int' })
   id: number;
 
-  @Column({ nullable: true })
+  @Column()
   name: string;
 
-  @Column()
+  @Column({ nullable: true })
   describe: string;
 
   @CreateDateColumn({ type: 'timestamp' })

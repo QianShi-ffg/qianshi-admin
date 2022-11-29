@@ -8,6 +8,9 @@ import { ClassifyModule } from './modules/classify/classify.module';
 import { HttpModule } from '@nestjs/axios';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { join } from 'path';
+import { FriendShipModule } from './modules/friend-ship/friend-ship.module';
+import { ScheduleModule } from '@nestjs/schedule'; // 定时任务
+import { TasksModule } from './schedule/tasks.module';
 @Module({
   imports: [
     TypeOrmModule.forRoot({
@@ -35,6 +38,9 @@ import { join } from 'path';
     ServeStaticModule.forRoot({
       rootPath: join(__dirname, '..', 'public'),
     }),
+    TasksModule,
+    FriendShipModule,
+    ScheduleModule.forRoot(),
   ],
   controllers: [AppController],
   providers: [AppService],

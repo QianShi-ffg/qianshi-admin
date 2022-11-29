@@ -38,7 +38,7 @@ export class ArticleService {
    * @return {*}
    */
   findAllArticle(query) {
-    const { page, pageSize } = query
+    const { page, pageSize } = query;
     return this.ArticleListRepository.createQueryBuilder('article_list')
       .orderBy('id', 'DESC')
       .skip((page - 1) * pageSize)
@@ -53,36 +53,44 @@ export class ArticleService {
    * @return {*}
    */
   findPublishArticle(query) {
-    const { page, pageSize, id } = query
-    console.log(id)
-    const sql = this.ArticleListRepository.createQueryBuilder('article_list')
-    .where('article_list.articleStatus = :articleStatus', { articleStatus: '1' })
+    const { page, pageSize, id } = query;
+    console.log(id);
+    const sql = this.ArticleListRepository.createQueryBuilder(
+      'article_list',
+    ).where('article_list.articleStatus = :articleStatus', {
+      articleStatus: '1',
+    });
     if (id) {
       return sql
-      .andWhere('article_list.classifyId = :classifyId', { classifyId: id })
-      .orderBy('id', 'DESC')
-      .skip((page - 1) * pageSize)
-      .take(pageSize)
-      .getMany();
+        .andWhere('article_list.classifyId = :classifyId', { classifyId: id })
+        .orderBy('id', 'DESC')
+        .skip((page - 1) * pageSize)
+        .take(pageSize)
+        .getMany();
     } else {
       return sql
-      .orderBy('id', 'DESC')
-      .skip((page - 1) * pageSize)
-      .take(pageSize)
-      .getMany();
+        .orderBy('id', 'DESC')
+        .skip((page - 1) * pageSize)
+        .take(pageSize)
+        .getMany();
     }
   }
 
   /**
-   * @description: 统计文章总数
+   * @description 统计文章总数
+   * @param articleStatus 发布 0 未发布 1已发布
    * @returns
    */
   countArticle(articleStatus) {
-    const sql =  this.ArticleListRepository.createQueryBuilder('article_list')
-    .select('COUNT(*) count')
+    const sql =
+      this.ArticleListRepository.createQueryBuilder('article_list').select(
+        'COUNT(*) count',
+      );
     if (articleStatus === '1') {
       return sql
-        .where('article_list.articleStatus = :articleStatus', { articleStatus: articleStatus })
+        .where('article_list.articleStatus = :articleStatus', {
+          articleStatus: articleStatus,
+        })
         .getRawOne();
     } else {
       return sql.getRawOne();
@@ -94,18 +102,20 @@ export class ArticleService {
    * @returns
    */
   async countClassify(articleStatus) {
-    const sql = await this.ArticleListRepository.createQueryBuilder('article_list')
-    .select(['b.id as id','b.name as name', 'COUNT(b.name) as value'])
-    .innerJoin('article_list.classify', 'b')
+    const sql = await this.ArticleListRepository.createQueryBuilder(
+      'article_list',
+    )
+      .select(['b.id as id', 'b.name as name', 'COUNT(b.name) as value'])
+      .innerJoin('article_list.classify', 'b');
     if (articleStatus === '1') {
       return sql
-        .where('article_list.articleStatus = :articleStatus', { articleStatus: articleStatus })
+        .where('article_list.articleStatus = :articleStatus', {
+          articleStatus: articleStatus,
+        })
         .groupBy('b.id')
         .getRawMany();
     } else {
-      return sql
-        .groupBy('b.id')
-        .getRawMany();
+      return sql.groupBy('b.id').getRawMany();
     }
   }
 
