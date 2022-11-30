@@ -11,10 +11,10 @@ export class TasksService {
 
   constructor(private readonly friendShipService: FriendShipService) {}
 
-  @Cron('0 0 0 * * *')
+  @Cron('0 10 0 * * 1-5')
   async screenShot() {
     const res = await this.friendShipService.findAll();
-    this.logger.debug('该方法每日运行一次');
+    this.logger.debug('该方法工作日每日运行一次');
     res.map((item) => {
       return this.setScreenShot(item);
     });
