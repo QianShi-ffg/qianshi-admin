@@ -11,7 +11,7 @@ export class TasksService {
 
   constructor(private readonly friendShipService: FriendShipService) {}
 
-  @Cron('0 10 0 * * 1-5')
+  @Cron('0 50 2 * * 1-5')
   async screenShot() {
     const res = await this.friendShipService.findAll();
     this.logger.debug('该方法工作日每日运行一次');
@@ -52,7 +52,8 @@ export class TasksService {
       await page.waitForTimeout(4000);
       await page.screenshot({
         quality: 10,
-        path: `./public/screenshot/${item.id}.jpeg`, //图片保存路径
+        // path: `./public/screenshot/${item.id}.jpeg`, //图片保存路径
+        path: join(__dirname, `../../public/screenshot/${item.id}.jpeg`), //图片保存路径
         type: 'jpeg',
         fullPage: false, //边滚动边截图
       });
