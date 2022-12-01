@@ -62,11 +62,11 @@ export class TasksService {
         screenShot: `/screenshot/${item.id}.jpeg`,
       });
       // const results = await conn(sql, data);
-      console.log(res);
+      console.log(res, 'res');
       console.log('OK');
       // }
     } catch (error) {
-      console.log(error);
+      console.log(error, 'error');
     }
   }
 }

@@ -14,7 +14,7 @@ export class ClassifyService {
   async create(createClassifyDto: CreateClassifyDto) {
     const { name } = createClassifyDto;
     const doc = await this.ClassifyRepository.findOne({ where: { name } });
-    console.log(doc);
+    console.log(doc, 'doc');
     if (doc) {
       throw new HttpException('分类已存在', 401);
     }

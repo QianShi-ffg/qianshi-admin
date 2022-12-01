@@ -81,7 +81,7 @@ export class AppService {
         return { code: 200, data: result.data, message: '获取数据成功' };
       })
       .catch((err) => {
-        console.log(err);
+        console.log(err, 'err');
         return { code: 2001, message: err.data };
       });
   }

@@ -54,7 +54,6 @@ export class ArticleService {
    */
   findPublishArticle(query) {
     const { page, pageSize, id } = query;
-    console.log(id);
     const sql = this.ArticleListRepository.createQueryBuilder(
       'article_list',
     ).where('article_list.articleStatus = :articleStatus', {
@@ -146,7 +145,7 @@ export class ArticleService {
    */
   publish(data) {
     const { ids } = data;
-    console.log(data);
+    console.log(data, 'data');
     return this.ArticleListRepository.update(ids, { articleStatus: 1 });
   }
 
