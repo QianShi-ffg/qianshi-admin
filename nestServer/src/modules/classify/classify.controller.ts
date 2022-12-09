@@ -17,9 +17,14 @@ export class ClassifyController {
   constructor(private readonly classifyService: ClassifyService) {}
 
   @Post('saveClassify')
-  create(@Body() createClassifyDto: CreateClassifyDto) {
+  async create(@Body() createClassifyDto: CreateClassifyDto) {
     console.log(createClassifyDto, 555);
-    return this.classifyService.create(createClassifyDto);
+    const res = await this.classifyService.create(createClassifyDto);
+    return {
+      code: 200,
+      message: 'success',
+      data: res,
+    };
   }
 
   @Get()
