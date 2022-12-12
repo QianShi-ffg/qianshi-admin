@@ -45,6 +45,10 @@ export class ArticleController {
     };
   }
 
+  /**
+   * 文章统计接口
+   * @returns
+   */
   @Get('articleClassifyCount')
   async findArticleCount() {
     const res = await this.articleService.countClassify('1');
@@ -59,10 +63,16 @@ export class ArticleController {
     };
   }
 
+  /**
+   * 文章详情
+   * @param id 文章id
+   * @returns
+   */
   @Get(':id')
   async findArticleDetail(@Param('id') id: string) {
-    console.log(id, 5555);
+    await this.articleService.updateArticleDetailViews(+id);
     const res = await this.articleService.findArticleDetail(+id);
+    console.log(res, 5555);
     return {
       code: 200,
       message: 'success',

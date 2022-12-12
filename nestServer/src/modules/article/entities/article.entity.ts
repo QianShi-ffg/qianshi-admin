@@ -39,6 +39,9 @@ export class ArticleList {
   @Column({ type: 'longtext', nullable: true })
   coverUrl: string;
 
+  @Column({ type: 'int', default: 0 })
+  Views: number;
+
   @ManyToOne((type) => ClassifyList, (classify_list) => classify_list.id)
   classify: ClassifyList;
 }

@@ -130,6 +130,24 @@ export class ArticleService {
   }
 
   /**
+   * 更新文章浏览量
+   * @param id 当前文章id
+   * @returns
+   */
+  updateArticleDetailViews(id: number) {
+    return this.ArticleListRepository.manager.increment(
+      'article_list',
+      { id: id },
+      'Views',
+      1,
+    );
+    return this.ArticleListRepository.update(id, { Views: 0 });
+    // return this.ArticleListRepository.findOne({
+    //   where: { id: id },
+    // });
+  }
+
+  /**
    * 文章内容更新
    * @param data 文章详情
    * @returns
