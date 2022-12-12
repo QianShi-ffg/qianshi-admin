@@ -52,8 +52,13 @@ export class ClassifyController {
     return this.classifyService.update(+id, updateClassifyDto);
   }
 
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.classifyService.remove(+id);
+  @Delete('delete')
+  async remove(@Body() data) {
+    const res = await this.classifyService.remove(data);
+    return {
+      code: 200,
+      message: 'success',
+      data: res,
+    };
   }
 }

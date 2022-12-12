@@ -54,7 +54,8 @@ export class ClassifyService {
     return `This action updates a #${id} classify`;
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} classify`;
+  remove(data) {
+    const { ids } = data;
+    return this.ClassifyRepository.delete(ids);
   }
 }

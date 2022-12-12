@@ -93,25 +93,24 @@ const handleEdit = (index, row) => {
 
 // 批量删除
 const batchDelete = () => {
-  // handleDelete(multipleSelectionId.value)
+  handleDelete(multipleSelectionId.value)
 }
 // 单条删除
 const handleDelete = async (ids) => {
-  // try {
-  //   const res = await api.deleteArticle({ id: ids.join(",") })
-  //   console.log(res, "resresres") 
-  //   if (res.code === 200) {
-  //     init();
-  //     ElMessage({ message: "删除成功", type: "success" })
-  //   } else {
-  //     throw res.msg
-  //   }
-  // } catch (error) {
-  //   console.log(error)
-  //   ElMessage({ message: error, type: "error" })
-  // } finally {
-  //   // 预留loading处理
-  // }
+  try {
+    const res = await api.deleteClassify({ ids: ids.join(",") })
+    if (res.code === 200) {
+      init();
+      ElMessage({ message: "删除成功", type: "success" })
+    } else {
+      throw res.msg
+    }
+  } catch (error) {
+    console.log(error)
+    ElMessage({ message: error, type: "error" })
+  } finally {
+    // 预留loading处理
+  }
 }
 
 const addClass = () => {

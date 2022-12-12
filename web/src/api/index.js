@@ -45,6 +45,10 @@ export default {
   saveClassify:(params = {}) => {
     return axiosPost('/classify/saveClassify', params)
   },
+  // 删除分类
+  deleteClassify:(params = {}) => {
+    return axiosDelete('/classify/delete', params)
+  },
   // 百度统计
   overview:(params = {}) => {
     return axiosGet('/overview', params)
