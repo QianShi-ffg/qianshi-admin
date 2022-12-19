@@ -27,7 +27,7 @@ export class AppController {
     return this.appService.refreshToken();
   }
 
-  @Get('city')
+  @Get('cityWeather')
   cityWeather(@Headers() header) {
     return this.appService.city(header);
   }
