@@ -28,31 +28,6 @@ import { TasksModule } from './schedule/tasks.module';
         logging: false,
       }),
     }),
-    // TypeOrmModule.forRoot({
-    //   type: 'mysql',
-    //   host: '188.131.164.41',
-    //   port: 3306,
-    //   username: '1',
-    //   password: 'blogServer@147258',
-    //   database: '1',
-    //   entities: ['dist/**/*.entity{.ts,.js}'],
-    //   autoLoadEntities: true, // 自动链接被 forFeature 注册的实体
-    //   synchronize: true,
-    //   timezone: '+08:00', // 东八区
-    //   cache: {
-    //     duration: 60000, // 1分钟的缓存
-    //   },
-    //   // extra: {
-    //   //   // poolMax: 32,
-    //   //   // poolMin: 16,
-    //   //   queueTimeout: 60000,
-    //   //   pollPingInterval: 60, // 每隔60秒连接
-    //   //   pollTimeout: 60, // 连接有效60秒
-    //   // },
-    //   // retryAttempts: 10,
-    //   // retryDelay: 60000,
-    //   // keepConnectionAlive: true,
-    // }),
     ArticleModule,
     UserModule,
     ClassifyModule,

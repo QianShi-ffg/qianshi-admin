@@ -5,10 +5,13 @@ import {
   UseInterceptors,
   UploadedFile,
   Body,
+  Headers,
+  Ip,
+  HostParam,
 } from '@nestjs/common';
 import { AppService } from './app.service';
 import { FileInterceptor } from '@nestjs/platform-express';
-import { Express } from 'express';
+import { Express, Request } from 'express';
 
 @Controller()
 export class AppController {
@@ -22,6 +25,11 @@ export class AppController {
   @Get('refreshToken')
   refreshToken(): string {
     return this.appService.refreshToken();
+  }
+
+  @Get('city')
+  cityWeather(@Headers() header) {
+    return this.appService.city(header);
   }
 
   @Post('upload')

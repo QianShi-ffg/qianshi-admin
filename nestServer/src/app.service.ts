@@ -1,13 +1,13 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Headers, Ip, HostParam } from '@nestjs/common';
 import { HttpService } from '@nestjs/axios';
 import * as dayjs from 'dayjs';
 import { createWriteStream, mkdirSync, existsSync } from 'fs';
 import { join, extname } from 'path';
 
 let refresh_token =
-  '122.a9f21f37883c5c3e38e278b854c7f73e.Y3sFDZZzsfTGU78eGOzZ78Qlssx9_4LJLUkteD5.MiUUrw';
+  '122.96cf4ec991ab3d6e52530f19df577cdb.YCaI0i54yInsn1JXgSMaDv0UWWy_dRuwupAhOdL.at6EFw';
 let access_token =
-  '121.25dbadd9e606310af661875e3ab870a4.YDlnLz0RRZf_VZ7fx7haz-YDWqcUovLdZc9he7Y.qkaPcA';
+  '121.ec4b7e3fe132c126cdcdc078ef1f7b2e.Y5agxj3HC4I9AbQI5_P0ByY_9SJ_SfZVEhdslaA.5LOitg';
 let expires_in = '';
 const apiKey = 'PLFuZ5UHascuRd9cANO6SrMdP8GhX6lF';
 const secretKey = 'rYhbIuz4YWqK3PTNqzpK5xRzGGpNjbp1';
@@ -86,6 +86,95 @@ export class AppService {
       });
   }
 
+  /**
+   * 通过访问者ip获取城市信息
+   * @param header 请求头相关数据
+   * @returns
+   */
+  city(header) {
+    console.log(header);
+    const ip = header['x-forwarded-for'];
+    return this.httpService
+      .get('https://api.map.baidu.com/location/ip', {
+        params: {
+          ak: 'Fn2X2OdjdA66GdbaVG4K30OH6owjjH5D',
+          ip: ip,
+          coor: 'bd09ll',
+        },
+      })
+      .toPromise()
+      .then(async (result) => {
+        const address = result.data.address;
+        const mapInfo = result.data.content.point;
+        const res = await this.weather(mapInfo);
+        const data = res.data.result.realtime;
+        let skycon = null;
+        const obj = {
+          CLEAR_DAY: '晴（白天）',
+          CLEAR_NIGHT: '晴（夜间）',
+          PARTLY_CLOUDY_DAY: '多云（白天）',
+          PARTLY_CLOUDY_NIGHT: '多云（夜间）',
+          CLOUDY: '阴',
+          LIGHT_HAZE: '轻度雾霾',
+          MODERATE_HAZE: '中度雾霾',
+          HEAVY_HAZE: '重度雾霾',
+          LIGHT_RAIN: '小雨',
+          MODERATE_RAIN: '中雨',
+          HEAVY_RAIN: '大雨',
+          STORM_RAIN: '暴雨',
+          FOG: '雾',
+          LIGHT_SNOW: '小雪',
+          MODERATE_SNOW: '中雪',
+          HEAVY_SNOW: '大雪',
+          STORM_SNOW: '暴雪',
+          DUST: '浮尘',
+          SAND: '沙尘',
+          WIND: '大风',
+        };
+        Object.entries(obj).forEach((item) => {
+          if (item.includes(data.skycon)) {
+            skycon = item[1];
+          }
+        });
+        return {
+          code: 200,
+          data: {
+            address,
+            temperature: data.temperature,
+            skycon: skycon,
+            pm25: data.air_quality.pm25,
+          },
+          message: '获取数据成功',
+        };
+      })
+      .catch((err) => {
+        console.log(err, 'cityErr');
+        return { code: 500, data: null, message: err };
+      });
+  }
+
+  weather(mapInfo) {
+    console.log(`${mapInfo.x},${mapInfo.y}`);
+    return this.httpService
+      .get(
+        `https://api.caiyunapp.com/v2.6/WYpeiV7gkcvrcBp0/${mapInfo.x},${mapInfo.y}/realtime`,
+      )
+      .toPromise()
+      .then((result) => {
+        return result;
+        // return { code: 200, data: result.data, message: '获取数据成功' };
+      })
+      .catch((err) => {
+        console.log(err, 'weatherErr');
+        return err;
+      });
+  }
+
+  /**
+   * 上传接口
+   * @param file 文件
+   * @returns
+   */
   async uploadFile(file) {
     // 获取文件的后缀
     const ext = extname(file.originalname);
