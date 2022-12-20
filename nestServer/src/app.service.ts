@@ -141,7 +141,8 @@ export class AppService {
           data: {
             address,
             temperature: data.temperature,
-            skycon: skycon,
+            skyconCn: skycon,
+            skyconEn: data.skycon,
             pm25: data.air_quality.pm25,
           },
           message: '获取数据成功',
