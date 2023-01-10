@@ -3,6 +3,8 @@ import { HttpService } from '@nestjs/axios';
 import * as dayjs from 'dayjs';
 import { createWriteStream, mkdirSync, existsSync } from 'fs';
 import { join, extname } from 'path';
+import { FriendShipService } from './modules/friend-ship/friend-ship.service';
+
 
 let refresh_token =
   '122.96cf4ec991ab3d6e52530f19df577cdb.YCaI0i54yInsn1JXgSMaDv0UWWy_dRuwupAhOdL.at6EFw';
@@ -14,7 +16,7 @@ const secretKey = 'rYhbIuz4YWqK3PTNqzpK5xRzGGpNjbp1';
 
 @Injectable()
 export class AppService {
-  constructor(private httpService: HttpService) {}
+  constructor(private httpService: HttpService,private readonly friendShipService: FriendShipService) {}
 
   overview(): any {
     // this.httpService.get('http://localhost:3000/cats');
@@ -92,7 +94,7 @@ export class AppService {
    * @returns
    */
   city(header) {
-    console.log(header);
+    console.log(header['x-forwarded-for']);
     const ip = header['x-forwarded-for'];
     return this.httpService
       .get('https://api.map.baidu.com/location/ip', {
@@ -104,49 +106,58 @@ export class AppService {
       })
       .toPromise()
       .then(async (result) => {
-        const address = result.data.address;
-        const mapInfo = result.data.content.point;
-        const res = await this.weather(mapInfo);
-        const data = res.data.result.realtime;
-        let skycon = null;
-        const obj = {
-          CLEAR_DAY: '晴（白天）',
-          CLEAR_NIGHT: '晴（夜间）',
-          PARTLY_CLOUDY_DAY: '多云（白天）',
-          PARTLY_CLOUDY_NIGHT: '多云（夜间）',
-          CLOUDY: '阴',
-          LIGHT_HAZE: '轻度雾霾',
-          MODERATE_HAZE: '中度雾霾',
-          HEAVY_HAZE: '重度雾霾',
-          LIGHT_RAIN: '小雨',
-          MODERATE_RAIN: '中雨',
-          HEAVY_RAIN: '大雨',
-          STORM_RAIN: '暴雨',
-          FOG: '雾',
-          LIGHT_SNOW: '小雪',
-          MODERATE_SNOW: '中雪',
-          HEAVY_SNOW: '大雪',
-          STORM_SNOW: '暴雪',
-          DUST: '浮尘',
-          SAND: '沙尘',
-          WIND: '大风',
-        };
-        Object.entries(obj).forEach((item) => {
-          if (item.includes(data.skycon)) {
-            skycon = item[1];
-          }
-        });
-        return {
-          code: 200,
-          data: {
-            address,
-            temperature: data.temperature,
-            skyconCn: skycon,
-            skyconEn: data.skycon,
-            pm25: data.air_quality.pm25,
-          },
-          message: '获取数据成功',
-        };
+        console.log(result.data, 6666666666666666);
+        if (result.data.status === 210) {
+          return {
+            code: 200,
+            data: {},
+            message: 'IP校验失败',
+          };
+        } else {
+          const address = result.data.address;
+          const mapInfo = result.data.content.point;
+          const res = await this.weather(mapInfo);
+          const data = res.data.result.realtime;
+          let skycon = null;
+          const obj = {
+            CLEAR_DAY: '晴（白天）',
+            CLEAR_NIGHT: '晴（夜间）',
+            PARTLY_CLOUDY_DAY: '多云（白天）',
+            PARTLY_CLOUDY_NIGHT: '多云（夜间）',
+            CLOUDY: '阴',
+            LIGHT_HAZE: '轻度雾霾',
+            MODERATE_HAZE: '中度雾霾',
+            HEAVY_HAZE: '重度雾霾',
+            LIGHT_RAIN: '小雨',
+            MODERATE_RAIN: '中雨',
+            HEAVY_RAIN: '大雨',
+            STORM_RAIN: '暴雨',
+            FOG: '雾',
+            LIGHT_SNOW: '小雪',
+            MODERATE_SNOW: '中雪',
+            HEAVY_SNOW: '大雪',
+            STORM_SNOW: '暴雪',
+            DUST: '浮尘',
+            SAND: '沙尘',
+            WIND: '大风',
+          };
+          Object.entries(obj).forEach((item) => {
+            if (item.includes(data.skycon)) {
+              skycon = item[1];
+            }
+          });
+          return {
+            code: 200,
+            data: {
+              address,
+              temperature: data.temperature,
+              skyconCn: skycon,
+              skyconEn: data.skycon,
+              pm25: data.air_quality.pm25,
+            },
+            message: '获取数据成功',
+          };
+        }
       })
       .catch((err) => {
         console.log(err, 'cityErr');
@@ -204,5 +215,10 @@ export class AppService {
         mkdirSync(join(__dirname, '../public/uploads'));
       }
     }
+  }
+
+  async refreshScreenShot(data) {
+    console.log(data)
+    return await this.friendShipService.setScreenShot(data)
   }
 }
