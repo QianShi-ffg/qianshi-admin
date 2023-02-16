@@ -14,12 +14,6 @@ let expires_in = '';
 const apiKey = 'PLFuZ5UHascuRd9cANO6SrMdP8GhX6lF';
 const secretKey = 'rYhbIuz4YWqK3PTNqzpK5xRzGGpNjbp1';
 
-const apiChatKey = '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'; // 将 YOUR_API_KEY 替换为您的实际 API 密钥
-const configuration = new Configuration({
-  organization: 'org-8bb996zZpR0jyGQ0MJyfDqrD',
-  apiKey: apiChatKey,
-});
-const openai = new OpenAIApi(configuration);
 @Injectable()
 export class AppService {
   constructor(
@@ -232,19 +226,21 @@ export class AppService {
   }
 
   async chat(message: string) {
-    console.log(message);
+    //chat
+    const configuration = new Configuration({
+      apiKey: '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',
+    });
+    const openai = new OpenAIApi(configuration);
     try {
       const completion = await openai.createCompletion({
+        prompt: message,
         model: 'text-davinci-003',
-        prompt: `${message}`,
-        max_tokens: 2000,
-        n: 1,
-        stop: null,
-        temperature: 0.7,
-      });
-      const configuration2 = new Configuration({
-        organization: 'org-8bb996zZpR0jyGQ0MJyfDqrD',
-        apiKey: apiChatKey,
+        temperature: 0.9,
+        max_tokens: 150,
+        top_p: 1,
+        frequency_penalty: 0.0,
+        presence_penalty: 0.6,
+        stop: ['Human:', 'AI:'],
       });
       console.log(completion.data.choices[0].text);
       return {

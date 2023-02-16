@@ -11,6 +11,7 @@ import { join } from 'path';
 import { FriendShipModule } from './modules/friend-ship/friend-ship.module';
 import { ScheduleModule } from '@nestjs/schedule'; // 定时任务
 import { TasksModule } from './schedule/tasks.module';
+import { ConfigModule } from '@nestjs/config';
 @Module({
   imports: [
     TypeOrmModule.forRootAsync({
@@ -39,6 +40,9 @@ import { TasksModule } from './schedule/tasks.module';
     TasksModule,
     FriendShipModule,
     ScheduleModule.forRoot(),
+    ConfigModule.forRoot({
+      envFilePath: ['.env'],
+    }),
   ],
   controllers: [AppController],
   providers: [AppService],
