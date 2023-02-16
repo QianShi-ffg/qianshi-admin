@@ -4,7 +4,7 @@ import * as dayjs from 'dayjs';
 import { createWriteStream, mkdirSync, existsSync } from 'fs';
 import { join, extname } from 'path';
 import { FriendShipService } from './modules/friend-ship/friend-ship.service';
-
+import { Configuration, OpenAIApi } from 'openai';
 
 let refresh_token =
   '122.96cf4ec991ab3d6e52530f19df577cdb.YCaI0i54yInsn1JXgSMaDv0UWWy_dRuwupAhOdL.at6EFw';
@@ -14,9 +14,18 @@ let expires_in = '';
 const apiKey = 'PLFuZ5UHascuRd9cANO6SrMdP8GhX6lF';
 const secretKey = 'rYhbIuz4YWqK3PTNqzpK5xRzGGpNjbp1';
 
+const apiChatKey = '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'; // 将 YOUR_API_KEY 替换为您的实际 API 密钥
+const configuration = new Configuration({
+  organization: 'org-8bb996zZpR0jyGQ0MJyfDqrD',
+  apiKey: apiChatKey,
+});
+const openai = new OpenAIApi(configuration);
 @Injectable()
 export class AppService {
-  constructor(private httpService: HttpService,private readonly friendShipService: FriendShipService) {}
+  constructor(
+    private httpService: HttpService,
+    private readonly friendShipService: FriendShipService,
+  ) {}
 
   overview(): any {
     // this.httpService.get('http://localhost:3000/cats');
@@ -218,7 +227,39 @@ export class AppService {
   }
 
   async refreshScreenShot(data) {
-    console.log(data)
-    return await this.friendShipService.setScreenShot(data)
+    console.log(data);
+    return await this.friendShipService.setScreenShot(data);
+  }
+
+  async chat(message: string) {
+    console.log(message);
+    try {
+      const completion = await openai.createCompletion({
+        model: 'text-davinci-003',
+        prompt: `${message}`,
+        max_tokens: 2000,
+        n: 1,
+        stop: null,
+        temperature: 0.7,
+      });
+      const configuration2 = new Configuration({
+        organization: 'org-8bb996zZpR0jyGQ0MJyfDqrD',
+        apiKey: apiChatKey,
+      });
+      console.log(completion.data.choices[0].text);
+      return {
+        code: 200,
+        data: completion.data.choices,
+        message: '获取数据成功',
+      };
+    } catch (error) {
+      if (error.response) {
+        console.log(error.response.status);
+        console.log(error.response.data);
+      } else {
+        console.log(error.message);
+      }
+    }
+    // const response = await openai11.listEngines();
   }
 }
