@@ -48,10 +48,4 @@ export class AppController {
     console.log(res);
     return res;
   }
-
-  @Post('chat')
-  async chat(@Body() data: any) {
-    const res = await this.appService.chat(data.message);
-    return res;
-  }
 }

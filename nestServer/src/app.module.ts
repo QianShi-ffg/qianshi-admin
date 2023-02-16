@@ -12,6 +12,7 @@ import { FriendShipModule } from './modules/friend-ship/friend-ship.module';
 import { ScheduleModule } from '@nestjs/schedule'; // 定时任务
 import { TasksModule } from './schedule/tasks.module';
 import { ConfigModule } from '@nestjs/config';
+import { ChatModule } from './modules/chat/chat.module';
 @Module({
   imports: [
     TypeOrmModule.forRootAsync({
@@ -43,6 +44,7 @@ import { ConfigModule } from '@nestjs/config';
     ConfigModule.forRoot({
       envFilePath: ['.env'],
     }),
+    ChatModule,
   ],
   controllers: [AppController],
   providers: [AppService],

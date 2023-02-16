@@ -4,7 +4,6 @@ import * as dayjs from 'dayjs';
 import { createWriteStream, mkdirSync, existsSync } from 'fs';
 import { join, extname } from 'path';
 import { FriendShipService } from './modules/friend-ship/friend-ship.service';
-import { Configuration, OpenAIApi } from 'openai';
 
 let refresh_token =
   '122.96cf4ec991ab3d6e52530f19df577cdb.YCaI0i54yInsn1JXgSMaDv0UWWy_dRuwupAhOdL.at6EFw';
@@ -223,39 +222,5 @@ export class AppService {
   async refreshScreenShot(data) {
     console.log(data);
     return await this.friendShipService.setScreenShot(data);
-  }
-
-  async chat(message: string) {
-    //chat
-    const configuration = new Configuration({
-      apiKey: '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',
-    });
-    const openai = new OpenAIApi(configuration);
-    try {
-      const completion = await openai.createCompletion({
-        prompt: message,
-        model: 'text-davinci-003',
-        temperature: 0.9,
-        max_tokens: 150,
-        top_p: 1,
-        frequency_penalty: 0.0,
-        presence_penalty: 0.6,
-        stop: ['Human:', 'AI:'],
-      });
-      console.log(completion.data.choices[0].text);
-      return {
-        code: 200,
-        data: completion.data.choices,
-        message: '获取数据成功',
-      };
-    } catch (error) {
-      if (error.response) {
-        console.log(error.response.status);
-        console.log(error.response.data);
-      } else {
-        console.log(error.message);
-      }
-    }
-    // const response = await openai11.listEngines();
   }
 }
