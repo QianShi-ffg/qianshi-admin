@@ -45,7 +45,7 @@ export class AppController {
   @Post('refreshScreenShot')
   async refreshScreenShot(@Body() data: any) {
     const res = await this.appService.refreshScreenShot(data);
-    console.log(res)
+    console.log(res);
     return res;
   }
 }

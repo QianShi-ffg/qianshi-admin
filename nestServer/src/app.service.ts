@@ -5,7 +5,6 @@ import { createWriteStream, mkdirSync, existsSync } from 'fs';
 import { join, extname } from 'path';
 import { FriendShipService } from './modules/friend-ship/friend-ship.service';
 
-
 let refresh_token =
   '122.96cf4ec991ab3d6e52530f19df577cdb.YCaI0i54yInsn1JXgSMaDv0UWWy_dRuwupAhOdL.at6EFw';
 let access_token =
@@ -16,7 +15,10 @@ const secretKey = 'rYhbIuz4YWqK3PTNqzpK5xRzGGpNjbp1';
 
 @Injectable()
 export class AppService {
-  constructor(private httpService: HttpService,private readonly friendShipService: FriendShipService) {}
+  constructor(
+    private httpService: HttpService,
+    private readonly friendShipService: FriendShipService,
+  ) {}
 
   overview(): any {
     // this.httpService.get('http://localhost:3000/cats');
@@ -218,7 +220,7 @@ export class AppService {
   }
 
   async refreshScreenShot(data) {
-    console.log(data)
-    return await this.friendShipService.setScreenShot(data)
+    console.log(data);
+    return await this.friendShipService.setScreenShot(data);
   }
 }

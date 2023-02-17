@@ -11,6 +11,8 @@ import { join } from 'path';
 import { FriendShipModule } from './modules/friend-ship/friend-ship.module';
 import { ScheduleModule } from '@nestjs/schedule'; // 定时任务
 import { TasksModule } from './schedule/tasks.module';
+import { ConfigModule } from '@nestjs/config';
+import { ChatModule } from './modules/chat/chat.module';
 @Module({
   imports: [
     TypeOrmModule.forRootAsync({
@@ -23,9 +25,10 @@ import { TasksModule } from './schedule/tasks.module';
         database: 'root',
         timezone: '+08:00',
         charset: 'utf8mb4',
-        entities: ['dist/**/*.entity{.ts,.js}'],
+        // entities: ['dist/**/*.entity{.ts,.js}'],
         synchronize: true,
         logging: false,
+        autoLoadEntities: true,
       }),
     }),
     ArticleModule,
@@ -38,6 +41,10 @@ import { TasksModule } from './schedule/tasks.module';
     TasksModule,
     FriendShipModule,
     ScheduleModule.forRoot(),
+    ConfigModule.forRoot({
+      envFilePath: ['.env'],
+    }),
+    ChatModule,
   ],
   controllers: [AppController],
   providers: [AppService],

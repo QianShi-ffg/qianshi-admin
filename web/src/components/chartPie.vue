@@ -32,7 +32,7 @@ const init = () => {
   let option;
   let index = 0;
   const colorList = [
-    '#37a2da', '#32c5e9', '#9fe6b8', '#ffdb5c', '#ff9f7f', '#fb7293', '#e7bcf3', '#8378ea', '#bf41ff'
+    '#37a2da', '#32c5e9', '#9fe6b8', '#ffdb5c', '#ff9f7f', '#f8bc31', '#fb7293', '#e7bcf3', '#8378ea', '#bf41ff', '#45b787', '#ed5a65', '#e3b4b8', '#7a7374', '#12a182', '#f1ca17', '#5a1f1b', '#9fe6b8', '#ffdb5c', '#ff9f7f', '#f8bc31', '#fb7293', '#e7bcf3', '#8378ea', '#bf41ff', '#45b787', '#ed5a65'
   ];
   option = {
     title: {
