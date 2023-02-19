@@ -23,7 +23,7 @@ export class AppController {
   }
 
   @Get('refreshToken')
-  refreshToken(): string {
+  refreshToken(): any {
     return this.appService.refreshToken();
   }
 

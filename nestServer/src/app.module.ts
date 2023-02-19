@@ -13,6 +13,8 @@ import { ScheduleModule } from '@nestjs/schedule'; // 定时任务
 import { TasksModule } from './schedule/tasks.module';
 import { ConfigModule } from '@nestjs/config';
 import { ChatModule } from './modules/chat/chat.module';
+import { CountToken } from './entities/token.entity';
+
 @Module({
   imports: [
     TypeOrmModule.forRootAsync({
@@ -31,6 +33,7 @@ import { ChatModule } from './modules/chat/chat.module';
         autoLoadEntities: true,
       }),
     }),
+    TypeOrmModule.forFeature([CountToken]),
     ArticleModule,
     UserModule,
     ClassifyModule,

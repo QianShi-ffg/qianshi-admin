@@ -4,36 +4,25 @@ import * as dayjs from 'dayjs';
 import { createWriteStream, mkdirSync, existsSync } from 'fs';
 import { join, extname } from 'path';
 import { FriendShipService } from './modules/friend-ship/friend-ship.service';
-
-let refresh_token =
-  '122.96cf4ec991ab3d6e52530f19df577cdb.YCaI0i54yInsn1JXgSMaDv0UWWy_dRuwupAhOdL.at6EFw';
-let access_token =
-  '121.ec4b7e3fe132c126cdcdc078ef1f7b2e.Y5agxj3HC4I9AbQI5_P0ByY_9SJ_SfZVEhdslaA.5LOitg';
-let expires_in = '';
-const apiKey = 'PLFuZ5UHascuRd9cANO6SrMdP8GhX6lF';
-const secretKey = 'rYhbIuz4YWqK3PTNqzpK5xRzGGpNjbp1';
+import { CountToken } from './entities/token.entity';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
 
 @Injectable()
 export class AppService {
   constructor(
+    @InjectRepository(CountToken)
+    private CountTokenRepository: Repository<CountToken>,
     private httpService: HttpService,
     private readonly friendShipService: FriendShipService,
   ) {}
 
-  overview(): any {
-    // this.httpService.get('http://localhost:3000/cats');
-    // const params = {
-    //   access_token: access_token,
-    //   site_id: "18341059",
-    //   method: "overview/getTimeTrendRpt",
-    //   start_date: "20220701",
-    //   end_date: dayjs().format("YYYYMMDD"),
-    //   metrics: "pv_count,visitor_count",
-    // };
+  async overview(): Promise<any> {
+    const res = await this.countToken();
     return this.httpService
       .get('https://openapi.baidu.com/rest/2.0/tongji/report/getData', {
         params: {
-          access_token: access_token,
+          access_token: res.access_token,
           site_id: '18341059',
           method: 'overview/getTimeTrendRpt',
           start_date: dayjs().subtract(90, 'day').format('YYYYMMDD'),
@@ -67,21 +56,24 @@ export class AppService {
       });
   }
 
-  refreshToken(): any {
+  async refreshToken(): Promise<any> {
+    const res = await this.countToken();
     return this.httpService
       .get('http://openapi.baidu.com/oauth/2.0/token', {
         params: {
           grant_type: 'refresh_token',
-          refresh_token: refresh_token,
-          client_id: apiKey,
-          client_secret: secretKey,
+          refresh_token: res.refresh_token,
+          client_id: res.apiKey,
+          client_secret: res.secretKey,
         },
       })
       .toPromise()
-      .then((result) => {
-        refresh_token = result.data.refresh_token;
-        access_token = result.data.access_token;
-        expires_in = result.data.expires_in;
+      .then(async (result) => {
+        await this.CountTokenRepository.update(1, {
+          refresh_token: result.data.refresh_token,
+          access_token: result.data.access_token,
+          expires_in: result.data.expires_in,
+        });
         return { code: 200, data: result.data, message: '获取数据成功' };
       })
       .catch((err) => {
@@ -90,6 +82,14 @@ export class AppService {
       });
   }
 
+  /**
+   * 查询token数据
+   */
+  countToken() {
+    return this.CountTokenRepository.findOne({
+      where: { id: 1 },
+    });
+  }
   /**
    * 通过访问者ip获取城市信息
    * @param header 请求头相关数据
