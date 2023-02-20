@@ -79,9 +79,13 @@ export class FriendShipService {
       // const results = await conn(sql, data);
       console.log(res, 'res');
       console.log('OK');
-      return { code: 200, data: {
-        path: `/screenshot/${item.id}.jpeg`
-      }, message: '截屏已完成'}
+      return {
+        code: 200,
+        data: {
+          path: `/screenshot/${item.id}.jpeg`,
+        },
+        message: '截屏已完成',
+      };
       // }
     } catch (error) {
       console.log(error, 'error');
