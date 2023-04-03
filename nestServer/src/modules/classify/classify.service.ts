@@ -51,11 +51,12 @@ export class ClassifyService {
   }
 
   update(id: number, updateClassifyDto: UpdateClassifyDto) {
-    return `This action updates a #${id} classify`;
+    return this.ClassifyRepository.update(id, updateClassifyDto);
   }
 
   remove(data) {
     const { ids } = data;
-    return this.ClassifyRepository.delete(ids);
+    console.log(ids);
+    return this.ClassifyRepository.delete(ids.split(','));
   }
 }

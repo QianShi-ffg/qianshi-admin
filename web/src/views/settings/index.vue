@@ -5,7 +5,9 @@
         <classifySetting/>
       </el-tab-pane>
       <el-tab-pane label="标签设置">标签设置</el-tab-pane>
-      <el-tab-pane label="友链设置">标签设置</el-tab-pane>
+      <el-tab-pane label="友链设置">
+        <friendsLinks/>
+      </el-tab-pane>
       <el-tab-pane label="个人信息">个人信息</el-tab-pane>
     </el-tabs>
   </div>
@@ -14,6 +16,7 @@
 
 <script setup>
 import classifySetting from '@/components/classifySetting.vue'
+import friendsLinks from '@/components/friendsLinks.vue';
 </script>
 
 <style lang="scss" scoped>

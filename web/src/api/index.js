@@ -27,6 +27,7 @@ export default {
   },
   // 编辑器上传图片------------------
   uploadImg:(params = {}) => {
+    console.log(params, 666666666)
     return axiosPost('/upload', params)
   },
   // 注册
@@ -48,6 +49,26 @@ export default {
   // 删除分类
   deleteClassify:(params = {}) => {
     return axiosDelete('/classify/delete', params)
+  },
+  // 更新分类
+  updateClassify:(params = {}) => {
+    return axiosPatch(`/classify/${params.id}`, params)
+  },
+  // 获取友链
+  getFriendShipList:(params = {}) => {
+    return axiosGet('/friendShip', params)
+  },
+  // 添加友链
+  saveFriendShip:(params = {}) => {
+    return axiosPost('/friendShip/saveFriendShip', params)
+  },
+  // 删除友链
+  deleteFriendShip:(params = {}) => {
+    return axiosDelete('/friendShip/delete', params)
+  },
+  // 更新友链
+  upDateFriendShip:(params = {}) => {
+    return axiosPatch(`/friendShip/${params.id}`, params)
   },
   // 百度统计
   overview:(params = {}) => {

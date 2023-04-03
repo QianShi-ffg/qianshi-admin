@@ -141,12 +141,13 @@ const publish = async () => {
 // 上传图片
 const uploadImg = async (files, callback) => {
   const formData = new FormData();
+  console.log(files)
   for (let i = 0; i < files.length; i++) {
     formData.append('file', files[i]);
     // fromData.append(files[i].name, files[i]);
   }
   const res = await api.uploadImg(formData)
-  console.log(`${import.meta.env.VITE_BASEURL}${res.data[0].path}`)
+  console.log(import.meta, import.meta.env, 555555555555555555)
   callback(res.data.map((item) => `${import.meta.env.VITE_BASEURL}${item.path}`))
 }
 </script>

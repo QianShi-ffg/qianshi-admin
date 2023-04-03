@@ -5,15 +5,30 @@
       <el-button type="danger" @click="batchDelete" v-if="multipleSelectionId.length > 0" round>批量删除</el-button>
     </div>
     <el-table ref="multipleTableRef" :data="tableData" style="width: 100%" @selection-change="handleSelectionChange"
-      size="default" height="calc(100% - 135px)">
+      size="default" height="calc(100% - 135px)" tooltip-effect>
       <el-table-column type="selection" width="55" />
       <!-- <el-table-column property="id" label="ID" /> -->
-      <el-table-column property="name" label="分类名称"/>
-      <el-table-column property="describe" label="描述"/>
-      <el-table-column label="创建时间">
+      <el-table-column property="name" label="作者名称" width="155"/>
+      <el-table-column property="icon" label="头像链接">
+        <template #default="scope">
+          <div style="display: flex; align-items: center">
+            <el-tooltip
+              class="box-item"
+              effect="dark"
+              :content="scope.row.icon"
+              placement="top-start"
+            >
+              <span style="white-space:nowrap;text-overflow: ellipsis; overflow: hidden; word-break: break-all;">{{ scope.row.icon }}</span>
+            </el-tooltip>
+          </div>
+        </template>
+      </el-table-column>
+      <el-table-column property="blogUrl" label="博客链接"/>
+      <el-table-column property="desc" label="描述"/>
+      <el-table-column label="创建时间" width="165">
         <template #default="scope">{{ date(scope.row.createTime) }}</template>
       </el-table-column>
-      <el-table-column label="操作">
+      <el-table-column label="操作" width="130">
         <template #default="scope">
           <el-tooltip class="box-item" effect="dark" content="编辑" placement="top">
             <el-button @click="handleEdit(scope.$index, scope.row)" :icon="Edit" link></el-button>
@@ -25,8 +40,8 @@
       </el-table-column>
     </el-table>
     <el-pagination background layout="total, prev, pager, next" :total="total" :page-size="20"
-      @current-change="currentChange" :current-page="paginationObj.page"/>
-    <classifyDialogVue :classDesc="classDesc" ref="classDialog" @success="success"/>
+      @current-change="currentChange" :current-page="paginationObj.page"></el-pagination>
+    <friendShipDialog :friendShipDesc="friendShipDesc" ref="friendDialog" @success="success"/>
   </div>
 </template>
 
@@ -37,7 +52,7 @@ import { Delete, Edit, Promotion } from "@element-plus/icons-vue";
 import { useRouter, useRoute } from "vue-router";
 import date from "@/utils/date";
 import api from "@/api/index.js";
-import classifyDialogVue from "./classifyDialog.vue";
+import friendShipDialog from "./friendShipDialog.vue";
 
 const router = useRouter();
 const route = useRoute();
@@ -45,8 +60,8 @@ const multipleTableRef = ref();
 const multipleSelection = ref([]);
 const multipleSelectionId = ref([]);
 const tableData = ref([]);
-const classDesc = ref({})
-const classDialog = ref()
+const friendShipDesc = ref({})
+const friendDialog = ref()
 const paginationObj = reactive({
   page: 1,
   pageSize: 20
@@ -55,7 +70,7 @@ const total = ref(0)
 
 const init = async () => {
   try {
-    const res = await api.getClassifyList(paginationObj)
+    const res = await api.getFriendShipList(paginationObj)
     if (res.code === 200) {
       tableData.value = res.data
       total.value = res.total
@@ -88,11 +103,12 @@ const handleSelectionChange = (val) => {
 
 // 编辑
 const handleEdit = (index, row) => {
-  classDesc.value = {
-    ...row,
+  console.log(index, row)
+  friendShipDesc.value = {
+    ...row
   }
   nextTick(()=> {
-    classDialog.value.show('edit')
+    friendDialog.value.show('edit')
   })
 };
 
@@ -103,7 +119,7 @@ const batchDelete = () => {
 // 单条删除
 const handleDelete = async (ids) => {
   try {
-    const res = await api.deleteClassify({ ids: ids.join(",") })
+    const res = await api.deleteFriendShip({ ids: ids.join(",") })
     if (res.code === 200) {
       init();
       ElMessage({ message: "删除成功", type: "success" })
@@ -119,7 +135,7 @@ const handleDelete = async (ids) => {
 }
 
 const addClass = () => {
-  classDialog.value.show('')
+  friendDialog.value.show('')
 }
 
 const success = () => {

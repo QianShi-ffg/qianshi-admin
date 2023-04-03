@@ -74,6 +74,10 @@
   box-shadow: var(--el-box-shadow-light);
 }
 
+.el-pagination>.is-first {
+  margin-left: 10px !important;
+}
+
 .el-pagination.is-background .el-pager li {
   background: none;
 }
@@ -100,11 +104,12 @@
 
 
 .el-table .el-table__inner-wrapper {
+  background: var(--div-bgColor);
   height: 100% !important;
 }
 
 .el-table tr {
-  background: var(--div-bgColor);
+  background: var(--el-table-tr-bg);
 }
 
 .el-table th.el-table__cell {
@@ -243,7 +248,13 @@
   }
 }
 
-
+.el-tabs .el-tabs__active-bar.is-left {
+  display: none;
+}
+.el-tabs.el-tabs--left .el-tabs__nav-wrap.is-left::after {
+  content: unset;
+  display: none;
+}
 
 
 
@@ -324,6 +335,7 @@
     --el-popper-light: rgba(183, 194, 231, 0.8);
     --el-dialog-bgColor: linear-gradient(90deg, var(--theme-left-color) 0%, var(--theme-right-color) 100%);
     --select-dropdown-shadow: #ba79bd65;
+    --el-table-tr-bg: #ffffff00;
   }
 
   a:hover {
