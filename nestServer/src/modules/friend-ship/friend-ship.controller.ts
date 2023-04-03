@@ -6,6 +6,7 @@ import {
   Patch,
   Param,
   Delete,
+  Query,
 } from '@nestjs/common';
 import { FriendShipService } from './friend-ship.service';
 import { CreateFriendShipDto } from './dto/create-friend-ship.dto';
@@ -15,18 +16,25 @@ import { UpdateFriendShipDto } from './dto/update-friend-ship.dto';
 export class FriendShipController {
   constructor(private readonly friendShipService: FriendShipService) {}
 
-  @Post()
-  create(@Body() createFriendShipDto: CreateFriendShipDto) {
-    return this.friendShipService.create(createFriendShipDto);
-  }
-
-  @Get()
-  async findAll() {
-    const res = await this.friendShipService.findAll();
+  @Post('saveFriendShip')
+  async create(@Body() createFriendShipDto: CreateFriendShipDto) {
+    const res = await this.friendShipService.create(createFriendShipDto);
     return {
       code: 200,
       message: 'success',
       data: res,
+    };
+  }
+
+  @Get()
+  async findAll(@Query() query: any) {
+    const res = await this.friendShipService.findAll(query);
+    const res1: any = await this.friendShipService.countFriendShip();
+    return {
+      code: 200,
+      message: 'success',
+      data: res,
+      total: Number(res1.count),
     };
   }
 
@@ -36,15 +44,25 @@ export class FriendShipController {
   }
 
   @Patch(':id')
-  update(
+  async update(
     @Param('id') id: string,
     @Body() updateFriendShipDto: UpdateFriendShipDto,
   ) {
-    return this.friendShipService.update(+id, updateFriendShipDto);
+    const res = await this.friendShipService.update(+id, updateFriendShipDto);
+    return {
+      code: 200,
+      message: 'success',
+      data: res,
+    };
   }
 
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.friendShipService.remove(+id);
+  @Delete('delete')
+  async remove(@Body() data) {
+    const res = await this.friendShipService.remove(data);
+    return {
+      code: 200,
+      message: 'success',
+      data: res,
+    };
   }
 }

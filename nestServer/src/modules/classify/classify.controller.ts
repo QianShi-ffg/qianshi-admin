@@ -45,11 +45,16 @@ export class ClassifyController {
   }
 
   @Patch(':id')
-  update(
+  async update(
     @Param('id') id: string,
     @Body() updateClassifyDto: UpdateClassifyDto,
   ) {
-    return this.classifyService.update(+id, updateClassifyDto);
+    const res = await this.classifyService.update(+id, updateClassifyDto);
+    return {
+      code: 200,
+      message: 'success',
+      data: res,
+    };
   }
 
   @Delete('delete')
