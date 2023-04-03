@@ -25,10 +25,10 @@
       </el-table-column>
       <el-table-column property="blogUrl" label="博客链接"/>
       <el-table-column property="desc" label="描述"/>
-      <el-table-column label="创建时间">
+      <el-table-column label="创建时间" width="165">
         <template #default="scope">{{ date(scope.row.createTime) }}</template>
       </el-table-column>
-      <el-table-column label="操作">
+      <el-table-column label="操作" width="130">
         <template #default="scope">
           <el-tooltip class="box-item" effect="dark" content="编辑" placement="top">
             <el-button @click="handleEdit(scope.$index, scope.row)" :icon="Edit" link></el-button>
