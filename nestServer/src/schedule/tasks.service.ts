@@ -10,7 +10,11 @@ export class TasksService {
 
   @Cron('0 0 2 * * 1-5')
   async screenShot() {
-    const res = await this.friendShipService.findAll();
+    const query = {
+      page: 1,
+      pageSize: 1000,
+    };
+    const res = await this.friendShipService.findAll(query);
     this.logger.debug('该方法工作日每日运行一次');
     res.map((item) => {
       return this.friendShipService.setScreenShot(item);

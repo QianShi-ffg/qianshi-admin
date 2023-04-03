@@ -28,6 +28,7 @@ export class NotFoundFilter implements ExceptionFilter {
         error: 'Not Found',
       });
     } else {
+      console.log(exception, 1212);
       response.status(status).send(exception);
     }
   }

@@ -34,8 +34,7 @@ export class AppController {
 
   @Post('upload')
   @UseInterceptors(FileInterceptor('file'))
-  async uploadFile(@Body() body, @UploadedFile() file: Express.Multer.File) {
-    console.log(body, 11);
+  async uploadFile(@UploadedFile() file: Express.Multer.File) {
     console.log(file, 22);
     const res = await this.appService.uploadFile(file);
     console.log(res, 'resres');

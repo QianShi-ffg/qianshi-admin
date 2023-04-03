@@ -16,7 +16,7 @@ axios.defaults.baseURL = import.meta.env.VITE_BASEURL;
 
 //请求拦截器 区分了一下正常请求时与发送formdata时的请求头
 axios.interceptors.request.use((config) => {
-  config.headers['Content-Type'] = 'application/json';
+  // config.headers['Content-Type'] = 'application/json';
   config.headers['token'] = 'token66666666666666'
   // 每个请求都会 加入 
   config.cancelToken = new axios.CancelToken(cancel => {

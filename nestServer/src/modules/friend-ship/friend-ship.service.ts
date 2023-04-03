@@ -15,11 +15,16 @@ export class FriendShipService {
   ) {}
 
   create(createFriendShipDto: CreateFriendShipDto) {
-    return 'This action adds a new friendShip';
+    return this.FriendShipRepository.save(createFriendShipDto);
   }
 
-  findAll() {
-    return this.FriendShipRepository.find();
+  findAll(query) {
+    const { page, pageSize } = query;
+    return this.FriendShipRepository.createQueryBuilder('friend_ship')
+      .orderBy('id', 'DESC')
+      .skip((page - 1) * pageSize)
+      .take(pageSize)
+      .getMany();
   }
 
   findOne(id: number) {
@@ -30,8 +35,9 @@ export class FriendShipService {
     return this.FriendShipRepository.update(id, updateFriendShipDto);
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} friendShip`;
+  remove(data) {
+    const { ids } = data;
+    return this.FriendShipRepository.delete(ids.split(','));
   }
 
   async setScreenShot(item) {
@@ -63,7 +69,6 @@ export class FriendShipService {
         height: 1080,
       });
       const rres = await page.goto(item.blogUrl, { timeout: 0 });
-      console.log(rres, 8555);
       await page.waitForTimeout(4000);
       await page.screenshot({
         quality: 10,
@@ -90,5 +95,15 @@ export class FriendShipService {
     } catch (error) {
       console.log(error, 'error');
     }
+  }
+
+  /**
+   * @description 统计友链总数
+   * @returns
+   */
+  countFriendShip() {
+    return this.FriendShipRepository.createQueryBuilder('friend_ship')
+      .select('COUNT(*) count')
+      .getRawOne();
   }
 }
