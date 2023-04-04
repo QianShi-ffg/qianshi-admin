@@ -36,7 +36,7 @@ export default {
   },
   // 登录
   login:(params = {}) => {
-    return axiosPost('/user/login', params)
+    return axiosPost('/auth/login', params)
   },
   // 获取分类
   getClassifyList:(params = {}) => {

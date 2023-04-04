@@ -14,6 +14,7 @@ import { TasksModule } from './schedule/tasks.module';
 import { ConfigModule } from '@nestjs/config';
 import { ChatModule } from './modules/chat/chat.module';
 import { CountToken } from './entities/token.entity';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
@@ -48,6 +49,7 @@ import { CountToken } from './entities/token.entity';
       envFilePath: ['.env'],
     }),
     ChatModule,
+    AuthModule,
   ],
   controllers: [AppController],
   providers: [AppService],

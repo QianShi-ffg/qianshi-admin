@@ -33,7 +33,7 @@ const init = () => {
       trigger: 'axis'
     },
     legend: {
-      data: ['PV', 'UV', '']
+      data: ['PV', 'UV']
     },
     grid: {
       left: '3%',
@@ -58,14 +58,62 @@ const init = () => {
       {
         name: 'PV',
         type: 'line',
-        stack: 'Total',
-        data: props.chartLineData.y1
+        // stack: 'Total',
+        data: props.chartLineData.y2,
+        color: "rgba(72, 104, 220)",
+        areaStyle: {
+            normal: {
+               color: new echarts.graphic.LinearGradient(
+                  0,
+                  0,
+                  0,
+                  1,
+                  [
+                     {
+                        offset: 0,
+                        color: "rgba(72, 104, 220,.8)",
+                     },
+                     {
+                        offset: 1,
+                        color: "rgba(72, 104, 220, 0)",
+                     },
+                  ],
+                  false
+               ),
+               shadowColor: "rgba(72, 104, 220, .4)",
+               shadowBlur: 2,
+            },
+         },
       },
       {
         name: 'UV',
         type: 'line',
-        stack: 'Total',
-        data: props.chartLineData.y2
+        // stack: 'Total',
+        data: props.chartLineData.y1,
+        color: "rgba(175, 106, 179)",
+        areaStyle: {
+            normal: {
+               color: new echarts.graphic.LinearGradient(
+                  0,
+                  0,
+                  0,
+                  1,
+                  [
+                     {
+                        offset: 0,
+                        color: "rgba(175, 106, 179, .8)",
+                     },
+                     {
+                        offset: 1,
+                        color: "rgba(175, 106, 179, 0)",
+                     },
+                  ],
+                  false
+               ),
+               shadowColor: "rgba(175, 106, 179, .4)",
+               shadowBlur: 2,
+            },
+         },
       }
     ]
   };

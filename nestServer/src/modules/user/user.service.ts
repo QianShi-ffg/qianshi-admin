@@ -4,12 +4,33 @@ import { UpdateUserDto } from './dto/update-user.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { User } from './entities/user.entity';
+
+export type User1 = any;
 @Injectable()
 export class UserService {
+  private readonly users: User1[];
   constructor(
     @InjectRepository(User)
     private UserRepository: Repository<User>,
-  ) {}
+  ) {
+    this.users = [
+      {
+        userId: 1,
+        username: 'qqq',
+        password: 'aaa',
+      },
+      {
+        userId: 2,
+        username: 'chris',
+        password: 'secret',
+      },
+      {
+        userId: 3,
+        username: 'maria',
+        password: 'guess',
+      },
+    ];
+  }
 
   /**
    * 注册
@@ -47,6 +68,7 @@ export class UserService {
     const res: any = await this.UserRepository.find({
       where: { name: name, password: password },
     });
+    console.log(res, 'resresresresres');
     let msg: any = '';
     let code = 200;
     if (res.length === 0) {
@@ -62,8 +84,12 @@ export class UserService {
     return `This action returns all user`;
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} user`;
+  async findOne(name: string): Promise<User1 | undefined> {
+    console.log(name);
+    return await this.UserRepository.find({
+      where: { name: name },
+      select: ['name', 'password'],
+    });
   }
 
   update(id: number, updateUserDto: UpdateUserDto) {

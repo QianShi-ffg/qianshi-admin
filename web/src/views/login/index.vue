@@ -85,15 +85,11 @@ const signIn = async() => {
     const res = await api.login({name: name.value, password: password.value})
     console.log(res)
     if (res.code === 200) {
-      if (res.data) {
-        sessionStorage.setItem('user', JSON.stringify({name: name.value, password: password.value}))
-        router.push('/')
-        ElMessage({ message: res.message, type: 'success'})
-      } else {
-        ElMessage({ message: res.message, type: 'error'})
-      }
+      sessionStorage.setItem('access_token', res['access_token'])
+      router.push('/')
+      ElMessage({ message: res.message, type: 'success'})
     } else {
-      ElMessage({ message: res.message, type: 'error'})
+      ElMessage({ message: '账户名密码错误', type: 'error'})
     }
   } else {
     ElMessage({ message: '账号与密码不可为空', type: 'error'})

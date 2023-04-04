@@ -89,14 +89,11 @@ watch(route, (value, oldVal) => {
   breadcrumb()
 })
 
-
-
 if (route.name) {
   currentMenu.value = route.name
 } else {
   currentMenu.value = '/'
 }
-
 
 const putMenu = () => {
   isCollapse.value = !isCollapse.value;

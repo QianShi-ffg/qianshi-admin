@@ -7,12 +7,10 @@ import {
   Body,
   Headers,
   Ip,
-  HostParam,
 } from '@nestjs/common';
 import { AppService } from './app.service';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { Express, Request } from 'express';
-
 @Controller()
 export class AppController {
   constructor(private readonly appService: AppService) {}

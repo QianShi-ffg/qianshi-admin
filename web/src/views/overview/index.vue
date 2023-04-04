@@ -4,9 +4,19 @@
       <div class="todaysFlowItem">
         <img src="@/assets/admin/qingfenketang.svg" alt="" />
         <div>
-          <p>近90天总访问量</p>
+          <p>总访问量</p>
           <p>
             <span>{{ data.sum }}</span>
+            <span>次</span>
+          </p>
+        </div>
+      </div>
+      <div class="todaysFlowItem">
+        <img src="@/assets/admin/qingfenketang.svg" alt="" />
+        <div>
+          <p>近90天总访问量</p>
+          <p>
+            <span>{{ data.nsum }}</span>
             <span>次</span>
           </p>
         </div>
@@ -102,8 +112,20 @@ const articleClassifyCount = async() => {
   }
 }
 
-const dataInit = (value) => {
-  const sum = value[1].map(item => {
+const dataInit = async(value) => {
+  const sum = await getSum(value[1])
+  const nsum = await getSum(value[1].slice(value[1].length -90))
+  console.log(sum, nsum)
+  data.value = {
+    todayData: value[1][value[1].length - 1][0],
+    yesterdayData: value[1][value[1].length - 2][0],
+    sum: sum,
+    nsum: nsum,
+  }
+}
+
+const getSum = (value) => {
+  return value.map(item => {
     if (item[0] !== '--') {
       return item[0]
     }
@@ -122,11 +144,6 @@ const dataInit = (value) => {
       }
     }
   })
-  data.value = {
-    todayData: value[1][value[1].length - 1][0],
-    yesterdayData: value[1][value[1].length - 2][0],
-    sum: sum
-  }
 }
 
 const chartDataInit = (value) => {
@@ -162,7 +179,7 @@ const chartDataInit = (value) => {
       align-items: center;
       width: 240px;
       height: 80%;
-      margin-right: 120px;
+      margin-right: 60px;
       padding-left: 20px;
       img {
         width: 50px;
