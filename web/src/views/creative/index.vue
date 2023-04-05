@@ -10,7 +10,7 @@
       <el-button type="danger" @click="batchDelete" v-if="multipleSelectionId.length > 0" round>批量删除</el-button>
     </div>
     <el-table ref="multipleTableRef" :data="tableData" style="width: 100%" @selection-change="handleSelectionChange"
-      size="default" height="calc(100% - 105px)">
+      size="default" height="calc(100% - 112px)">
       <el-table-column type="selection" width="55" />
       <el-table-column property="title" label="标题" />
       <el-table-column label="发布状态">

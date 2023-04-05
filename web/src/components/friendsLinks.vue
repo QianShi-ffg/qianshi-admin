@@ -5,7 +5,7 @@
       <el-button type="danger" @click="batchDelete" v-if="multipleSelectionId.length > 0" round>批量删除</el-button>
     </div>
     <el-table ref="multipleTableRef" :data="tableData" style="width: 100%" @selection-change="handleSelectionChange"
-      size="default" height="calc(100% - 135px)" tooltip-effect>
+      size="default" height="calc(100% - 112px)" tooltip-effect>
       <el-table-column type="selection" width="55" />
       <!-- <el-table-column property="id" label="ID" /> -->
       <el-table-column property="name" label="作者名称" width="155"/>
@@ -161,7 +161,7 @@ const currentChange = (value) => {
 
 .el-pagination {
   position: absolute;
-  bottom: 5px;
+  bottom: 30px;
   right: 20%;
 }
 </style>
