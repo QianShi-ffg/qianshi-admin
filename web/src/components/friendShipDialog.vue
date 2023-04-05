@@ -1,6 +1,6 @@
 <template>
   <div id="classifyDialog" v-if="dialogVisible">
-    <el-dialog v-model="dialogVisible" title="新增友链" width="400px" :destroy-on-close="true">
+    <el-dialog v-model="dialogVisible" title="新增友链" width="400px" :destroy-on-close="true" :append-to-body="true" :close-on-click-modal="false">
       <el-form :model="form" label-width="120px" :label-position="'top'" ref="formRef" :rules="rules" hide-required-asterisk>
         <el-form-item label="作者名称" prop="name">
           <el-input v-model="form.name" placeholder="请输入作者名称"/>

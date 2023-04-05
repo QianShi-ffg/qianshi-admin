@@ -17,10 +17,25 @@ const routes = [
         component: () => import('@/views/creative/index.vue')
       },
       {
-        name: 'settings',
-        path: '/settings',
-        component: () => import('@/views/settings/index.vue')
-      }
+        name: 'classifySetting',
+        path: '/classifySetting',
+        component: () => import('@/components/classifySetting.vue')
+      },
+      {
+        name: 'tagsSetting',
+        path: '/tagsSetting',
+        component: () => import('@/components/tagsSetting.vue')
+      },
+      {
+        name: 'friendsLinkSetting',
+        path: '/friendsLinkSetting',
+        component: () => import('@/components/friendsLinks.vue')
+      },
+      {
+        name: 'userInfo',
+        path: '/userInfo',
+        component: () => import('@/components/userInfo.vue')
+      },
     ]
   },
   {
@@ -61,10 +76,14 @@ router.beforeEach((to, from, next) => {
     delete window._axiosPromiseArr[index]
   })
   if(to.name === 'login') {
-    sessionStorage.clear()
-    next()
+    if(sessionStorage.getItem('access_token')) {
+      next({ name: '/' })
+    } else {
+      sessionStorage.clear()
+      next()
+    }
   } else {
-    if(!sessionStorage.getItem('user') && to.name !== 'login') {
+    if(!sessionStorage.getItem('access_token') && to.name !== 'login') {
       next({ name: 'login' })
     } else {
       next()

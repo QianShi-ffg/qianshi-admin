@@ -12,35 +12,31 @@
                   :collapse-transition="true" :router="true">
                   <el-menu-item index="/">
                     <el-icon>
-                      <icon-menu />
+                      <House />
                     </el-icon>
                     <template #title>网站概况</template>
                   </el-menu-item>
-                  <el-sub-menu index="1">
-                    <template #title>
-                      <el-icon>
-                        <DataAnalysis />
-                      </el-icon>
-                      <span>数据分析</span>
-                    </template>
-                    <el-menu-item index="1-1">流量分析</el-menu-item>
-                    <el-menu-item index="1-2">来源分析</el-menu-item>
-                    <el-menu-item index="1-3">访问分析</el-menu-item>
-                  </el-sub-menu>
                   <el-menu-item index="creative">
                     <el-icon>
                       <EditPen />
                     </el-icon>
                     <template #title>创作中心</template>
                   </el-menu-item>
-                  <el-menu-item index="settings">
-                    <el-icon>
-                      <setting />
-                    </el-icon>
-                    <template #title>设置</template>
-                  </el-menu-item>
+                  <el-sub-menu index="1">
+                    <template #title>
+                      <el-icon>
+                        <setting />
+                      </el-icon>
+                      <span>设置</span>
+                    </template>
+                    <el-menu-item index="classifySetting">分类设置</el-menu-item>
+                    <el-menu-item index="tagsSetting">标签设置</el-menu-item>
+                    <el-menu-item index="friendsLinkSetting">友链设置</el-menu-item>
+                    <el-menu-item index="userInfo">个人信息</el-menu-item>
+                  </el-sub-menu>
                 </el-menu>
               </div>
+              <logOut/>
             </el-card>
           </el-aside>
           <el-container>
@@ -72,6 +68,7 @@
 import { ref, reactive, markRaw, watch } from "vue";
 import { useRoute } from "vue-router";
 import userIcon from '@/assets/userIcon.jpg'
+import logOut from "./login/logOut.vue";
 import {
   Fold,
   Expand
@@ -89,14 +86,11 @@ watch(route, (value, oldVal) => {
   breadcrumb()
 })
 
-
-
 if (route.name) {
   currentMenu.value = route.name
 } else {
   currentMenu.value = '/'
 }
-
 
 const putMenu = () => {
   isCollapse.value = !isCollapse.value;
@@ -141,6 +135,8 @@ breadcrumb()
       height: 100%;
       background-color: var(--el-card-bgColor);
       text-align: center;
+      padding-bottom: 60px;
+      overflow: hidden;
 
       img {
         transition-property: width, border-radius;
@@ -158,7 +154,7 @@ breadcrumb()
       .menu {
         padding: 0 8px;
         height: calc(100% - 110px - 10px - 10px);
-        // overflow-y: overlay;
+        overflow-y: overlay;
       }
     }
 
