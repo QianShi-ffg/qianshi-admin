@@ -12,7 +12,6 @@ import { FriendShipModule } from './modules/friend-ship/friend-ship.module';
 import { ScheduleModule } from '@nestjs/schedule'; // 定时任务
 import { TasksModule } from './schedule/tasks.module';
 import { ConfigModule } from '@nestjs/config';
-import { ChatModule } from './modules/chat/chat.module';
 import { CountToken } from './entities/token.entity';
 import { AuthModule } from './auth/auth.module';
 
@@ -48,7 +47,6 @@ import { AuthModule } from './auth/auth.module';
     ConfigModule.forRoot({
       envFilePath: ['.env'],
     }),
-    ChatModule,
     AuthModule,
   ],
   controllers: [AppController],
