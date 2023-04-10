@@ -19,9 +19,9 @@ export class FriendShipService {
   }
 
   findAll(query) {
-    const { page, pageSize } = query;
+    const { page, pageSize, sort } = query;
     return this.FriendShipRepository.createQueryBuilder('friend_ship')
-      .orderBy('id', 'DESC')
+      .orderBy('id', sort)
       .skip((page - 1) * pageSize)
       .take(pageSize)
       .getMany();

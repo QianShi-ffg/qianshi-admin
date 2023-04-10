@@ -64,7 +64,8 @@ const friendShipDesc = ref({})
 const friendDialog = ref()
 const paginationObj = reactive({
   page: 1,
-  pageSize: 20
+  pageSize: 20,
+  sort: 'DESC'
 })
 const total = ref(0)
 
