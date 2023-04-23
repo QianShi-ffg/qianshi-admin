@@ -17,7 +17,7 @@
     ></el-input>
     <div>
       <el-button @click="save" round>保存草稿</el-button>
-      <el-button type="success" @click="publish" round>发布</el-button>
+      <el-button type="success" @click="publish" round :disabled="publishDisabled">发布</el-button>
     </div>
   </header>
   <div class="editor">
@@ -49,6 +49,7 @@ const titleValue = ref("");
 const articleInfo = ref({});
 const artDesc = ref({});
 const saveDialog = ref(null);
+const publishDisabled = ref(true)
 // 编辑器主题
 const theme = ref("light");
 const articleData = reactive({
@@ -139,6 +140,7 @@ const codeSave = async (e) => {
       router.replace({ path: route.path, query: { id: res.data.id } });
       saveType.value = "edit";
     }
+    publishDisabled.value = false
     ElMessage({ message: "已保存草稿箱", type: "success" });
   } else {
     ElMessage({ message: "系统错误请稍后再试", type: "error" });
