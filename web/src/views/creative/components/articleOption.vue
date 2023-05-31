@@ -38,7 +38,7 @@ import { ref, reactive, onMounted } from "vue";
 import { useRouter, useRoute } from "vue-router";
 import { ElMessage } from "element-plus";
 import { ArrowLeft } from "@element-plus/icons-vue";
-import MdEditor from "md-editor-v3";
+import { MdEditor } from 'md-editor-v3';
 import "md-editor-v3/lib/style.css";
 import api from "@/api/index.js";
 
