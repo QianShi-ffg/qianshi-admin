@@ -46,7 +46,7 @@ export class FriendShipService {
         mkdirSync(join(__dirname, '../../../public/screenshot'));
       }
       const browser = await puppeteer.launch({
-        headless: true,
+        headless: 'new',
         slowMo: 0,
         args: [
           '--no-zygote',

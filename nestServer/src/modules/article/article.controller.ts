@@ -72,7 +72,6 @@ export class ArticleController {
   async findArticleDetail(@Param('id') id: string) {
     await this.articleService.updateArticleDetailViews(+id);
     const res = await this.articleService.findArticleDetail(+id);
-    console.log(res, 5555);
     return {
       code: 200,
       message: 'success',
