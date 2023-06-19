@@ -163,7 +163,6 @@ export class ArticleService {
    */
   publish(data) {
     const { ids } = data;
-    console.log(data, 'data');
     return this.ArticleListRepository.update(ids, { articleStatus: 1 });
   }
 
