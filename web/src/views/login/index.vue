@@ -86,7 +86,7 @@ const signIn = async() => {
     console.log(res)
     if (res.code === 200) {
       sessionStorage.setItem('access_token', res['access_token'])
-      router.push('/')
+      location.reload()
       ElMessage({ message: res.message, type: 'success'})
     } else {
       ElMessage({ message: '账户名密码错误', type: 'error'})
