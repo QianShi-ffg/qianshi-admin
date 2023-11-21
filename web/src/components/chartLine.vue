@@ -59,7 +59,7 @@ const init = () => {
         name: 'PV',
         type: 'line',
         // stack: 'Total',
-        data: props.chartLineData.y2,
+        data: props.chartLineData.y1,
         color: "rgba(72, 104, 220)",
         areaStyle: {
             normal: {
@@ -89,7 +89,7 @@ const init = () => {
         name: 'UV',
         type: 'line',
         // stack: 'Total',
-        data: props.chartLineData.y1,
+        data: props.chartLineData.y2,
         color: "rgba(175, 106, 179)",
         areaStyle: {
             normal: {
