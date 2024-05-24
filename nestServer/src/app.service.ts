@@ -25,7 +25,7 @@ export class AppService {
           access_token: res.access_token,
           site_id: '18341059',
           method: 'overview/getTimeTrendRpt',
-          start_date: dayjs().subtract(210, 'day').format('YYYYMMDD'),
+          start_date: dayjs('2022-09-01').format('YYYYMMDD'),
           end_date: dayjs().format('YYYYMMDD'),
           metrics: 'pv_count,visitor_count',
         },

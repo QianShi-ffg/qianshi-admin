@@ -21,12 +21,13 @@
     </div>
   </header>
   <div class="editor">
-    <md-editor
+    <MdEditor
       v-model="text"
       @onHtmlChanged="saveHtml"
       @onSave="codeSave"
       :onUploadImg="uploadImg"
       :theme="theme"
+      ref="editorRef"
     />
   </div>
   <saveDialogVue ref="saveDialog" @success="success" :artDesc="artDesc" />
@@ -50,6 +51,10 @@ const articleInfo = ref({});
 const artDesc = ref({});
 const saveDialog = ref(null);
 const publishDisabled = ref(true)
+
+// 编辑器配置
+const editorRef = ref();
+
 // 编辑器主题
 const theme = ref("light");
 const articleData = reactive({

@@ -151,6 +151,7 @@ const chartDataInit = (value) => {
   let arr1 = []
   let arr2 = []
   value[1].slice(-7).map(item => {
+    console.log(item, 'arrarrarrarrarrarrarr')
     arr1.push(item[0])
     arr2.push(item[1])
   })
