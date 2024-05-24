@@ -57,7 +57,7 @@
           </el-container>
         </el-container>
         <el-footer>
-          Copyright © 千拾 2022 晋ICP备18013488号-1
+          Copyright © 千拾 晋ICP备18013488号-1
         </el-footer>
       </el-container>
     </div>
