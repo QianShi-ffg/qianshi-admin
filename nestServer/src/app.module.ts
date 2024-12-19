@@ -11,20 +11,22 @@ import { join } from 'path';
 import { FriendShipModule } from './modules/friend-ship/friend-ship.module';
 import { ScheduleModule } from '@nestjs/schedule'; // 定时任务
 import { TasksModule } from './schedule/tasks.module';
-import { ConfigModule } from '@nestjs/config';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 import { CountToken } from './entities/token.entity';
 import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
     TypeOrmModule.forRootAsync({
-      useFactory: () => ({
+      imports: [ConfigModule],
+      inject: [ConfigService],
+      useFactory: (configService: ConfigService) => ({
         type: 'mysql',
-        host: 'localhost',
-        port: 3306,
-        username: 'root',
-        password: 'root',
-        database: 'root',
+        host: configService.get<string>('DATABASE_HOST'),
+        port: configService.get<number>('DATABASE_PORT'),
+        username: configService.get<string>('DATABASE_USER'),
+        password: configService.get<string>('DATABASE_PASSWORD'),
+        database: configService.get<string>('DATABASE_NAME'),
         timezone: '+08:00',
         charset: 'utf8mb4',
         // entities: ['dist/**/*.entity{.ts,.js}'],
