@@ -41,11 +41,12 @@ export class FriendShipService {
   }
 
   async setScreenShot(item) {
+    let browser = null;
     try {
       if (!existsSync(join(__dirname, '../../../public/screenshot'))) {
         mkdirSync(join(__dirname, '../../../public/screenshot'));
       }
-      const browser = await puppeteer.launch({
+      browser = await puppeteer.launch({
         headless: true,
         slowMo: 0,
         args: [
@@ -71,42 +72,70 @@ export class FriendShipService {
         width: 1920,
         height: 1080,
       });
-      try {
-        const rres = await page.goto(item.blogUrl, {
-          timeout: 0,
-          // waitUntil: 'networkidle2', // networkidle2: 500ms 内有不超过 2 个网络连接时就算成功(还有两个以下的request),就认为导航完成。
-        });
-        // await page.waitForTimeout(4000);
-        new Promise((resolve, reject) =>
-          setTimeout(async () => {
+      const rres = await page.goto(item.blogUrl, {
+        timeout: 0,
+        // waitUntil: 'networkidle2', // networkidle2: 500ms 内有不超过 2 个网络连接时就算成功(还有两个以下的request),就认为导航完成。
+      });
+      // await page.waitForTimeout(4000);
+      // try {
+      //   new Promise((resolve, reject) =>
+      //     setTimeout(async () => {
+      //       await page.screenshot({
+      //         quality: 10,
+      //         // path: `./public/screenshot/${item.id}.jpeg`, //图片保存路径
+      //         path: join(
+      //           __dirname,
+      //           `../../../public/screenshot/${item.id}.jpeg`,
+      //         ), //图片保存路径
+      //         type: 'jpeg',
+      //         fullPage: false, //边滚动边截图
+      //       });
+      //       const res = await this.FriendShipRepository.update(item.id, {
+      //         screenShot: `/screenshot/${item.id}.jpeg`,
+      //       });
+      //       // const results = await conn(sql, data);
+      //       console.log(res, 'res');
+      //       console.log('OK');
+      //       resolve(true);
+      //     }, 4000),
+      //   );
+      // } catch (error) {
+      //   console.log(error, 'errorerrorerrorerrorerrorerrorerror');
+      //   return {
+      //     code: 200,
+      //     data: {},
+      //     message: '截屏失败',
+      //   };
+      // } finally {
+      //   await browser.close();
+      // }
+
+      // 使用 Promise 来处理延时和截图
+      await new Promise((resolve, reject) => {
+        setTimeout(async () => {
+          try {
             await page.screenshot({
               quality: 10,
-              // path: `./public/screenshot/${item.id}.jpeg`, //图片保存路径
               path: join(
                 __dirname,
                 `../../../public/screenshot/${item.id}.jpeg`,
               ), //图片保存路径
               type: 'jpeg',
-              fullPage: false, //边滚动边截图
+              fullPage: false,
             });
-            await browser.close();
+            await page.close();
             const res = await this.FriendShipRepository.update(item.id, {
               screenShot: `/screenshot/${item.id}.jpeg`,
             });
-            // const results = await conn(sql, data);
             console.log(res, 'res');
             console.log('OK');
-            resolve;
-          }, 4000),
-        );
-      } catch (error) {
-        console.log(error, 'errorerrorerrorerrorerrorerrorerror');
-        return {
-          code: 200,
-          data: {},
-          message: '截屏失败',
-        };
-      }
+            resolve(true);
+          } catch (error) {
+            reject(error);
+          }
+        }, 4000);
+      });
+
       return {
         code: 200,
         data: {
@@ -117,6 +146,16 @@ export class FriendShipService {
       // }
     } catch (error) {
       console.log(error, 'error');
+      return {
+        code: 200,
+        data: {},
+        message: '截屏失败',
+      };
+    } finally {
+      // 确保浏览器实例始终被关闭
+      if (browser) {
+        await browser.close();
+      }
     }
   }
 
